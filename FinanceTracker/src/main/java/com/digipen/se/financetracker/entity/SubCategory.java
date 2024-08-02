@@ -18,11 +18,11 @@ import java.util.List;
 public class SubCategory {
     @Column(name = "sub_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Id private int Id;
+    @Id private int subId;
     @NotBlank
     @Max(255)
     @Column(name = "sub_name")
-    private String name;
+    private String subName;
     @JsonIgnore
     @ManyToOne
     @Fetch(FetchMode.JOIN)

@@ -8,7 +8,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
@@ -16,16 +15,16 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @NamedQuery(name = "Category.findCategoryBySubCategoryId",
-        query = "SELECT sc.category FROM SubCategory sc WHERE sc.Id = :id")
+        query = "SELECT sc.category FROM SubCategory sc WHERE sc.category.catId = :subId")
 @Table(name = "category")
 public class Category {
     @Column(name = "cat_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Id private int Id;
+    @Id private int catId;
     @NotBlank
     @Max(255)
     @Column(name = "cat_name")
-    private String name;
+    private String catName;
     @JsonIgnore
     @OneToMany(mappedBy = "category")
     @Fetch(FetchMode.SELECT)

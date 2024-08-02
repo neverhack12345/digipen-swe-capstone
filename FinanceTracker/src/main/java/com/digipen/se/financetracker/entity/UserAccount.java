@@ -24,7 +24,7 @@ public class UserAccount {
     public enum GENDER {M, F};
     @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Id private int Id;
+    @Id private int userId;
     @NotBlank
     @Email
     @Max(255)

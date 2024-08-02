@@ -25,7 +25,7 @@ import java.time.LocalDate;
 public class CashFlow {
     @Column(name = "flow_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Id private int Id;
+    @Id private int flowId;
     @NotBlank
     @Max(255)
     @Column(name = "source_name")

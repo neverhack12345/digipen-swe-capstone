@@ -18,7 +18,7 @@ import java.math.BigDecimal;
 public class Budget {
     @Column(name = "budget_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Id private int Id;
+    @Id private int budgetId;
     @Positive
     @Column(name = "year")
     private int year;
