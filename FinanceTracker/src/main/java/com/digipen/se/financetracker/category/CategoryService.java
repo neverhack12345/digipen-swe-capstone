@@ -7,17 +7,17 @@ import java.util.List;
 
 @Service
 public class CategoryService {
-    private final CategoryRepo categoryRepo;
+    private final CategoryRepository categoryRepository;
 
-    CategoryService(CategoryRepo categoryRepo) {
-        this.categoryRepo = categoryRepo;
+    CategoryService(CategoryRepository categoryRepository) {
+        this.categoryRepository = categoryRepository;
     }
 
     public List<Category> findAll() {
-        return this.categoryRepo.findAll();
+        return this.categoryRepository.findAll();
     }
 
-    public Category findCategoryBySubCategoryId(Integer id) {
-        return this.categoryRepo.findCategoryBySubCategoryId(id);
+    public Category findCategoryBySubCategoryId(Integer subId) {
+        return this.categoryRepository.findCategoryBySubCategoryId(subId);
     }
 }
