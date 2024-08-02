@@ -33,8 +33,21 @@ INSERT INTO cash_flow (user_id, sub_id, source_name, date, amount, remark) VALUE
 INSERT INTO cash_flow (user_id, sub_id, source_name, date, amount, remark) VALUES (2, 3, 'Happy Hawker' , NOW(), 15.42, NULL);
 INSERT INTO cash_flow (user_id, sub_id, source_name, date, amount, remark) VALUES (2, 4, 'Brawl Royal', NOW(), 14.56, NULL);
 
+
 /* budget table ----------------------------------------------------------------*/
 INSERT INTO budget (user_id, cat_id, year, month, amount) VALUES (1, 1, 2024, 9, 5500);
 INSERT INTO budget (user_id, cat_id, year, month, amount) VALUES (1, 2, 2024, 9, 20);
 INSERT INTO budget (user_id, cat_id, year, month, amount) VALUES (2, 1, 2024, 9, 5500);
 INSERT INTO budget (user_id, cat_id, year, month, amount) VALUES (2, 2, 2024, 9, 20);
+INSERT INTO budget (user_id, cat_id, year, month, amount) VALUES (1, 1, 2024, 8, 5500);
+INSERT INTO budget (user_id, cat_id, year, month, amount) VALUES (1, 2, 2024, 8, 20);
+INSERT INTO budget (user_id, cat_id, year, month, amount) VALUES (2, 1, 2024, 8, 5500);
+INSERT INTO budget (user_id, cat_id, year, month, amount) VALUES (2, 2, 2024, 8, 20);
+INSERT INTO budget (user_id, cat_id, year, month, amount) VALUES (1, 1, 2024, 7, 5500);
+INSERT INTO budget (user_id, cat_id, year, month, amount) VALUES (1, 2, 2024, 7, 20);
+INSERT INTO budget (user_id, cat_id, year, month, amount) VALUES (2, 1, 2024, 7, 5500);
+INSERT INTO budget (user_id, cat_id, year, month, amount) VALUES (2, 2, 2024, 7, 20);
+INSERT INTO budget (user_id, cat_id, year, month, amount) VALUES (1, 1, 2024, 6, 5500);
+INSERT INTO budget (user_id, cat_id, year, month, amount) VALUES (1, 2, 2024, 6, 20);
+INSERT INTO budget (user_id, cat_id, year, month, amount) VALUES (2, 1, 2024, 6, 5500);
+INSERT INTO budget (user_id, cat_id, year, month, amount) VALUES (2, 2, 2024, 6, 20);
