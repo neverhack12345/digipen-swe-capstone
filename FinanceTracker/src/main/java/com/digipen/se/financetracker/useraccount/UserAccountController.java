@@ -3,9 +3,8 @@ package com.digipen.se.financetracker.useraccount;
 import com.digipen.se.financetracker.entities.UserAccount;
 import com.digipen.se.financetracker.exceptions.InvalidRequestParamException;
 import com.digipen.se.financetracker.exceptions.ResourceNotFoundException;
-import com.digipen.se.financetracker.pojo.UserDTO;
+import com.digipen.se.financetracker.pojo.UserAddDTO;
 import jakarta.validation.ConstraintViolationException;
-import jakarta.validation.Valid;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -44,14 +43,14 @@ public class UserAccountController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<String> add(@RequestBody UserDTO userDTO)
+    public ResponseEntity<String> add(@RequestBody UserAddDTO userAddDTO)
             throws InvalidRequestParamException, ConstraintViolationException {
-        if (this.userAccountService.countUserAccountByEmail(userDTO.getEmail()) > 0) {
+        if (this.userAccountService.countUserAccountByEmail(userAddDTO.getEmail()) > 0) {
             throw new InvalidRequestParamException("User email already exists!");
         }
         UserAccount userAccount = new UserAccount(
-                userDTO.getEmail(), userDTO.getPassword(), userDTO.getFirstName(), userDTO.getLastName(),
-                userDTO.getDob(), userDTO.getGender());
+                userAddDTO.getEmail(), userAddDTO.getPassword(), userAddDTO.getFirstName(), userAddDTO.getLastName(),
+                userAddDTO.getDob(), userAddDTO.getGender());
         this.userAccountService.add(userAccount);
         return ResponseEntity.ok().body("Add successful!");
     }
@@ -65,5 +64,17 @@ public class UserAccountController {
         } else {
             return ResponseEntity.ok().body("Authentication fail!");
         }
+    }
+
+    @PostMapping("/update")
+    public ResponseEntity<String> update(@RequestBody UserAccount userAccount)
+            throws InvalidRequestParamException, ConstraintViolationException {
+        UserAccount currUser = this.userAccountService.findUserAccountByUserId(userAccount.getUserId());
+        if (currUser == null) {
+            throw new ResourceNotFoundException("No user matching user id!");
+        }
+        currUser.replace(userAccount);
+        this.userAccountService.add(currUser);
+        return ResponseEntity.ok().body("Update successful!");
     }
 }

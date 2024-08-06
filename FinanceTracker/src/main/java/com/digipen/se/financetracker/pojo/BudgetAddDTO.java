@@ -5,10 +5,7 @@ import lombok.Data;
 import java.math.BigDecimal;
 
 @Data
-public class BudgetDTO {
-    private int userId;
-    private int categoryId;
-    private int year;
-    private int month;
+public class BudgetAddDTO {
+    private int userId, categoryId, year, month;
     private BigDecimal amount;
 }

@@ -27,7 +27,7 @@ public interface CashFlowRepository extends JpaRepository<CashFlow, Integer> {
             @Param("userId") Integer userId,@Param("year") Integer year, @Param("month") Integer month);
 
     @Query("SELECT COUNT(f) FROM CashFlow f " +
-            "WHERE LOWER(f.sourceName) = LOWER(:name) AND f.date = :date")
-    Long countCashFlowBySourceNameAndDate(@Param("name") String sourceName,
-                                          @Param("date") LocalDate date);
+            "WHERE f.userAccount.userId = :userId AND LOWER(f.sourceName) = LOWER(:name) AND f.date = :date")
+    Long countCashFlowByUserAccount_UserIdSourceNameAndDate(@Param("userId") Integer userId,
+            @Param("name") String sourceName, @Param("date") LocalDate date);
 }

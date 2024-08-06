@@ -18,6 +18,7 @@ import org.hibernate.validator.constraints.Length;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -25,7 +26,7 @@ import java.util.List;
 @Entity
 @Table(name = "user_account")
 public class UserAccount {
-    public enum GENDER {M, F};
+    public enum GENDER {M, F, O};
     @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id private int userId;
@@ -54,12 +55,14 @@ public class UserAccount {
     @Enumerated(EnumType.STRING)
     @Column(name = "gender")
     private GENDER gender;
+    @JsonIgnore
     @CreationTimestamp
     @Column(updatable = false, name = "created_at")
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
+    @JsonIgnore
     @UpdateTimestamp
     @Column(name = "updated_at")
-    private LocalDate updatedAt;
+    private LocalDateTime updatedAt;
 
     @JsonIgnore
     @OneToMany(mappedBy = "userAccount")
@@ -82,14 +85,20 @@ public class UserAccount {
         switch (gender.toUpperCase()) {
             case "M" -> this.gender = GENDER.M;
             case "F" -> this.gender = GENDER.F;
-            default -> this.gender = null;
+            default -> this.gender = GENDER.O;
         }
     }
 
-    @JsonIgnore
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void replace(UserAccount userAccount) {
+        this.email = userAccount.getEmail();
+        this.password = hashPassword(userAccount.password);
+        this.firstName = userAccount.getFirstName();
+        this.lastName = userAccount.getLastName();
+        this.dob = userAccount.getDob();
+        this.gender = userAccount.getGender();
     }
+
+
     private String hashPassword(String rawPasword) {
         BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
         return bcrypt.encode(rawPasword);

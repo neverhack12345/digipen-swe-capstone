@@ -4,6 +4,7 @@ import com.digipen.se.financetracker.entities.Category;
 import com.digipen.se.financetracker.entities.SubCategory;
 import com.digipen.se.financetracker.exceptions.InvalidRequestParamException;
 import com.digipen.se.financetracker.exceptions.ResourceNotFoundException;
+import com.digipen.se.financetracker.pojo.SubCategoryAddDTO;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,7 @@ public class CategoryController {
     private final CategoryService categoryService;
     private final SubCategoryService subCategoryService;
 
-    private CategoryController(
+    public CategoryController(
             CategoryService categoryService, SubCategoryService subCategoryService) {
         this.categoryService = categoryService;
         this.subCategoryService = subCategoryService;
@@ -58,6 +59,18 @@ public class CategoryController {
         return ResponseEntity.ok().body("Add successful!");
     }
 
+    @PostMapping("/category/update")
+    public ResponseEntity<String> update(@RequestBody Category category)
+            throws ResourceNotFoundException, ConstraintViolationException {
+        Category currCat = this.categoryService.findCategoryByCatId(category.getCatId());
+        if (currCat == null) {
+            throw new ResourceNotFoundException("No category matching category id!");
+        }
+        currCat.setCatName(category.getCatName());
+        this.categoryService.add(currCat);
+        return ResponseEntity.ok().body("Update successful!");
+    }
+
     @GetMapping("/subcategory/getAll")
     public ResponseEntity<List<SubCategory>> findSubCategories() throws ResourceNotFoundException {
         List<SubCategory> subCategoryList = this.subCategoryService.findAll();
@@ -94,5 +107,26 @@ public class CategoryController {
         SubCategory subCategory = new SubCategory(subName, category);
         this.subCategoryService.add(subCategory);
         return ResponseEntity.ok().body("Add successful!");
+    }
+
+    @PostMapping("/subcategory/update")
+    public ResponseEntity<String> update(@RequestBody SubCategoryAddDTO subCategoryAddDTO)
+            throws ResourceNotFoundException, InvalidRequestParamException, ConstraintViolationException {
+        SubCategory currSub = this.subCategoryService.findSubCategoryBySubId(subCategoryAddDTO.getSubId());
+        if (currSub == null) {
+            throw new ResourceNotFoundException("No sub-category matching sub-category id!");
+        }
+        if (this.subCategoryService.countSubCategoryBySubName(subCategoryAddDTO.getSubName()) > 0) {
+            throw new InvalidRequestParamException(
+                    "There is an existing sub-category with the same name!");
+        }
+        Category newCat = this.categoryService.findCategoryByCatId(subCategoryAddDTO.getCatId());
+        if (newCat == null) {
+            throw new ResourceNotFoundException("No category matching category id!");
+        }
+        currSub.setSubName(subCategoryAddDTO.getSubName());
+        currSub.setCategory(newCat);
+        this.subCategoryService.add(currSub);
+        return ResponseEntity.ok().body("Update successful!");
     }
 }

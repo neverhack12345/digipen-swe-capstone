@@ -18,6 +18,10 @@ public class BudgetService {
         return this.budgetRepository.findAll();
     }
 
+    public Budget findBudgetByBudget_Id(Integer budgetId) {
+        return this.budgetRepository.findById(budgetId).orElse(null);
+    }
+
     public List<Budget> findAllByUserId(Integer userId) {
         return this.budgetRepository.findAllByUserAccount_UserIdOrderByMonthYearDesc(userId);
     }
@@ -37,5 +41,9 @@ public class BudgetService {
 
     public void add(@Valid Budget budget) {
         this.budgetRepository.save(budget);
+    }
+
+    public void delete(Budget budget) {
+        this.budgetRepository.delete(budget);
     }
 }

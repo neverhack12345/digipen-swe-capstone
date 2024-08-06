@@ -49,9 +49,4 @@ public class Budget {
         this.category = category;
         this.userAccount = userAccount;
     }
-
-    @JsonIgnore
-    public void setBudgetId(int budgetId) {
-        this.budgetId = budgetId;
-    }
 }

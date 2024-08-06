@@ -4,7 +4,8 @@ import com.digipen.se.financetracker.category.SubCategoryService;
 import com.digipen.se.financetracker.entities.*;
 import com.digipen.se.financetracker.exceptions.InvalidRequestParamException;
 import com.digipen.se.financetracker.exceptions.ResourceNotFoundException;
-import com.digipen.se.financetracker.pojo.CashFlowDTO;
+import com.digipen.se.financetracker.pojo.CashFlowAddDTO;
+import com.digipen.se.financetracker.pojo.CashFlowUpdateDTO;
 import com.digipen.se.financetracker.useraccount.UserAccountService;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.ResponseEntity;
@@ -66,26 +67,64 @@ public class CashFlowController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<String> add(@RequestBody CashFlowDTO cashFlowDTO)
+    public ResponseEntity<String> add(@RequestBody CashFlowAddDTO cashFlowAddDTO)
             throws ResourceNotFoundException, InvalidRequestParamException, ConstraintViolationException {
-        if (cashFlowDTO.getAmount().compareTo(BigDecimal.ZERO) == 0) {
+        if (cashFlowAddDTO.getAmount().compareTo(BigDecimal.ZERO) == 0) {
             throw new InvalidRequestParamException("Cash flow amount cannot be 0!");
         }
-        if (this.cashFlowService.countCashFlowByDetails(
-                cashFlowDTO.getSourceName(), cashFlowDTO.getDate()) > 0) {
+        if (this.cashFlowService.countCashFlowByDetails(cashFlowAddDTO.getUserId(),
+                cashFlowAddDTO.getSourceName(), cashFlowAddDTO.getDate()) > 0) {
             throw new InvalidRequestParamException("Cash flow already exists!");
         }
-        UserAccount userAccount = this.userAccountService.findUserAccountByUserId(cashFlowDTO.getUserId());
+        UserAccount userAccount = this.userAccountService.findUserAccountByUserId(cashFlowAddDTO.getUserId());
         if (userAccount == null) {
             throw new InvalidRequestParamException("User Id cannot be found!");
         }
-        SubCategory subCategory = this.subCategoryService.findSubCategoryBySubId(cashFlowDTO.getSubId());
+        SubCategory subCategory = this.subCategoryService.findSubCategoryBySubId(cashFlowAddDTO.getSubId());
         if (subCategory == null) {
             throw new InvalidRequestParamException("Sub-Category Id cannot be found!");
         }
-        CashFlow cashFlow = new CashFlow(cashFlowDTO.getSourceName(), cashFlowDTO.getDate(),
-                cashFlowDTO.getAmount(), cashFlowDTO.getRemark(), subCategory, userAccount);
+        CashFlow cashFlow = new CashFlow(cashFlowAddDTO.getSourceName(), cashFlowAddDTO.getDate(),
+                cashFlowAddDTO.getAmount(), cashFlowAddDTO.getRemark(), subCategory, userAccount);
         this.cashFlowService.add(cashFlow);
         return ResponseEntity.ok().body("Add successful!");
+    }
+
+    @PostMapping("/update")
+    public ResponseEntity<String> update(@RequestBody CashFlowUpdateDTO cashFlowUpdateDTO)
+            throws ResourceNotFoundException, InvalidRequestParamException, ConstraintViolationException {
+        if (cashFlowUpdateDTO.getAmount().compareTo(BigDecimal.ZERO) == 0) {
+            throw new InvalidRequestParamException("Cash flow amount cannot be 0!");
+        }
+        CashFlow currCashFlow = this.cashFlowService.findCashFlowByFlow_Id(cashFlowUpdateDTO.getFlowId());
+        if (currCashFlow == null) {
+            throw new ResourceNotFoundException("Cash flow not found!");
+        }
+        if (this.cashFlowService.countCashFlowByDetails(currCashFlow.getUserAccount().getUserId(),
+                cashFlowUpdateDTO.getSourceName(), cashFlowUpdateDTO.getDate()) > 0) {
+            throw new InvalidRequestParamException("Cash flow already exists!");
+        }
+        SubCategory newSubCategory = this.subCategoryService.findSubCategoryBySubId(cashFlowUpdateDTO.getSubId());
+        if (newSubCategory == null) {
+            throw new InvalidRequestParamException("Sub-Category Id cannot be found!");
+        }
+        currCashFlow.setSourceName(cashFlowUpdateDTO.getSourceName());
+        currCashFlow.setDate(cashFlowUpdateDTO.getDate());
+        currCashFlow.setAmount(cashFlowUpdateDTO.getAmount());
+        currCashFlow.setRemark(cashFlowUpdateDTO.getRemark());
+        currCashFlow.setSubCategory(newSubCategory);
+        this.cashFlowService.add(currCashFlow);
+        return ResponseEntity.ok().body("Update successful!");
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<String> delete(@RequestParam("id") Integer flowId)
+            throws ResourceNotFoundException, InvalidRequestParamException, ConstraintViolationException {
+        CashFlow cashFlow = this.cashFlowService.findCashFlowByFlow_Id(flowId);
+        if (cashFlow == null) {
+            throw new ResourceNotFoundException("Cash flow not found!");
+        }
+        this.cashFlowService.delete(cashFlow);
+        return ResponseEntity.ok().body("Delete successful!");
     }
 }

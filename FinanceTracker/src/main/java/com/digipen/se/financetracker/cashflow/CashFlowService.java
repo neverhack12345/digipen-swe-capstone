@@ -23,6 +23,10 @@ public class CashFlowService {
         return this.cashFlowRepository.findAllByUserAccount_UserIdOrderByDateDesc(userId);
     }
 
+    public CashFlow findCashFlowByFlow_Id(Integer flowId) {
+        return this.cashFlowRepository.findById(flowId).orElse(null);
+    }
+
     public List<CashFlow> findAllByUserId(Integer userId, Integer year) {
         return this.cashFlowRepository.findAllByYearAndUserAccount_UserIdOrderByDateDesc(userId, year);
     }
@@ -32,11 +36,15 @@ public class CashFlowService {
                 userId, year, month);
     }
 
-    public Long countCashFlowByDetails(String name, LocalDate date) {
-        return this.cashFlowRepository.countCashFlowBySourceNameAndDate(name, date);
+    public Long countCashFlowByDetails(Integer userId, String name, LocalDate date) {
+        return this.cashFlowRepository.countCashFlowByUserAccount_UserIdSourceNameAndDate(userId, name, date);
     }
 
     public void add(@Valid CashFlow cashFlow) {
         this.cashFlowRepository.save(cashFlow);
+    }
+
+    public void delete(CashFlow cashFlow) {
+        this.cashFlowRepository.delete(cashFlow);
     }
 }

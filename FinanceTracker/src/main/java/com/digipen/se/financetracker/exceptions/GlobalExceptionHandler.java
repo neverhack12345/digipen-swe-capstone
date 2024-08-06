@@ -2,6 +2,7 @@ package com.digipen.se.financetracker.exceptions;
 
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.InvalidDataAccessResourceUsageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -73,8 +74,18 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErrorDetails> dataIntegrityViolationException(
+            DataIntegrityViolationException ex, WebRequest request) {
+        ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(),
+                "Error when interacting with database!",
+                request.getDescription(false));
+        return new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorDetails> globleExcpetionHandler(Exception ex, WebRequest request) {
+    public ResponseEntity<ErrorDetails> globalExceptionHandler(Exception ex, WebRequest request) {
+        System.out.println(ex);
         ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(),
                 ex.getLocalizedMessage(), request.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);

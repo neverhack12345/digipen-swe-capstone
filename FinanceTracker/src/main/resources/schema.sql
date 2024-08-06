@@ -9,8 +9,8 @@ DROP TABLE IF EXISTS user_account;
 CREATE TABLE user_account (user_id INT AUTO_INCREMENT,
     email VARCHAR(255) UNIQUE, password VARCHAR (60) NOT NULL,
 	first_name VARCHAR(255) NOT NULL, last_name VARCHAR(255),
-	dob DATE, gender VARCHAR(1), created_at DATE DEFAULT NOW(),
-    updated_at DATE,
+	dob DATE, gender VARCHAR(1), created_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP,
     PRIMARY KEY(user_id) 
 	) engine=InnoDB;
 

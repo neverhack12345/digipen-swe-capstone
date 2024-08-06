@@ -6,7 +6,8 @@ import com.digipen.se.financetracker.entities.Category;
 import com.digipen.se.financetracker.entities.UserAccount;
 import com.digipen.se.financetracker.exceptions.InvalidRequestParamException;
 import com.digipen.se.financetracker.exceptions.ResourceNotFoundException;
-import com.digipen.se.financetracker.pojo.BudgetDTO;
+import com.digipen.se.financetracker.pojo.BudgetAddDTO;
+import com.digipen.se.financetracker.pojo.BudgetUpdateDTO;
 import com.digipen.se.financetracker.useraccount.UserAccountService;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.ResponseEntity;
@@ -68,26 +69,64 @@ public class BudgetController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<String> add(@RequestBody BudgetDTO budgetDTO)
+    public ResponseEntity<String> add(@RequestBody BudgetAddDTO budgetAddDTO)
             throws ResourceNotFoundException, InvalidRequestParamException, ConstraintViolationException {
-        if (budgetDTO.getAmount().compareTo(BigDecimal.ZERO) == 0) {
+        if (budgetAddDTO.getAmount().compareTo(BigDecimal.ZERO) == 0) {
             throw new InvalidRequestParamException("Budget amount cannot be 0!");
         }
         if (this.budgetService.countBudgetByDetails(
-                budgetDTO.getUserId(), budgetDTO.getYear(), budgetDTO.getMonth()) > 0) {
+                budgetAddDTO.getUserId(), budgetAddDTO.getYear(), budgetAddDTO.getMonth()) > 0) {
             throw new InvalidRequestParamException("Budget already exists!");
         }
-        UserAccount userAccount = this.userAccountService.findUserAccountByUserId(budgetDTO.getUserId());
+        UserAccount userAccount = this.userAccountService.findUserAccountByUserId(budgetAddDTO.getUserId());
         if (userAccount == null) {
             throw new InvalidRequestParamException("User Id cannot be found!");
         }
-        Category category = this.categoryService.findCategoryByCatId(budgetDTO.getCategoryId());
+        Category category = this.categoryService.findCategoryByCatId(budgetAddDTO.getCategoryId());
         if (category == null) {
             throw new InvalidRequestParamException("Category Id cannot be found!");
         }
-        Budget budget = new Budget(budgetDTO.getYear(), budgetDTO.getMonth(), budgetDTO.getAmount(),
+        Budget budget = new Budget(budgetAddDTO.getYear(), budgetAddDTO.getMonth(), budgetAddDTO.getAmount(),
                 category, userAccount);
         this.budgetService.add(budget);
         return ResponseEntity.ok().body("Add successful!");
+    }
+
+    @PostMapping("/update")
+    public ResponseEntity<String> update(@RequestBody BudgetUpdateDTO budgetUpdateDTO)
+            throws ResourceNotFoundException, InvalidRequestParamException, ConstraintViolationException {
+        if (budgetUpdateDTO.getAmount().compareTo(BigDecimal.ZERO) == 0) {
+            throw new InvalidRequestParamException("Budget amount cannot be 0!");
+        }
+        Budget currBudget = this.budgetService.findBudgetByBudget_Id(budgetUpdateDTO.getBudgetId());
+        if (currBudget == null) {
+            throw new ResourceNotFoundException("Budget not found!");
+        }
+        if (this.budgetService.countBudgetByDetails(
+                currBudget.getUserAccount().getUserId(), budgetUpdateDTO.getYear(),
+                budgetUpdateDTO.getMonth()) > 0) {
+            throw new InvalidRequestParamException("Budget already exists!");
+        }
+        Category newCat = this.categoryService.findCategoryByCatId(budgetUpdateDTO.getCategoryId());
+        if (newCat == null) {
+            throw new InvalidRequestParamException("Category Id cannot be found!");
+        }
+        currBudget.setYear(budgetUpdateDTO.getYear());
+        currBudget.setMonth(budgetUpdateDTO.getMonth());
+        currBudget.setAmount(budgetUpdateDTO.getAmount());
+        currBudget.setCategory(newCat);
+        this.budgetService.add(currBudget);
+        return ResponseEntity.ok().body("Update successful!");
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<String> delete(@RequestParam("id") Integer budgetId)
+            throws ResourceNotFoundException {
+        Budget budget = this.budgetService.findBudgetByBudget_Id(budgetId);
+        if (budget == null) {
+            throw new ResourceNotFoundException("Budget not found!");
+        }
+        this.budgetService.delete(budget);
+        return ResponseEntity.ok().body("Delete successful!");
     }
 }
