@@ -1,10 +1,9 @@
 package com.digipen.se.financetracker.category;
 
-import com.digipen.se.financetracker.entity.Category;
-import com.digipen.se.financetracker.entity.SubCategory;
-import com.digipen.se.financetracker.exception.InvalidInputException;
-import com.digipen.se.financetracker.exception.InvalidRequestParamException;
-import com.digipen.se.financetracker.exception.ResourceNotFoundException;
+import com.digipen.se.financetracker.entities.Category;
+import com.digipen.se.financetracker.entities.SubCategory;
+import com.digipen.se.financetracker.exceptions.InvalidRequestParamException;
+import com.digipen.se.financetracker.exceptions.ResourceNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;

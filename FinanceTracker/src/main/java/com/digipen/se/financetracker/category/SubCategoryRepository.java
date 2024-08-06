@@ -1,6 +1,6 @@
 package com.digipen.se.financetracker.category;
 
-import com.digipen.se.financetracker.entity.SubCategory;
+import com.digipen.se.financetracker.entities.SubCategory;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

@@ -1,8 +1,9 @@
 package com.digipen.se.financetracker.useraccount;
 
-import com.digipen.se.financetracker.entity.UserAccount;
-import com.digipen.se.financetracker.exception.InvalidRequestParamException;
-import com.digipen.se.financetracker.exception.ResourceNotFoundException;
+import com.digipen.se.financetracker.entities.UserAccount;
+import com.digipen.se.financetracker.exceptions.InvalidRequestParamException;
+import com.digipen.se.financetracker.exceptions.ResourceNotFoundException;
+import com.digipen.se.financetracker.pojo.UserDTO;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
 import org.springframework.data.repository.query.Param;
@@ -43,11 +44,14 @@ public class UserAccountController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<String> add(@RequestBody @Valid UserAccount userAccount)
+    public ResponseEntity<String> add(@RequestBody UserDTO userDTO)
             throws InvalidRequestParamException, ConstraintViolationException {
-        if (this.userAccountService.countUserAccountByEmail(userAccount.getEmail()) > 0) {
+        if (this.userAccountService.countUserAccountByEmail(userDTO.getEmail()) > 0) {
             throw new InvalidRequestParamException("User email already exists!");
         }
+        UserAccount userAccount = new UserAccount(
+                userDTO.getEmail(), userDTO.getPassword(), userDTO.getFirstName(), userDTO.getLastName(),
+                userDTO.getDob(), userDTO.getGender());
         this.userAccountService.add(userAccount);
         return ResponseEntity.ok().body("Add successful!");
     }

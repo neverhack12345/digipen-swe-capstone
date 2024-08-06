@@ -1,4 +1,4 @@
-package com.digipen.se.financetracker.exception;
+package com.digipen.se.financetracker.exceptions;
 
 import java.io.Serial;
 

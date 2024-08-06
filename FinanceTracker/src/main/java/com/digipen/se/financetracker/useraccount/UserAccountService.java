@@ -1,6 +1,6 @@
 package com.digipen.se.financetracker.useraccount;
 
-import com.digipen.se.financetracker.entity.UserAccount;
+import com.digipen.se.financetracker.entities.UserAccount;
 import jakarta.validation.Valid;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -28,7 +28,6 @@ public class UserAccountService {
     }
 
     public void add(@Valid UserAccount userAccount) {
-        userAccount.hashPassword();
         this.userAccountRepository.save(userAccount);
     }
 

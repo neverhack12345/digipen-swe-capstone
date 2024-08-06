@@ -1,8 +1,6 @@
 package com.digipen.se.financetracker.category;
 
-import com.digipen.se.financetracker.entity.SubCategory;
-import com.digipen.se.financetracker.exception.InvalidInputException;
-import jakarta.transaction.Transactional;
+import com.digipen.se.financetracker.entities.SubCategory;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 
@@ -30,5 +28,9 @@ public class SubCategoryService {
 
     public void add(@Valid SubCategory subCategory) {
         this.subCategoryRepository.save(subCategory);
+    }
+
+    public SubCategory findSubCategoryBySubId(Integer subId) {
+        return this.subCategoryRepository.findById(subId).orElse(null);
     }
 }

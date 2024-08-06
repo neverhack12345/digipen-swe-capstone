@@ -1,4 +1,4 @@
-package com.digipen.se.financetracker.entity;
+package com.digipen.se.financetracker.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;

@@ -1,4 +1,4 @@
-package com.digipen.se.financetracker.entity;
+package com.digipen.se.financetracker.entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -10,8 +10,10 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -40,7 +42,6 @@ public class UserAccount {
     @Length(max = 255, message = "User first name cannot be longer than 255 characters!")
     @Column(name = "first_name")
     private String firstName;
-    @NotBlank(message = "User last name cannot be blank!")
     @Length(max = 255, message = "User last name cannot be longer than 255 characters!")
     @Column(name = "last_name")
     private String lastName;
@@ -53,6 +54,13 @@ public class UserAccount {
     @Enumerated(EnumType.STRING)
     @Column(name = "gender")
     private GENDER gender;
+    @CreationTimestamp
+    @Column(updatable = false, name = "created_at")
+    private LocalDate createdAt;
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    private LocalDate updatedAt;
+
     @JsonIgnore
     @OneToMany(mappedBy = "userAccount")
     @Fetch(FetchMode.SELECT)
@@ -62,12 +70,29 @@ public class UserAccount {
     @Fetch(FetchMode.SELECT)
     private List<CashFlow> CashFlow;
 
+    public UserAccount(String email, String rawPasword, String firstName,
+                       String lastName, LocalDate dob, String gender) {
+        this.email = email;
+        this.password = hashPassword(rawPasword);
+        this.firstName = firstName;
+        if (!lastName.isBlank()) {
+            this.lastName = lastName;
+        }
+        this.dob = dob;
+        switch (gender.toUpperCase()) {
+            case "M" -> this.gender = GENDER.M;
+            case "F" -> this.gender = GENDER.F;
+            default -> this.gender = null;
+        }
+    }
+
     @JsonIgnore
     public void setUserId(int userId) {
         this.userId = userId;
     }
-    public void hashPassword() {
+    private String hashPassword(String rawPasword) {
         BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
-        this.password = bcrypt.encode(this.password);
+        return bcrypt.encode(rawPasword);
     }
+
 }

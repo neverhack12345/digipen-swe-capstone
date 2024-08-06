@@ -1,8 +1,6 @@
 package com.digipen.se.financetracker.category;
 
-import com.digipen.se.financetracker.entity.Category;
-import com.digipen.se.financetracker.exception.InvalidInputException;
-import jakarta.transaction.Transactional;
+import com.digipen.se.financetracker.entities.Category;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 

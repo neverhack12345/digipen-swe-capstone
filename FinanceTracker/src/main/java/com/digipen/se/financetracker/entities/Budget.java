@@ -1,4 +1,4 @@
-package com.digipen.se.financetracker.entity;
+package com.digipen.se.financetracker.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -42,7 +42,7 @@ public class Budget {
     private UserAccount userAccount;
 
     public Budget(int year, int month, BigDecimal amount,
-                  @Valid Category category, @Valid UserAccount userAccount) {
+                  Category category, UserAccount userAccount) {
         this.year = year;
         this.month = month;
         this.amount = amount;

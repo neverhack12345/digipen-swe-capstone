@@ -1,8 +1,10 @@
 package com.digipen.se.financetracker.cashflow;
 
-import com.digipen.se.financetracker.entity.CashFlow;
+import com.digipen.se.financetracker.entities.CashFlow;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -17,17 +19,24 @@ public class CashFlowService {
         return this.cashFlowRepository.findAll();
     }
 
-    public List<CashFlow> findByUserId(Integer userId) {
+    public List<CashFlow> findAllByUserId(Integer userId) {
         return this.cashFlowRepository.findAllByUserAccount_UserIdOrderByDateDesc(userId);
     }
 
-    public List<CashFlow> findByUserId(Integer userId, Integer year) {
+    public List<CashFlow> findAllByUserId(Integer userId, Integer year) {
         return this.cashFlowRepository.findAllByYearAndUserAccount_UserIdOrderByDateDesc(userId, year);
     }
 
-    public List<CashFlow> findByUserId(Integer userId, Integer year, Integer month) {
+    public List<CashFlow> findAllByUserId(Integer userId, Integer year, Integer month) {
         return this.cashFlowRepository.findAllByYearAndMonthAndUserAccount_UserIdOrderByDateDesc(
                 userId, year, month);
     }
 
+    public Long countCashFlowByDetails(String name, LocalDate date) {
+        return this.cashFlowRepository.countCashFlowBySourceNameAndDate(name, date);
+    }
+
+    public void add(@Valid CashFlow cashFlow) {
+        this.cashFlowRepository.save(cashFlow);
+    }
 }

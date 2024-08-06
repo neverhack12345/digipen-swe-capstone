@@ -1,11 +1,11 @@
 package com.digipen.se.financetracker.budget;
 
 import com.digipen.se.financetracker.category.CategoryService;
-import com.digipen.se.financetracker.entity.Budget;
-import com.digipen.se.financetracker.entity.Category;
-import com.digipen.se.financetracker.entity.UserAccount;
-import com.digipen.se.financetracker.exception.InvalidRequestParamException;
-import com.digipen.se.financetracker.exception.ResourceNotFoundException;
+import com.digipen.se.financetracker.entities.Budget;
+import com.digipen.se.financetracker.entities.Category;
+import com.digipen.se.financetracker.entities.UserAccount;
+import com.digipen.se.financetracker.exceptions.InvalidRequestParamException;
+import com.digipen.se.financetracker.exceptions.ResourceNotFoundException;
 import com.digipen.se.financetracker.pojo.BudgetDTO;
 import com.digipen.se.financetracker.useraccount.UserAccountService;
 import jakarta.validation.ConstraintViolationException;
