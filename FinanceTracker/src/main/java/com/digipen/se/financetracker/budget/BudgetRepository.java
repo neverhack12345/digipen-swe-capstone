@@ -27,4 +27,10 @@ public interface BudgetRepository extends JpaRepository<Budget, Integer> {
             @Param("userId") Integer userId,
             @Param("year") Integer year,
             @Param("month") Integer month);
+
+    @Query("SELECT COUNT(b) " +
+            "FROM Budget b " +
+            "WHERE b.userAccount.userId = :userId AND b.year = :year AND b.month = :month")
+    Long CountBudgetByUserAccount_UserIdAndYearAndMonth(
+            @Param("userId") Integer userId, @Param("year") Integer year, @Param("month") Integer month);
 }

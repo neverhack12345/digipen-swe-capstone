@@ -1,6 +1,8 @@
 package com.digipen.se.financetracker.useraccount;
 
 import com.digipen.se.financetracker.entity.UserAccount;
+import jakarta.validation.Valid;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,7 +19,22 @@ public class UserAccountService {
         return this.userAccountRepository.findAll();
     }
 
-    public List<UserAccount> findByUserId(Integer userId) {
-        return this.userAccountRepository.findByUserId(userId);
+    public UserAccount findUserAccountByUserId(Integer userId) {
+        return this.userAccountRepository.findUserAccountByUserId(userId);
+    }
+
+    public Long countUserAccountByEmail(String email) {
+        return this.userAccountRepository.countUserAccountByEmail(email);
+    }
+
+    public void add(@Valid UserAccount userAccount) {
+        userAccount.hashPassword();
+        this.userAccountRepository.save(userAccount);
+    }
+
+    public boolean authenticate(String email, String password) {
+        BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
+        String passwordHash = this.userAccountRepository.getPasswordByEmail(email);
+        return bcrypt.matches(password, passwordHash);
     }
 }

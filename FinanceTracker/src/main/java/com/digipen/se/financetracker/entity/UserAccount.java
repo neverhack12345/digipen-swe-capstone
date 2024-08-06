@@ -12,6 +12,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.validator.constraints.Length;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -25,24 +27,24 @@ public class UserAccount {
     @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id private int userId;
-    @NotBlank
-    @Email
-    @Max(255)
+    @NotBlank(message = "User email cannot be blank!")
+    @Email(message = "User email invalid format!")
+    @Length(max = 255, message = "User email cannot be longer than 255 characters!")
     @Column(name = "email")
     private String email;
-    @NotBlank
-    @Max(255)
+    @NotBlank(message = "User password cannot be blank!")
+    @Length(max = 255, message = "User password cannot be longer than 255 characters!")
     @Column(name = "password")
     private String password;
-    @NotBlank
-    @Max(255)
+    @NotBlank(message = "User first name cannot be blank!")
+    @Length(max = 255, message = "User first name cannot be longer than 255 characters!")
     @Column(name = "first_name")
     private String firstName;
-    @NotBlank
-    @Max(255)
+    @NotBlank(message = "User last name cannot be blank!")
+    @Length(max = 255, message = "User last name cannot be longer than 255 characters!")
     @Column(name = "last_name")
     private String lastName;
-    @PastOrPresent
+    @FutureOrPresent(message = "User date of birth cannot be in the future")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)
@@ -59,4 +61,13 @@ public class UserAccount {
     @OneToMany(mappedBy = "userAccount")
     @Fetch(FetchMode.SELECT)
     private List<CashFlow> CashFlow;
+
+    @JsonIgnore
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+    public void hashPassword() {
+        BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
+        this.password = bcrypt.encode(this.password);
+    }
 }
