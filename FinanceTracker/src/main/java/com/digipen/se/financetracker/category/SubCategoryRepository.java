@@ -1,4 +1,4 @@
-package com.digipen.se.financetracker.subcategory;
+package com.digipen.se.financetracker.category;
 
 import com.digipen.se.financetracker.entity.SubCategory;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,4 +12,7 @@ import java.util.List;
 public interface SubCategoryRepository extends JpaRepository<SubCategory, Integer> {
     @Query("SELECT sc from SubCategory sc WHERE sc.category.catId = :catId")
     List<SubCategory> findSubCategoriesByCategory_CatId(@Param("catId") Integer catId);
+
+    @Query("SELECT COUNT(sc) from SubCategory sc WHERE LOWER(sc.subName) = LOWER(:subName)")
+    Long countSubCategoryBySubName(@Param("subName") String subName);
 }
