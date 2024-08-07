@@ -35,7 +35,7 @@ export default function LoginForm() {
               color='default' variant='bordered' size='md' radius='full'/>
             </div>
             <div className="w-full flex-wrap gap-4">
-                <Button className="mt-2 w-full" color="primary" variant='solid' size='md' radius='full'>
+                <Button className="mt-2 w-full" type="submit" color="primary" variant='solid' size='md' radius='full'>
                     Log-in
                 </Button>
             </div>
