@@ -7,17 +7,16 @@ import { Input } from "@nextui-org/input";
 import { Divider } from "@nextui-org/divider";
 import { Select, SelectItem } from "@nextui-org/select";
 import { DatePicker } from "@nextui-org/date-picker";
-import { createUser } from "../api/route";
 import { FormEvent } from "react";
+import { sampleAPI } from "@/app/api/route";
 
-export default function SignUp() {
-    async function onSubmit(event: FormEvent<HTMLFormElement>) {
-      event.preventDefault()
-      const formData = new FormData(event.currentTarget)
-      await createUser(formData);
-    }
-
-    const gender = [
+export default function FormTemplate() {
+  async function onSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    const formData = new FormData(event.currentTarget)
+    await sampleAPI(formData);
+  }
+  const gender = [
       {key: "unkown", label: "N/A"},
       {key: "female", label: "F"},
       {key: "male", label: "M"},
@@ -61,7 +60,7 @@ export default function SignUp() {
             </Select>
           </div>
           <div className="w-full flex-wrap">
-            <Button className="w-full" type="submit" color="primary" variant='solid' size='md' radius='full'>
+            <Button className="w-full" color="primary" variant='solid' size='md' radius='full'>
               Sign-up
             </Button>
           </div>

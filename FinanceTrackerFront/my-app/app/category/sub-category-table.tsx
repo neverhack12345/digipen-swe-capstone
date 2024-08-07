@@ -1,5 +1,6 @@
 "use client"
 
+import useSWR from 'swr'
 import React from "react";
 import {
     Table,
@@ -12,7 +13,6 @@ import {
 import { Chip } from "@nextui-org/chip";
 import { User } from "@nextui-org/user";
 import { Pagination } from "@nextui-org/pagination";
-import { Input } from "@nextui-org/input"
 import { Button } from "@nextui-org/button"
 import {
     DropdownTrigger,
@@ -20,55 +20,25 @@ import {
     DropdownMenu,
     DropdownItem
 } from "@nextui-org/dropdown"
-import {PlusIcon, VerticalDotsIcon, SearchIcon, ChevronDownIcon} from "@/template/resource/icons";
-import {columns, users, statusOptions} from "@/template/resource/data";
-import {capitalize} from "../../template/resource/utils";
+import { PlusIcon, VerticalDotsIcon } from "@/template/resource/icons";
+import { columns, users } from "@/template/resource/data";
 
-const statusColorMap = {
-  active: "success",
-  paused: "danger",
-  vacation: "warning",
-};
-
-const INITIAL_VISIBLE_COLUMNS = ["name", "role", "status", "actions"];
-
-export default function CategoryTable() {
-  const [filterValue, setFilterValue] = React.useState("");
-  const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
-  const [visibleColumns, setVisibleColumns] = React.useState(new Set(INITIAL_VISIBLE_COLUMNS));
-  const [statusFilter, setStatusFilter] = React.useState("all");
+export default function SubCategoryTable() {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [sortDescriptor, setSortDescriptor] = React.useState({
-    column: "age",
-    direction: "ascending",
-  });
   const [page, setPage] = React.useState(1);
-
-  const hasSearchFilter = Boolean(filterValue);
+  const { data, error, isLoading } = useSWR('', fetch)
+ 
+  if (error) return <div>failed to load</div>
+  if (isLoading) return <div>loading...</div>
 
   const headerColumns = React.useMemo(() => {
-    // if (visibleColumns === "all") return columns;
-    if (visibleColumns) return columns;
-
-    return columns.filter((column) => Array.from(visibleColumns).includes(column.uid));
-  }, [visibleColumns]);
+    return columns
+  }, []);
 
   const filteredItems = React.useMemo(() => {
     let filteredUsers = [...users];
-
-    if (hasSearchFilter) {
-      filteredUsers = filteredUsers.filter((user) =>
-        user.name.toLowerCase().includes(filterValue.toLowerCase()),
-      );
-    }
-    if (statusFilter !== "all" && Array.from(statusFilter).length !== statusOptions.length) {
-      filteredUsers = filteredUsers.filter((user) =>
-        Array.from(statusFilter).includes(user.status),
-      );
-    }
-
     return filteredUsers;
-  }, [users, filterValue, statusFilter]);
+  }, [users]);
 
   const pages = Math.ceil(filteredItems.length / rowsPerPage);
 
@@ -80,22 +50,12 @@ export default function CategoryTable() {
   }, [page, filteredItems, rowsPerPage]);
 
   const sortedItems = React.useMemo(() => {
-    return [...items].sort((a, b) => {
-      // const first = a[sortDescriptor.column];
-      // const second = b[sortDescriptor.column];
-      const first = a["age"];
-      const second = b["age"];
-      const cmp = first < second ? -1 : first > second ? 1 : 0;
-
-      return sortDescriptor.direction === "descending" ? -cmp : cmp;
-    });
-  }, [sortDescriptor, items]);
+    return [...items];
+  }, [items]);
 
   const renderCell = React.useCallback((user: { [x: string]: any; avatar: any; 
-    email: string | number | bigint | boolean | React.ReactElement<any, string | 
-    React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | Promise<React.AwaitedReactNode> | null | undefined; 
-    team: string | number | bigint | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | 
-    Iterable<React.ReactNode> | React.ReactPortal | Promise<React.AwaitedReactNode> | null | undefined; status: string | number; 
+    email: string | null | undefined; 
+    team: string | null | undefined; status: string | number; 
   }, 
     columnKey: string | number) => {
     const cellValue = user[columnKey];
@@ -120,7 +80,6 @@ export default function CategoryTable() {
         );
       case "status":
         return (
-          // <Chip className="capitalize" color={statusColorMap[user.status]} size="sm" variant="flat">
           <Chip className="capitalize" color="success" size="sm" variant="flat">
             {cellValue}
           </Chip>
@@ -164,76 +123,11 @@ export default function CategoryTable() {
     setPage(1);
   }, []);
 
-  const onSearchChange = React.useCallback((value: React.SetStateAction<string>) => {
-    if (value) {
-      setFilterValue(value);
-      setPage(1);
-    } else {
-      setFilterValue("");
-    }
-  }, []);
-
-  const onClear = React.useCallback(()=>{
-    setFilterValue("")
-    setPage(1)
-  },[])
-
   const topContent = React.useMemo(() => {
     return (
       <div className="flex flex-col gap-4">
         <div className="flex justify-between gap-3 items-end">
-          <Input
-            isClearable
-            className="w-full sm:max-w-[44%]"
-            placeholder="Search by name..."
-            startContent={<SearchIcon />}
-            value={filterValue}
-            onClear={() => onClear()}
-            onValueChange={onSearchChange}
-          />
           <div className="flex gap-3">
-            <Dropdown>
-              <DropdownTrigger className="hidden sm:flex">
-                <Button endContent={<ChevronDownIcon className="text-small" />} variant="flat">
-                  Status
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu
-                disallowEmptySelection
-                aria-label="Table Columns"
-                closeOnSelect={false}
-                selectedKeys={statusFilter}
-                selectionMode="multiple"
-                // onSelectionChange={setStatusFilter}
-              >
-                {statusOptions.map((status) => (
-                  <DropdownItem key={status.uid} className="capitalize">
-                    {capitalize(status.name)}
-                  </DropdownItem>
-                ))}
-              </DropdownMenu>
-            </Dropdown>
-            <Dropdown>
-              <DropdownTrigger className="hidden sm:flex">
-                <Button endContent={<ChevronDownIcon className="text-small" />} variant="flat">
-                  Columns
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu
-                disallowEmptySelection
-                aria-label="Table Columns"
-                closeOnSelect={false}
-                selectedKeys={visibleColumns}
-                selectionMode="multiple"
-                // onSelectionChange={setVisibleColumns}
-              >
-                {columns.map((column) => (
-                  <DropdownItem key={column.uid} className="capitalize">
-                    {capitalize(column.name)}
-                  </DropdownItem>
-                ))}
-              </DropdownMenu>
-            </Dropdown>
             <Button color="primary" endContent={<PlusIcon width={undefined} height={undefined} />}>
               Add New
             </Button>
@@ -256,22 +150,14 @@ export default function CategoryTable() {
       </div>
     );
   }, [
-    filterValue,
-    statusFilter,
-    visibleColumns,
     onRowsPerPageChange,
     users.length,
-    onSearchChange,
-    hasSearchFilter,
   ]);
 
   const bottomContent = React.useMemo(() => {
     return (
       <div className="py-2 px-2 flex justify-between items-center">
         <span className="w-[30%] text-small text-default-400">
-          {selectedKeys.keys.length === filteredItems.length
-            ? "All items selected"
-            : `${selectedKeys.size} of ${filteredItems.length} selected`}
         </span>
         <Pagination
           isCompact
@@ -292,7 +178,7 @@ export default function CategoryTable() {
         </div>
       </div>
     );
-  }, [selectedKeys, items.length, page, pages, hasSearchFilter]);
+  }, [items.length, page, pages]);
 
   return (
     <Table
@@ -303,13 +189,9 @@ export default function CategoryTable() {
       classNames={{
         wrapper: "max-h-[382px]",
       }}
-      selectedKeys={selectedKeys}
       selectionMode="multiple"
-      // sortDescriptor={sortDescriptor}
       topContent={topContent}
       topContentPlacement="outside"
-      // onSelectionChange={setSelectedKeys}
-      // onSortChange={setSortDescriptor}
     >
       <TableHeader columns={headerColumns}>
         {(column) => (

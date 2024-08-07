@@ -1,5 +1,6 @@
 "use client"
 
+import useSWR from 'swr'
 import React from "react";
 import {
     Table,
@@ -22,7 +23,7 @@ import {
 } from "@nextui-org/dropdown"
 import {PlusIcon, VerticalDotsIcon, SearchIcon, ChevronDownIcon} from "@/template/resource/icons";
 import {columns, users, statusOptions} from "@/template/resource/data";
-import {capitalize} from "../../template/resource/utils";
+import {capitalize} from "@/template/resource/utils";
 
 const statusColorMap = {
   active: "success",
@@ -32,7 +33,7 @@ const statusColorMap = {
 
 const INITIAL_VISIBLE_COLUMNS = ["name", "role", "status", "actions"];
 
-export default function CategoryTable() {
+export default function FullTableTemplate() {
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
   const [visibleColumns, setVisibleColumns] = React.useState(new Set(INITIAL_VISIBLE_COLUMNS));
@@ -43,6 +44,10 @@ export default function CategoryTable() {
     direction: "ascending",
   });
   const [page, setPage] = React.useState(1);
+  const { data, error, isLoading } = useSWR('', fetch)
+ 
+  if (error) return <div>failed to load</div>
+  if (isLoading) return <div>loading...</div>
 
   const hasSearchFilter = Boolean(filterValue);
 

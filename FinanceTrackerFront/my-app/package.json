@@ -29,6 +29,7 @@
 		"@nextui-org/system": "2.2.5",
 		"@nextui-org/table": "^2.0.39",
 		"@nextui-org/theme": "2.2.9",
+		"@nextui-org/tooltip": "^2.0.39",
 		"@nextui-org/user": "^2.0.33",
 		"@react-aria/ssr": "3.9.4",
 		"@react-aria/visually-hidden": "3.8.12",
@@ -38,7 +39,8 @@
 		"next": "14.2.4",
 		"next-themes": "^0.2.1",
 		"react": "18.3.1",
-		"react-dom": "18.3.1"
+		"react-dom": "18.3.1",
+		"swr": "^2.2.5"
 	},
 	"devDependencies": {
 		"@types/node": "20.5.7",
