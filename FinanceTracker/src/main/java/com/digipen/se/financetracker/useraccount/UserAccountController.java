@@ -1,12 +1,12 @@
 package com.digipen.se.financetracker.useraccount;
 
-import com.digipen.se.financetracker.entities.UserAccount;
 import com.digipen.se.financetracker.exceptions.InvalidRequestParamException;
 import com.digipen.se.financetracker.exceptions.ResourceNotFoundException;
-import com.digipen.se.financetracker.pojo.UserAddDTO;
+import com.digipen.se.financetracker.model.UserCreationDTO;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,10 +14,13 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/user")
 public class UserAccountController {
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final UserAccountService userAccountService;
 
-    public UserAccountController(UserAccountService userAccountService) {
+    public UserAccountController(UserAccountService userAccountService,
+                                 BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userAccountService = userAccountService;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     @GetMapping("/getAll")
@@ -43,14 +46,15 @@ public class UserAccountController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<String> add(@RequestBody UserAddDTO userAddDTO)
+    public ResponseEntity<String> add(@RequestBody UserCreationDTO userCreationDTO)
             throws InvalidRequestParamException, ConstraintViolationException {
-        if (this.userAccountService.countUserAccountByEmail(userAddDTO.getEmail()) > 0) {
+        if (this.userAccountService.countUserAccountByEmail(userCreationDTO.getEmail()) > 0) {
             throw new InvalidRequestParamException("User email already exists!");
         }
         UserAccount userAccount = new UserAccount(
-                userAddDTO.getEmail(), userAddDTO.getPassword(), userAddDTO.getFirstName(), userAddDTO.getLastName(),
-                userAddDTO.getDob(), userAddDTO.getGender());
+                userCreationDTO.getEmail(), bCryptPasswordEncoder.encode(userCreationDTO.getPassword()),
+                userCreationDTO.getFirstName(), userCreationDTO.getLastName(),
+                userCreationDTO.getDob(), userCreationDTO.getGender());
         this.userAccountService.add(userAccount);
         return ResponseEntity.ok().body("Add successful!");
     }
@@ -69,6 +73,7 @@ public class UserAccountController {
     @PostMapping("/update")
     public ResponseEntity<String> update(@RequestBody UserAccount userAccount)
             throws InvalidRequestParamException, ConstraintViolationException {
+        userAccount.setPassword(bCryptPasswordEncoder.encode(userAccount.getPassword()));
         UserAccount currUser = this.userAccountService.findUserAccountByUserId(userAccount.getUserId());
         if (currUser == null) {
             throw new ResourceNotFoundException("No user matching user id!");

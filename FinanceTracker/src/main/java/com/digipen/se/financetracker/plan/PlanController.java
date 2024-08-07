@@ -1,8 +1,8 @@
 package com.digipen.se.financetracker.plan;
 
 import com.digipen.se.financetracker.exceptions.InvalidRequestParamException;
-import com.digipen.se.financetracker.pojo.GeneratedPlan;
-import com.digipen.se.financetracker.pojo.Plan;
+import com.digipen.se.financetracker.model.GeneratedPlan;
+import com.digipen.se.financetracker.model.Plan;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

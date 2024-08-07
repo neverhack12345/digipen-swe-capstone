@@ -1,5 +1,6 @@
-package com.digipen.se.financetracker.entities;
+package com.digipen.se.financetracker.category;
 
+import com.digipen.se.financetracker.budget.Budget;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;

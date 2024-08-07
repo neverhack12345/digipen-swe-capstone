@@ -1,6 +1,5 @@
 package com.digipen.se.financetracker.budget;
 
-import com.digipen.se.financetracker.entities.Budget;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 

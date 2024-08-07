@@ -1,7 +1,7 @@
 package com.digipen.se.financetracker.plan;
 
-import com.digipen.se.financetracker.pojo.GeneratedPlan;
-import com.digipen.se.financetracker.pojo.Plan;
+import com.digipen.se.financetracker.model.GeneratedPlan;
+import com.digipen.se.financetracker.model.Plan;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 

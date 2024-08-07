@@ -1,5 +1,6 @@
-package com.digipen.se.financetracker.entities;
+package com.digipen.se.financetracker.useraccount;
 
+import com.digipen.se.financetracker.budget.Budget;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -71,12 +72,12 @@ public class UserAccount {
     @JsonIgnore
     @OneToMany(mappedBy = "userAccount")
     @Fetch(FetchMode.SELECT)
-    private List<CashFlow> CashFlow;
+    private List<com.digipen.se.financetracker.cashflow.CashFlow> CashFlow;
 
-    public UserAccount(String email, String rawPasword, String firstName,
+    public UserAccount(String email, String password, String firstName,
                        String lastName, LocalDate dob, String gender) {
         this.email = email;
-        this.password = hashPassword(rawPasword);
+        this.password = password;
         this.firstName = firstName;
         if (!lastName.isBlank()) {
             this.lastName = lastName;
@@ -91,17 +92,10 @@ public class UserAccount {
 
     public void replace(UserAccount userAccount) {
         this.email = userAccount.getEmail();
-        this.password = hashPassword(userAccount.password);
+        this.password = userAccount.getPassword();
         this.firstName = userAccount.getFirstName();
         this.lastName = userAccount.getLastName();
         this.dob = userAccount.getDob();
         this.gender = userAccount.getGender();
     }
-
-
-    private String hashPassword(String rawPasword) {
-        BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
-        return bcrypt.encode(rawPasword);
-    }
-
 }

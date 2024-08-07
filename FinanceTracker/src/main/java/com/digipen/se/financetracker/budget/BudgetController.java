@@ -1,13 +1,12 @@
 package com.digipen.se.financetracker.budget;
 
 import com.digipen.se.financetracker.category.CategoryService;
-import com.digipen.se.financetracker.entities.Budget;
-import com.digipen.se.financetracker.entities.Category;
-import com.digipen.se.financetracker.entities.UserAccount;
+import com.digipen.se.financetracker.category.Category;
+import com.digipen.se.financetracker.useraccount.UserAccount;
 import com.digipen.se.financetracker.exceptions.InvalidRequestParamException;
 import com.digipen.se.financetracker.exceptions.ResourceNotFoundException;
-import com.digipen.se.financetracker.pojo.BudgetAddDTO;
-import com.digipen.se.financetracker.pojo.BudgetUpdateDTO;
+import com.digipen.se.financetracker.model.BudgetCreationDTO;
+import com.digipen.se.financetracker.model.BudgetUpdateDTO;
 import com.digipen.se.financetracker.useraccount.UserAccountService;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.ResponseEntity;
@@ -69,24 +68,24 @@ public class BudgetController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<String> add(@RequestBody BudgetAddDTO budgetAddDTO)
+    public ResponseEntity<String> add(@RequestBody BudgetCreationDTO budgetCreationDTO)
             throws ResourceNotFoundException, InvalidRequestParamException, ConstraintViolationException {
-        if (budgetAddDTO.getAmount().compareTo(BigDecimal.ZERO) == 0) {
+        if (budgetCreationDTO.getAmount().compareTo(BigDecimal.ZERO) == 0) {
             throw new InvalidRequestParamException("Budget amount cannot be 0!");
         }
         if (this.budgetService.countBudgetByDetails(
-                budgetAddDTO.getUserId(), budgetAddDTO.getYear(), budgetAddDTO.getMonth()) > 0) {
+                budgetCreationDTO.getUserId(), budgetCreationDTO.getYear(), budgetCreationDTO.getMonth()) > 0) {
             throw new InvalidRequestParamException("Budget already exists!");
         }
-        UserAccount userAccount = this.userAccountService.findUserAccountByUserId(budgetAddDTO.getUserId());
+        UserAccount userAccount = this.userAccountService.findUserAccountByUserId(budgetCreationDTO.getUserId());
         if (userAccount == null) {
             throw new InvalidRequestParamException("User Id cannot be found!");
         }
-        Category category = this.categoryService.findCategoryByCatId(budgetAddDTO.getCategoryId());
+        Category category = this.categoryService.findCategoryByCatId(budgetCreationDTO.getCategoryId());
         if (category == null) {
             throw new InvalidRequestParamException("Category Id cannot be found!");
         }
-        Budget budget = new Budget(budgetAddDTO.getYear(), budgetAddDTO.getMonth(), budgetAddDTO.getAmount(),
+        Budget budget = new Budget(budgetCreationDTO.getYear(), budgetCreationDTO.getMonth(), budgetCreationDTO.getAmount(),
                 category, userAccount);
         this.budgetService.add(budget);
         return ResponseEntity.ok().body("Add successful!");

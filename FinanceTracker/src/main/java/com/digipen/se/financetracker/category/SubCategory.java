@@ -1,5 +1,7 @@
-package com.digipen.se.financetracker.entities;
+package com.digipen.se.financetracker.category;
 
+import com.digipen.se.financetracker.cashflow.CashFlow;
+import com.digipen.se.financetracker.category.Category;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;

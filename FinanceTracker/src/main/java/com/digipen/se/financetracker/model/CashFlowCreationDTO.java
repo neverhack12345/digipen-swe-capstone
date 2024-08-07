@@ -1,4 +1,4 @@
-package com.digipen.se.financetracker.pojo;
+package com.digipen.se.financetracker.model;
 
 import lombok.Data;
 
@@ -6,8 +6,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Data
-public class CashFlowUpdateDTO {
-    private int flowId;
+public class CashFlowCreationDTO {
+    private int userId;
     private String sourceName;
     private LocalDate date;
     private BigDecimal amount;

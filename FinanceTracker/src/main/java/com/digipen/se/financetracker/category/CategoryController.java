@@ -1,10 +1,8 @@
 package com.digipen.se.financetracker.category;
 
-import com.digipen.se.financetracker.entities.Category;
-import com.digipen.se.financetracker.entities.SubCategory;
 import com.digipen.se.financetracker.exceptions.InvalidRequestParamException;
 import com.digipen.se.financetracker.exceptions.ResourceNotFoundException;
-import com.digipen.se.financetracker.pojo.SubCategoryAddDTO;
+import com.digipen.se.financetracker.model.SubCategoryCreationDTO;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
@@ -110,21 +108,21 @@ public class CategoryController {
     }
 
     @PostMapping("/subcategory/update")
-    public ResponseEntity<String> update(@RequestBody SubCategoryAddDTO subCategoryAddDTO)
+    public ResponseEntity<String> update(@RequestBody SubCategoryCreationDTO subCategoryCreationDTO)
             throws ResourceNotFoundException, InvalidRequestParamException, ConstraintViolationException {
-        SubCategory currSub = this.subCategoryService.findSubCategoryBySubId(subCategoryAddDTO.getSubId());
+        SubCategory currSub = this.subCategoryService.findSubCategoryBySubId(subCategoryCreationDTO.getSubId());
         if (currSub == null) {
             throw new ResourceNotFoundException("No sub-category matching sub-category id!");
         }
-        if (this.subCategoryService.countSubCategoryBySubName(subCategoryAddDTO.getSubName()) > 0) {
+        if (this.subCategoryService.countSubCategoryBySubName(subCategoryCreationDTO.getSubName()) > 0) {
             throw new InvalidRequestParamException(
                     "There is an existing sub-category with the same name!");
         }
-        Category newCat = this.categoryService.findCategoryByCatId(subCategoryAddDTO.getCatId());
+        Category newCat = this.categoryService.findCategoryByCatId(subCategoryCreationDTO.getCatId());
         if (newCat == null) {
             throw new ResourceNotFoundException("No category matching category id!");
         }
-        currSub.setSubName(subCategoryAddDTO.getSubName());
+        currSub.setSubName(subCategoryCreationDTO.getSubName());
         currSub.setCategory(newCat);
         this.subCategoryService.add(currSub);
         return ResponseEntity.ok().body("Update successful!");

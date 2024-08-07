@@ -1,6 +1,5 @@
 package com.digipen.se.financetracker.budget;
 
-import com.digipen.se.financetracker.entities.Budget;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

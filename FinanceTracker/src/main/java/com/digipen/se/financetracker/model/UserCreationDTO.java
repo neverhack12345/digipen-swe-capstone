@@ -1,11 +1,11 @@
-package com.digipen.se.financetracker.pojo;
+package com.digipen.se.financetracker.model;
 
 import lombok.Data;
 
 import java.time.LocalDate;
 
 @Data
-public class UserAddDTO {
+public class UserCreationDTO {
     private String email;
     private String password;
     private String firstName;

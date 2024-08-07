@@ -1,6 +1,5 @@
 package com.digipen.se.financetracker.category;
 
-import com.digipen.se.financetracker.entities.SubCategory;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 

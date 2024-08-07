@@ -1,4 +1,4 @@
-package com.digipen.se.financetracker.pojo;
+package com.digipen.se.financetracker.model;
 
 import lombok.Data;
 
