@@ -12,23 +12,29 @@ import {
 } from "@nextui-org/table";
 import { Tooltip } from '@nextui-org/tooltip';
 import { Button } from "@nextui-org/button"
-import { PlusIcon, EditIcon } from "@/template/resource/icons";
-import { users, subCategoryColumns } from "@/template/resource/data";
+import { PlusIcon, EditIcon, DeleteIcon } from "@/template/resource/icons";
+import { users, cashFlowColumns } from "@/template/resource/data";
 
-export default function CategoryTable() {
+export default function CashFlowTable() {
   const [data, setData] = useState([
     {
+      "flowId": 0,
+      "sourceName": "string",
+      "date": "2024-08-08",
+      "amount": 0,
+      "remark": "string",
       "subId": 0,
-      "subName": "string"
+      "subName": "string",
+      "userId": 0
     }
   ]);
 
   const headerColumns = React.useMemo(() => {
-    return subCategoryColumns
+    return cashFlowColumns
   }, []);
 
   useEffect(() => {
-    fetch('http://localhost:8080/api/subcategory/getAll').then(response => {
+    fetch('http://localhost:8080/api/cashflow/getAll').then(response => {
     if (!response.ok) {
       throw new Error('Network response was not ok ' + response.statusText);
     }
@@ -57,9 +63,14 @@ export default function CategoryTable() {
     if (columnKey === "actions" ) {
       return (
         <div className="relative flex items-center justify-center	gap-2">
-          <Tooltip content="Edit sub-category">
+          <Tooltip content="Edit cash flow">
             <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
               <EditIcon />
+            </span>
+          </Tooltip>
+          <Tooltip color="danger" content="Delete cash flow">
+            <span className="text-lg text-danger cursor-pointer active:opacity-50">
+              <DeleteIcon />
             </span>
           </Tooltip>
         </div>
@@ -71,7 +82,7 @@ export default function CategoryTable() {
   const topContent = React.useMemo(() => {
     return (
       <div className="flex flex-col gap-4">
-        <h1 className={title()}>Sub-Category Table</h1>
+        <h1 className={title()}>Cash Flow Table</h1>
         <div className="flex justify-between gap-3 items-end">
           <div className="flex gap-3">
             <Button color="primary" endContent={<PlusIcon width={undefined} height={undefined} />}>
@@ -105,9 +116,9 @@ export default function CategoryTable() {
           </TableColumn>
         )}
       </TableHeader>
-      <TableBody emptyContent={"No sub-category found"} items={filteredItems}>
+      <TableBody emptyContent={"No cash flow found"} items={filteredItems}>
         {(item) => (
-          <TableRow key={item.subId}>
+          <TableRow key={item.flowId}>
             {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
           </TableRow>
         )}

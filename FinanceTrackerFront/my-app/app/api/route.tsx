@@ -2,9 +2,85 @@
 
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
+import { redirect, permanentRedirect } from "next/navigation";
 
 const LOGIN_TAG = "isLoggedin";
+
+export async function addBudget(formData: { userId: string; categoryId: string; year: string; month: string; amount: string; }) {
+    try {
+        const response = await fetch('http://localhost:8080/api/budget/add', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          console.log(data.message);
+        } else {
+          const errorData = await response.json();
+          console.log(errorData.message || 'There was an error submitting the form.');
+        }
+    } catch (error) {
+        console.log('There was an error submitting the form.');
+        console.error('Form submission error:', error);
+    }
+    revalidatePath("/budget")
+    redirect("/budget")
+}
+
+export async function deleteBudget(budgetId: any) {
+  try {
+      const response = await fetch(`http://localhost:8080/api/budget/delete?id=${budgetId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json', 
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data.message);
+      } else {
+        const errorData = await response.json();
+        console.log(errorData.message || 'There was an error submitting the form.');
+      }
+  } catch (error) {
+      console.log('There was an error submitting the form.');
+      console.error('Form submission error:', error);
+  }
+  revalidatePath("/budget")
+  permanentRedirect("/budget")
+}
+
+export async function editBudget(formData: { budgetId: string | null; categoryId: string 
+  | null; year: string | null; month: string | null; amount: string | null; }) {
+    console.log(formData);
+  try {
+      const response = await fetch('http://localhost:8080/api/budget/update', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data.message);
+      } else {
+        const errorData = await response.json();
+        console.log(errorData.message || 'There was an error submitting the form.');
+      }
+  } catch (error) {
+      console.log('There was an error submitting the form.');
+      console.error('Form submission error:', error);
+  }
+  revalidatePath("/budget")
+  redirect("/budget")
+}
 
 export async function sampleAPI(formData: FormData) {
     // const response = await fetch('/api/submit', {
@@ -16,19 +92,11 @@ export async function sampleAPI(formData: FormData) {
 }
 
 export async function createUser(formData: FormData) {
-    // const response = await fetch('/api/submit', {
-    //     method: 'POST',
-    //     body: formData,
-    //   })
     revalidatePath("/signup")
     redirect("/login");
 }
 
 export async function authenticateUser(formData: FormData) {
-    // const response = await fetch('/api/submit', {
-    //     method: 'POST',
-    //     body: formData,
-    //   })
     cookies().set(LOGIN_TAG, "true")
     revalidatePath("/login")
     redirect("/category");

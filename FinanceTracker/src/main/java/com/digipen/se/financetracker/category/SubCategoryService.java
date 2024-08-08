@@ -1,5 +1,6 @@
 package com.digipen.se.financetracker.category;
 
+import com.digipen.se.financetracker.model.SubCategoryDTO;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 
@@ -13,8 +14,8 @@ public class SubCategoryService {
         this.subCategoryRepository = subCategoryRepository;
     }
 
-    public List<SubCategory> findAll() {
-        return this.subCategoryRepository.findAll();
+    public List<SubCategoryDTO> findAll() {
+        return this.subCategoryRepository.findSubCategoriesDTO();
     }
 
     public List<SubCategory> findSubCategoriesByCategory_CatId(Integer catId) {

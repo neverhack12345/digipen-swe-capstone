@@ -5,6 +5,7 @@ import com.digipen.se.financetracker.category.SubCategoryService;
 import com.digipen.se.financetracker.exceptions.InvalidRequestParamException;
 import com.digipen.se.financetracker.exceptions.ResourceNotFoundException;
 import com.digipen.se.financetracker.model.CashFlowCreationDTO;
+import com.digipen.se.financetracker.model.CashFlowDTO;
 import com.digipen.se.financetracker.model.CashFlowUpdateDTO;
 import com.digipen.se.financetracker.useraccount.UserAccount;
 import com.digipen.se.financetracker.useraccount.UserAccountService;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.util.List;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/api/cashflow")
 public class CashFlowController {
@@ -30,8 +32,8 @@ public class CashFlowController {
     }
 
     @GetMapping("/getAll")
-    public ResponseEntity<List<CashFlow>> findCashFlows() throws ResourceNotFoundException {
-        List<CashFlow> cashFlowList = this.cashFlowService.findAll();
+    public ResponseEntity<List<CashFlowDTO>> findCashFlows() throws ResourceNotFoundException {
+        List<CashFlowDTO> cashFlowList = this.cashFlowService.findAll();
         if (cashFlowList.isEmpty()) {
             throw new ResourceNotFoundException("No cash flow found!");
         }

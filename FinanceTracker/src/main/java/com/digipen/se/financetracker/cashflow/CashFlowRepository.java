@@ -1,5 +1,6 @@
 package com.digipen.se.financetracker.cashflow;
 
+import com.digipen.se.financetracker.model.CashFlowDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -29,4 +30,9 @@ public interface CashFlowRepository extends JpaRepository<CashFlow, Integer> {
             "WHERE f.userAccount.userId = :userId AND LOWER(f.sourceName) = LOWER(:name) AND f.date = :date")
     Long countCashFlowByUserAccount_UserIdSourceNameAndDate(@Param("userId") Integer userId,
             @Param("name") String sourceName, @Param("date") LocalDate date);
+
+    @Query("SELECT NEW com.digipen.se.financetracker.model.CashFlowDTO(" +
+            "f.flowId, f.sourceName, f.date, f.amount, f.remark, f.subCategory.subId, " +
+            "f.subCategory.subName, f.userAccount.userId) FROM CashFlow f")
+    List<CashFlowDTO> findCashFlowDTO();
 }

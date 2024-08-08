@@ -1,7 +1,7 @@
 "use client"
 
 import { title } from "@/components/primitives";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
     Table,
     TableHeader,
@@ -10,42 +10,53 @@ import {
     TableRow,
     TableCell,
 } from "@nextui-org/table";
-import { Tooltip } from '@nextui-org/tooltip';
-import { Button } from "@nextui-org/button"
-import { PlusIcon, EditIcon } from "@/template/resource/icons";
-import { users, subCategoryColumns } from "@/template/resource/data";
+import { PlusIcon } from "@/template/resource/icons";
+import { users, budgetColumns } from "@/template/resource/data";
+import NextLink from "next/link"
+import { DeleteBudgetButton } from "./delete-budget-button";
+import { EditBudgetButton } from "./edit-budget-button";
 
-export default function CategoryTable() {
+export default function BudgetTable() {
   const [data, setData] = useState([
     {
-      "subId": 0,
-      "subName": "string"
+      "budgetId": 0,
+      "year": 0,
+      "month": 0,
+      "amount": 0,
+      "catId": 0,
+      "catName": "string",
+      "userId": 0
     }
   ]);
 
   const headerColumns = React.useMemo(() => {
-    return subCategoryColumns
+    return budgetColumns
+  }, []);
+
+  const fetchData = useCallback(() => {
+    fetch('http://localhost:8080/api/budget/getAll')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok ' + response.statusText);
+        }
+        return response.json(); // Parse the JSON from the response
+      })
+      .then(data => {
+        if (Array.isArray(data)) {
+          setData(data);
+          return data;
+        } else {
+          throw new Error('Response data is not an array');
+        }
+      })
+      .catch(error => {
+        console.error('There was a problem with the fetch operation:', error);
+      });
   }, []);
 
   useEffect(() => {
-    fetch('http://localhost:8080/api/subcategory/getAll').then(response => {
-    if (!response.ok) {
-      throw new Error('Network response was not ok ' + response.statusText);
-    }
-    return response.json(); // Parse the JSON from the response
-    })
-    .then(data => {
-      if (Array.isArray(data)) {
-        setData(data);
-        return data;
-      } else {
-        throw new Error('Response data is not an array');
-      }
-    })
-    .catch(error => {
-      console.error('There was a problem with the fetch operation:', error);
-    });
-  },[])
+    fetchData();
+  }, []);
 
   const filteredItems = React.useMemo(() => {
     let filteredUsers = [...data];
@@ -57,11 +68,8 @@ export default function CategoryTable() {
     if (columnKey === "actions" ) {
       return (
         <div className="relative flex items-center justify-center	gap-2">
-          <Tooltip content="Edit sub-category">
-            <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-              <EditIcon />
-            </span>
-          </Tooltip>
+          <EditBudgetButton budget={user} />
+          <DeleteBudgetButton budgetId={user["budgetId"]} refreshData={fetchData} />
         </div>
       );
     }
@@ -71,12 +79,12 @@ export default function CategoryTable() {
   const topContent = React.useMemo(() => {
     return (
       <div className="flex flex-col gap-4">
-        <h1 className={title()}>Sub-Category Table</h1>
+        <h1 className={title()}>Budget Table</h1>
         <div className="flex justify-between gap-3 items-end">
           <div className="flex gap-3">
-            <Button color="primary" endContent={<PlusIcon width={undefined} height={undefined} />}>
-              Add New
-            </Button>
+          <NextLink type="button" href="/budget/add" >
+            <PlusIcon width={undefined} height={undefined} />
+          </NextLink>
           </div>
         </div>
       </div>
@@ -105,9 +113,9 @@ export default function CategoryTable() {
           </TableColumn>
         )}
       </TableHeader>
-      <TableBody emptyContent={"No sub-category found"} items={filteredItems}>
+      <TableBody emptyContent={"No budget found"} items={filteredItems}>
         {(item) => (
-          <TableRow key={item.subId}>
+          <TableRow key={item.budgetId}>
             {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
           </TableRow>
         )}

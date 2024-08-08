@@ -1,4 +1,4 @@
-export default function BudgetLayout({
+export default function AddBudgetLayout({
   children,
 }: {
   children: React.ReactNode;

@@ -1,7 +1,6 @@
 "use client"
 
 import { title } from "@/components/primitives";
-import useSWR from 'swr'
 import React from "react";
 import {
     Table,
@@ -20,11 +19,7 @@ import { columns, users } from "@/template/resource/data";
 export default function TableTemplate() {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [page, setPage] = React.useState(1);
-  const { data, error, isLoading } = useSWR('', fetch)
  
-  if (error) return <div>failed to load</div>
-  if (isLoading) return <div>loading...</div>
-
   const headerColumns = React.useMemo(() => {
     return columns
   }, []);

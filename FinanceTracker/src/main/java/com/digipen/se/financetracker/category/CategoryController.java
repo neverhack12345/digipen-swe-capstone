@@ -3,6 +3,7 @@ package com.digipen.se.financetracker.category;
 import com.digipen.se.financetracker.exceptions.InvalidRequestParamException;
 import com.digipen.se.financetracker.exceptions.ResourceNotFoundException;
 import com.digipen.se.financetracker.model.SubCategoryCreationDTO;
+import com.digipen.se.financetracker.model.SubCategoryDTO;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/api")
 public class CategoryController {
@@ -70,8 +72,8 @@ public class CategoryController {
     }
 
     @GetMapping("/subcategory/getAll")
-    public ResponseEntity<List<SubCategory>> findSubCategories() throws ResourceNotFoundException {
-        List<SubCategory> subCategoryList = this.subCategoryService.findAll();
+    public ResponseEntity<List<SubCategoryDTO>> findSubCategories() throws ResourceNotFoundException {
+        List<SubCategoryDTO> subCategoryList = this.subCategoryService.findAll();
         if (subCategoryList.isEmpty()) {
             throw new ResourceNotFoundException("No sub-category found!");
         }

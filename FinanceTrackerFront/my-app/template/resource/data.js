@@ -1,4 +1,39 @@
-import React from "react";
+const categoryColumns = [
+  {name: "ID", uid: "catId", sortable: true},
+  {name: "CATEGORY", uid: "catName", sortable: true},
+  {name: "ACTIONS", uid: "actions"},
+]
+
+const subCategoryColumns = [
+  {name: "ID", uid: "subId", sortable: true},
+  {name: "SUBCATEGORY", uid: "subName", sortable: true},
+  {name: "CATEGORY", uid: "catName", sortable: true},
+  {name: "ACTIONS", uid: "actions"},
+]
+
+const budgetColumns = [
+  {name: "ID", uid: "budgetId", sortable: true},
+  {name: "YEAR", uid: "year", sortable: true},
+  {name: "Month", uid: "month", sortable: true},
+  {name: "AMOUNT", uid: "amount", sortable: true},
+  {name: "CATEGORY ID", uid: "catId", sortable: true},
+  {name: "CATEGORY", uid: "catName", sortable: true},
+  {name: "USER ID", uid: "userId", sortable: true},
+  {name: "ACTIONS", uid: "actions"},
+]
+
+const cashFlowColumns = [
+  {name: "ID", uid: "flowId", sortable: true},
+  {name: "SOURCE", uid: "sourceName", sortable: true},
+  {name: "DATE", uid: "date", sortable: true},
+  {name: "AMOUNT", uid: "amount", sortable: true},
+  {name: "REMARK", uid: "remark", sortable: true},
+  {name: "SUBCATEGORY ID", uid: "subId", sortable: true},
+  {name: "SUBCATEGORY", uid: "subName", sortable: true},
+  {name: "USER ID", uid: "userId", sortable: true},
+  {name: "ACTIONS", uid: "actions"},
+]
+
 const columns = [
   {name: "ID", uid: "id", sortable: true},
   {name: "NAME", uid: "name", sortable: true},
@@ -219,4 +254,4 @@ const users = [
   },
 ];
 
-export {columns, users, statusOptions};
+export {columns, users, statusOptions, categoryColumns, subCategoryColumns, budgetColumns, cashFlowColumns};

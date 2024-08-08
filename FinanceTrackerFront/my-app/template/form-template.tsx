@@ -60,7 +60,7 @@ export default function FormTemplate() {
             </Select>
           </div>
           <div className="w-full flex-wrap">
-            <Button className="w-full" color="primary" variant='solid' size='md' radius='full'>
+            <Button type="submit" className="w-full" color="primary" variant='solid' size='md' radius='full'>
               Sign-up
             </Button>
           </div>

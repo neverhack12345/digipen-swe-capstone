@@ -1,5 +1,6 @@
 package com.digipen.se.financetracker.budget;
 
+import com.digipen.se.financetracker.model.BudgetDTO;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 
@@ -13,8 +14,8 @@ public class BudgetService {
         this.budgetRepository = budgetRepository;
     }
 
-    public List<Budget> findAll() {
-        return this.budgetRepository.findAll();
+    public List<BudgetDTO> findAll() {
+        return this.budgetRepository.findBudgetDTO();
     }
 
     public Budget findBudgetByBudget_Id(Integer budgetId) {
@@ -34,8 +35,9 @@ public class BudgetService {
                 userId, year, month);
     }
 
-    public Long countBudgetByDetails(Integer userId, Integer year, Integer month) {
-        return this.budgetRepository.CountBudgetByUserAccount_UserIdAndYearAndMonth(userId, year, month);
+    public Long countBudgetByDetails(Integer userId, Integer catId, Integer year, Integer month) {
+        return this.budgetRepository.CountBudgetByUserAccount_UserIdAndCategory_CategoryIdAndYearAndMonth(
+                userId, catId, year, month);
     }
 
     public void add(@Valid Budget budget) {

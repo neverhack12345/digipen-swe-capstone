@@ -1,5 +1,6 @@
 package com.digipen.se.financetracker.category;
 
+import com.digipen.se.financetracker.model.SubCategoryDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -14,4 +15,8 @@ public interface SubCategoryRepository extends JpaRepository<SubCategory, Intege
 
     @Query("SELECT COUNT(sc) from SubCategory sc WHERE LOWER(sc.subName) = LOWER(:subName)")
     Long countSubCategoryBySubName(@Param("subName") String subName);
+
+    @Query("SELECT NEW com.digipen.se.financetracker.model.SubCategoryDTO(" +
+            "sc.subId, sc.subName, sc.category.catName) FROM SubCategory sc")
+    List<SubCategoryDTO> findSubCategoriesDTO();
 }

@@ -1,5 +1,6 @@
 package com.digipen.se.financetracker.budget;
 
+import com.digipen.se.financetracker.model.BudgetDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -29,7 +30,14 @@ public interface BudgetRepository extends JpaRepository<Budget, Integer> {
 
     @Query("SELECT COUNT(b) " +
             "FROM Budget b " +
-            "WHERE b.userAccount.userId = :userId AND b.year = :year AND b.month = :month")
-    Long CountBudgetByUserAccount_UserIdAndYearAndMonth(
-            @Param("userId") Integer userId, @Param("year") Integer year, @Param("month") Integer month);
+            "WHERE b.userAccount.userId = :userId AND b.category.catId = :catId " +
+            "AND b.year = :year AND b.month = :month")
+    Long CountBudgetByUserAccount_UserIdAndCategory_CategoryIdAndYearAndMonth(
+            @Param("userId") Integer userId, @Param("catId") Integer catId,
+            @Param("year") Integer year, @Param("month") Integer month);
+
+    @Query("SELECT NEW com.digipen.se.financetracker.model.BudgetDTO(" +
+            "b.budgetId, b.year, b.month, b.amount, b.category.catId, " +
+            "b.category.catName, b.userAccount.userId) FROM Budget b")
+    List<BudgetDTO> findBudgetDTO();
 }

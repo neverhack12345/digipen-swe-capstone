@@ -1,5 +1,6 @@
 package com.digipen.se.financetracker.cashflow;
 
+import com.digipen.se.financetracker.model.CashFlowDTO;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 
@@ -14,8 +15,8 @@ public class CashFlowService {
         this.cashFlowRepository = cashFlowRepository;
     }
 
-    public List<CashFlow> findAll() {
-        return this.cashFlowRepository.findAll();
+    public List<CashFlowDTO> findAll() {
+        return this.cashFlowRepository.findCashFlowDTO();
     }
 
     public List<CashFlow> findAllByUserId(Integer userId) {

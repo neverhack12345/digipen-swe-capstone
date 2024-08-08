@@ -2,6 +2,7 @@ package com.digipen.se.financetracker.budget;
 
 import com.digipen.se.financetracker.category.CategoryService;
 import com.digipen.se.financetracker.category.Category;
+import com.digipen.se.financetracker.model.BudgetDTO;
 import com.digipen.se.financetracker.useraccount.UserAccount;
 import com.digipen.se.financetracker.exceptions.InvalidRequestParamException;
 import com.digipen.se.financetracker.exceptions.ResourceNotFoundException;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.util.List;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/api/budget")
 public class BudgetController {
@@ -30,8 +32,8 @@ public class BudgetController {
     }
 
     @GetMapping("/getAll")
-    public ResponseEntity<List<Budget>> findUserAccounts() throws ResourceNotFoundException {
-        List<Budget> budgetList = this.budgetService.findAll();
+    public ResponseEntity<List<BudgetDTO>> findUserAccounts() throws ResourceNotFoundException {
+        List<BudgetDTO> budgetList = this.budgetService.findAll();
         if (budgetList.isEmpty()) {
             throw new ResourceNotFoundException("No budget found!");
         }
@@ -74,7 +76,8 @@ public class BudgetController {
             throw new InvalidRequestParamException("Budget amount cannot be 0!");
         }
         if (this.budgetService.countBudgetByDetails(
-                budgetCreationDTO.getUserId(), budgetCreationDTO.getYear(), budgetCreationDTO.getMonth()) > 0) {
+                budgetCreationDTO.getUserId(), budgetCreationDTO.getCategoryId(),
+                budgetCreationDTO.getYear(), budgetCreationDTO.getMonth()) > 0) {
             throw new InvalidRequestParamException("Budget already exists!");
         }
         UserAccount userAccount = this.userAccountService.findUserAccountByUserId(budgetCreationDTO.getUserId());
@@ -102,8 +105,8 @@ public class BudgetController {
             throw new ResourceNotFoundException("Budget not found!");
         }
         if (this.budgetService.countBudgetByDetails(
-                currBudget.getUserAccount().getUserId(), budgetUpdateDTO.getYear(),
-                budgetUpdateDTO.getMonth()) > 0) {
+                currBudget.getUserAccount().getUserId(), budgetUpdateDTO.getCategoryId(),
+                budgetUpdateDTO.getYear(), budgetUpdateDTO.getMonth()) > 0) {
             throw new InvalidRequestParamException("Budget already exists!");
         }
         Category newCat = this.categoryService.findCategoryByCatId(budgetUpdateDTO.getCategoryId());
