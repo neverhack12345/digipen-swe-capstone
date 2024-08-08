@@ -3,10 +3,11 @@
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect, permanentRedirect } from "next/navigation";
+import { AddBudget } from "@/types/definitions";
 
 const LOGIN_TAG = "isLoggedin";
 
-export async function addBudget(formData: { userId: string; categoryId: string; year: string; month: string; amount: string; }) {
+export async function addBudget(formData: AddBudget) {
     try {
         const response = await fetch('http://localhost:8080/api/budget/add', {
           method: 'POST',

@@ -1,7 +1,7 @@
 "use client"
 
 import { title } from "@/components/primitives";
-import React, { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import {
     Table,
     TableHeader,
@@ -15,24 +15,10 @@ import { users, budgetColumns } from "@/template/resource/data";
 import NextLink from "next/link"
 import { DeleteBudgetButton } from "./delete-budget-button";
 import { EditBudgetButton } from "./edit-budget-button";
+import { Budget } from "@/types/definitions";
 
 export default function BudgetTable() {
-  const [data, setData] = useState([
-    {
-      "budgetId": 0,
-      "year": 0,
-      "month": 0,
-      "amount": 0,
-      "catId": 0,
-      "catName": "string",
-      "userId": 0
-    }
-  ]);
-
-  const headerColumns = React.useMemo(() => {
-    return budgetColumns
-  }, []);
-
+  const [data , setData] = useState<Array<Budget>>();
   const fetchData = useCallback(() => {
     fetch('http://localhost:8080/api/budget/getAll')
       .then(response => {
@@ -58,13 +44,15 @@ export default function BudgetTable() {
     fetchData();
   }, []);
 
-  const filteredItems = React.useMemo(() => {
-    let filteredUsers = [...data];
-    return filteredUsers;
+  const filteredItems = useMemo(() => {
+    if (data !== undefined) {
+      return [...data];
+    } else {
+      return [];
+    }
   }, [data]);
 
-  const renderCell = React.useCallback((user: { [x: string]: any; }, columnKey: string | number) => {
-    const cellValue = user[columnKey];
+  const renderCell = useCallback((user: Budget, columnKey: keyof Budget | 'actions' ) => {
     if (columnKey === "actions" ) {
       return (
         <div className="relative flex items-center justify-center	gap-2">
@@ -73,10 +61,10 @@ export default function BudgetTable() {
         </div>
       );
     }
-    return cellValue;
+    return user[columnKey];
   }, []);
 
-  const topContent = React.useMemo(() => {
+  const topContent = useMemo(() => {
     return (
       <div className="flex flex-col gap-4">
         <h1 className={title()}>Budget Table</h1>
@@ -103,7 +91,7 @@ export default function BudgetTable() {
       topContent={topContent}
       topContentPlacement="outside"
     >
-      <TableHeader columns={headerColumns}>
+      <TableHeader columns={budgetColumns}>
         {(column) => (
           <TableColumn
             key={column.uid}
@@ -116,7 +104,7 @@ export default function BudgetTable() {
       <TableBody emptyContent={"No budget found"} items={filteredItems}>
         {(item) => (
           <TableRow key={item.budgetId}>
-            {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
+            {(columnKey) => <TableCell>{renderCell(item, columnKey as keyof Budget | 'actions')}</TableCell>}
           </TableRow>
         )}
       </TableBody>
