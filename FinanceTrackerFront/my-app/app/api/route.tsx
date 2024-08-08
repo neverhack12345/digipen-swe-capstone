@@ -4,6 +4,8 @@ import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
+const LOGIN_TAG = "isLoggedin";
+
 export async function sampleAPI(formData: FormData) {
     // const response = await fetch('/api/submit', {
     //     method: 'POST',
@@ -27,13 +29,17 @@ export async function authenticateUser(formData: FormData) {
     //     method: 'POST',
     //     body: formData,
     //   })
-    cookies().set("isLoggedin", "true")
+    cookies().set(LOGIN_TAG, "true")
     revalidatePath("/login")
     redirect("/category");
 }
 
 export async function logoutUser() {
-    // cookies().delete("isLoggedin");
-    // revalidatePath("/")
-    // redirect("/login");
+    cookies().delete(LOGIN_TAG);
+    revalidatePath("/")
+    redirect("/login");
+}
+
+export async function isLoggedin() {
+    return cookies().has(LOGIN_TAG);
 }

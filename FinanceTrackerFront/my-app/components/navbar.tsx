@@ -25,9 +25,11 @@ import {
   SearchIcon,
   Logo,
 } from "@/components/icons";
+import { LogoutButton } from "./logoutButton";
 import { cookies } from "next/headers";
 
 export const Navbar = () => {
+  const cookieStore = cookies();
   const searchInput = (
     <Input
       aria-label="Search"
@@ -59,7 +61,7 @@ export const Navbar = () => {
           </NextLink>
         </NavbarBrand>
         <ul className="hidden lg:flex gap-4 justify-start ml-2">
-          {cookies().has("isLoggedin") && siteConfig.navItems.map((item) => (
+          {cookieStore.has("isLoggedin") && siteConfig.navItems.map((item) => (
             <NavbarItem key={item.href}>
               <NextLink
                 className={clsx(
@@ -92,7 +94,7 @@ export const Navbar = () => {
           </Link>
           <ThemeSwitch />
         </NavbarItem>
-        <NavbarItem className="hidden lg:flex">{searchInput}</NavbarItem>
+        {/* <NavbarItem className="hidden lg:flex">{searchInput}</NavbarItem> */}
         <NavbarItem className="hidden md:flex">
           <Button
             isExternal
@@ -105,6 +107,14 @@ export const Navbar = () => {
             Sponsor
           </Button>
         </NavbarItem>
+        {cookieStore.has("isLoggedin") && (
+          <LogoutButton />
+        )}
+        {!cookieStore.has("isLoggedin") && (
+          <NavbarItem>
+            <NextLink href="/login">Login/Sign-up</NextLink>
+          </NavbarItem>
+        )}
       </NavbarContent>
 
       <NavbarContent className="sm:hidden basis-1 pl-4" justify="end">
