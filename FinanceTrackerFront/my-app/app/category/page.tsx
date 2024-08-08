@@ -1,13 +1,14 @@
-// import CategoryTable from "./category-table"
-// import SubCategoryTable from "./sub-category-table"
-import TableTemplate from "@/template/table-template";
+"use client"
+import CategoryTable from "./category-table"
+import SubCategoryTable from "./sub-category-table"
 
-export default function CategoryPage() {
+const CategoryPage = () => {
   return (
-    <div className="relative mx-auto flex w-full space-y-2.5 p-4">
-      {/* <CategoryTable /> */}
-      {/* <SubCategoryTable /> */}
-      <TableTemplate />
+    <div className="relative mx-auto flex-nowrap w-full space-y-2.5 p-4">
+      <CategoryTable />
+      <SubCategoryTable />
     </div>
   );
 }
+
+export default CategoryPage;

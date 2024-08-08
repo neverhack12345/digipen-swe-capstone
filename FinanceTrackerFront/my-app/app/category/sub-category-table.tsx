@@ -1,7 +1,7 @@
 "use client"
 
-import useSWR from 'swr'
-import React from "react";
+import { title } from "@/components/primitives";
+import React, { useState, useEffect } from "react";
 import {
     Table,
     TableHeader,
@@ -10,100 +10,71 @@ import {
     TableRow,
     TableCell,
 } from "@nextui-org/table";
-import { Chip } from "@nextui-org/chip";
-import { User } from "@nextui-org/user";
+import { Tooltip } from '@nextui-org/tooltip';
 import { Pagination } from "@nextui-org/pagination";
 import { Button } from "@nextui-org/button"
-import {
-    DropdownTrigger,
-    Dropdown,
-    DropdownMenu,
-    DropdownItem
-} from "@nextui-org/dropdown"
-import { PlusIcon, VerticalDotsIcon } from "@/template/resource/icons";
-import { columns, users } from "@/template/resource/data";
+import { PlusIcon, EditIcon, DeleteIcon } from "@/template/resource/icons";
+import { users, subCategoryColumns } from "@/template/resource/data";
 
-export default function SubCategoryTable() {
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [page, setPage] = React.useState(1);
-  const { data, error, isLoading } = useSWR('', fetch)
- 
-  if (error) return <div>failed to load</div>
-  if (isLoading) return <div>loading...</div>
+export default function CategoryTable() {
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [page, setPage] = useState(1);
+  const [data, setData] = useState([{"subId": 1, "subName": "sub", "catName": "cat"}]);
 
   const headerColumns = React.useMemo(() => {
-    return columns
+    return subCategoryColumns
   }, []);
 
+  useEffect(() => {
+    fetch('http://localhost:8080/api/subcategory/getAll').then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok ' + response.statusText);
+    }
+    return response.json(); // Parse the JSON from the response
+    })
+    .then(data => {
+      if (Array.isArray(data)) {
+        setData(data);
+        return data;
+        // data.forEach(item => {
+        //   console.log(item); // Access individual JSON objects
+        // });
+      } else {
+        throw new Error('Response data is not an array');
+      }
+    })
+    .catch(error => {
+      console.error('There was a problem with the fetch operation:', error);
+    });
+  },[])
+
   const filteredItems = React.useMemo(() => {
-    let filteredUsers = [...users];
+    // let filteredUsers = [...data];
+    let filteredUsers = [...data];
     return filteredUsers;
-  }, [users]);
+  }, [data]);
 
   const pages = Math.ceil(filteredItems.length / rowsPerPage);
 
-  const items = React.useMemo(() => {
-    const start = (page - 1) * rowsPerPage;
-    const end = start + rowsPerPage;
-
-    return filteredItems.slice(start, end);
-  }, [page, filteredItems, rowsPerPage]);
-
-  const sortedItems = React.useMemo(() => {
-    return [...items];
-  }, [items]);
-
-  const renderCell = React.useCallback((user: { [x: string]: any; avatar: any; 
-    email: string | null | undefined; 
-    team: string | null | undefined; status: string | number; 
-  }, 
-    columnKey: string | number) => {
+  const renderCell = React.useCallback((user: { [x: string]: any; }, columnKey: string | number) => {
     const cellValue = user[columnKey];
-
-    switch (columnKey) {
-      case "name":
-        return (
-          <User
-            avatarProps={{radius: "lg", src: user.avatar}}
-            description={user.email}
-            name={cellValue}
-          >
-            {user.email}
-          </User>
-        );
-      case "role":
-        return (
-          <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">{cellValue}</p>
-            <p className="text-bold text-tiny capitalize text-default-400">{user.team}</p>
-          </div>
-        );
-      case "status":
-        return (
-          <Chip className="capitalize" color="success" size="sm" variant="flat">
-            {cellValue}
-          </Chip>
-        );
-      case "actions":
-        return (
-          <div className="relative flex justify-end items-center gap-2">
-            <Dropdown>
-              <DropdownTrigger>
-                <Button isIconOnly size="sm" variant="light">
-                  <VerticalDotsIcon className="text-default-300" width={undefined} height={undefined} />
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu>
-                <DropdownItem>View</DropdownItem>
-                <DropdownItem>Edit</DropdownItem>
-                <DropdownItem>Delete</DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
-          </div>
-        );
-      default:
-        return cellValue;
+    if (columnKey === "actions" ) {
+      return (
+        <div className="relative flex items-center justify-center	gap-2">
+          <Tooltip content="Edit sub-category">
+            <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+              <EditIcon />
+            </span>
+          </Tooltip>
+          <Tooltip color="danger" content="Delete sub-category">
+            <span className="text-lg text-danger cursor-pointer active:opacity-50">
+              <DeleteIcon />
+            </span>
+          </Tooltip>
+        </div>
+      );
     }
+    return cellValue;
   }, []);
 
   const onNextPage = React.useCallback(() => {
@@ -126,6 +97,7 @@ export default function SubCategoryTable() {
   const topContent = React.useMemo(() => {
     return (
       <div className="flex flex-col gap-4">
+        <h1 className={title()}>Sub-Category Table</h1>
         <div className="flex justify-between gap-3 items-end">
           <div className="flex gap-3">
             <Button color="primary" endContent={<PlusIcon width={undefined} height={undefined} />}>
@@ -134,7 +106,7 @@ export default function SubCategoryTable() {
           </div>
         </div>
         <div className="flex justify-between items-center">
-          <span className="text-default-400 text-small">Total {users.length} users</span>
+          <span className="text-default-400 text-small">Total {filteredItems.length} sub-categories</span>
           <label className="flex items-center text-default-400 text-small">
             Rows per page:
             <select
@@ -178,7 +150,7 @@ export default function SubCategoryTable() {
         </div>
       </div>
     );
-  }, [items.length, page, pages]);
+  }, [filteredItems.length, page, pages]);
 
   return (
     <Table
@@ -189,7 +161,6 @@ export default function SubCategoryTable() {
       classNames={{
         wrapper: "max-h-[382px]",
       }}
-      selectionMode="multiple"
       topContent={topContent}
       topContentPlacement="outside"
     >
@@ -198,15 +169,14 @@ export default function SubCategoryTable() {
           <TableColumn
             key={column.uid}
             align={column.uid === "actions" ? "center" : "start"}
-            allowsSorting={column.sortable}
           >
             {column.name}
           </TableColumn>
         )}
       </TableHeader>
-      <TableBody emptyContent={"No users found"} items={sortedItems}>
+      <TableBody emptyContent={"No users found"} items={filteredItems}>
         {(item) => (
-          <TableRow key={item.id}>
+          <TableRow key={item.subId}>
             {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
           </TableRow>
         )}
