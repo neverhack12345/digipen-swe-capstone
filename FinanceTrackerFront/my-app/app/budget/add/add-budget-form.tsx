@@ -8,12 +8,11 @@ import { Divider } from "@nextui-org/divider";
 import { Select, SelectItem } from "@nextui-org/select";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { addBudget } from "@/app/api/route";
-import { AddBudget } from "@/types/definitions";
+import { FormErrors, AddBudget } from "@/types/definitions";
 import { z } from "zod";
 
 export default function AddBudgetForm() {
-  type FormErrors = Partial<Record<keyof AddBudget, string[]>>;
-  const [errors, setErrors] = useState<FormErrors>({});
+  const [errors, setErrors] = useState<FormErrors<AddBudget>>({});
   const monthRange = Array.from({ length: 12 }, (_, i) => ({key: String(i + 1), label: String(i + 1)}));
   const yearRange = Array.from({ length: 200 }, (_, i) => ({key: String(i + 1900), label: String(i + 1900)}));
   const [formData, setFormData] = useState<AddBudget>({
@@ -33,7 +32,7 @@ export default function AddBudgetForm() {
     amount: z.coerce.number()
   });  
 
-  const validateForm = (data: AddBudget): FormErrors => {
+  const validateForm = (data: AddBudget): FormErrors<AddBudget> => {
     try {
       AddBudgetSchema.parse(data);
       return {};

@@ -1,7 +1,7 @@
 // This file contains type definitions for your data.
 // It describes the shape of the data, and what data type each property should accept.
-// For simplicity of teaching, we're manually defining these types.
-// However, these types are generated automatically if you're using an ORM such as Prisma.
+export type FormErrors<T> = Partial<Record<keyof T, string[]>>;
+
 export type Budget = {
   budgetId: string,
   year: number,
@@ -26,4 +26,13 @@ export type EditBudget = {
   year: string,
   month: string,
   amount: string
+};
+
+export type AddUser = {
+  email: string,
+  password: string,
+  firstName: string,
+  lastName: string | undefined ,
+  dob: string | undefined ,
+  gender: string | undefined 
 };

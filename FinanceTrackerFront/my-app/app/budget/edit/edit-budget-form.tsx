@@ -9,12 +9,11 @@ import { Divider } from "@nextui-org/divider";
 import { Select, SelectItem } from '@nextui-org/select';
 import { ChangeEvent, FormEvent, useState } from "react";
 import { editBudget } from "@/app/api/route";
-import { EditBudget } from '@/types/definitions'; 
+import { FormErrors, EditBudget } from '@/types/definitions'; 
 import { z } from "zod"
 
 export default function EditBudgetForm() {
-  type FormErrors = Partial<Record<keyof EditBudget, string[]>>;
-  const [errors, setErrors] = useState<FormErrors>({});
+  const [errors, setErrors] = useState<FormErrors<EditBudget>>({});
   const monthRange = Array.from({ length: 12 }, (_, i) => ({key: String(i + 1), label: String(i + 1)}));
   const yearRange = Array.from({ length: 200 }, (_, i) => ({key: String(i + 1900), label: String(i + 1900)}));
   const searchParams = useSearchParams() 
@@ -34,7 +33,7 @@ export default function EditBudgetForm() {
     amount: z.coerce.number()
   });  
 
-  const validateForm = (data: EditBudget): FormErrors => {
+  const validateForm = (data: EditBudget): FormErrors<EditBudget> => {
     try {
       UpdateBudgetSchema.parse(data);
       return {};
