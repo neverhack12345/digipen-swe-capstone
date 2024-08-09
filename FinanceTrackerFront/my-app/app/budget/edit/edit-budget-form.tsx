@@ -6,6 +6,7 @@ import { Button } from "@nextui-org/button";
 import { Card, CardBody } from "@nextui-org/card"; 
 import { Input } from "@nextui-org/input";
 import { Divider } from "@nextui-org/divider";
+import { Select, SelectItem } from '@nextui-org/select';
 import { ChangeEvent, FormEvent, useState } from "react";
 import { editBudget } from "@/app/api/route";
 import { EditBudget } from '@/types/definitions'; 
@@ -14,6 +15,8 @@ import { z } from "zod"
 export default function EditBudgetForm() {
   type FormErrors = Partial<Record<keyof EditBudget, string[]>>;
   const [errors, setErrors] = useState<FormErrors>({});
+  const monthRange = Array.from({ length: 12 }, (_, i) => ({key: String(i + 1), label: String(i + 1)}));
+  const yearRange = Array.from({ length: 200 }, (_, i) => ({key: String(i + 1900), label: String(i + 1900)}));
   const searchParams = useSearchParams() 
   const [formData, setFormData] = useState<EditBudget>({
     "budgetId": searchParams.get('budgetId') || "1",
@@ -48,11 +51,8 @@ export default function EditBudgetForm() {
     const newErrors = validateForm(formData);
     setErrors(newErrors);
     if (Object.keys(newErrors).length === 0 && formData !== undefined) {
-      // Form is valid, proceed with submission
-      console.log("Form submitted:", formData);
       editBudget(formData);
     }
-    
   }
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -65,6 +65,12 @@ export default function EditBudgetForm() {
         });
       };
     }
+  }
+  const handleSelectionChange = (key: string, value: string) => {
+    setFormData({
+      ...formData,
+      [key]: value,
+    });
   }
 
   return (
@@ -82,7 +88,7 @@ export default function EditBudgetForm() {
         <h1 className={title()}>Edit Budget</h1>
         <div className="w-full flex-wrap gap-4">
           <Input isDisabled key="budgetId" name="budgetId" value={formData.budgetId} type="Text" 
-          label="Category Id" placeholder="Enter budget category id" color='default' variant='bordered' size='md' radius='full'/>
+          label="Budget Id" placeholder="Enter budget budeget id" color='default' variant='bordered' size='md' radius='full'/>
           {errors.budgetId && errors.budgetId.length > 0 && (
             <div className="form-msg">{errors.budgetId[0]}</div>
           )}
@@ -91,13 +97,31 @@ export default function EditBudgetForm() {
           {errors.categoryId && errors.categoryId.length > 0 && (
             <div className="form-msg">{errors.categoryId[0]}</div>
           )}
-          <Input key="year" name="year" value={formData.year} onChange={handleChange} type="Text" label="Year" 
-          placeholder="Enter budget year" color='default' variant='bordered' size='md' radius='full'/>
+          <Select
+            items={yearRange}
+            label="Year"
+            placeholder="Select a year"
+            className="max-w-xs"
+            color='default' variant='bordered' size='md' radius='full'
+            defaultSelectedKeys={[formData["year"]]}
+            onChange={(e) => handleSelectionChange("year", e.target.value)}
+          >
+            {(year) => <SelectItem key={year.key} value={year.key}>{year.label}</SelectItem>}
+          </Select>
           {errors.year && errors.year.length > 0 && (
             <div className="form-msg">{errors.year[0]}</div>
           )}
-          <Input key="month" name="month" value={formData.month} onChange={handleChange} type="Text" label="Month" 
-          placeholder="Enter budget month" color='default' variant='bordered' size='md' radius='full'/>
+          <Select
+            items={monthRange}
+            label="Month"
+            placeholder="Select a month"
+            className="max-w-xs"
+            color='default' variant='bordered' size='md' radius='full'
+            defaultSelectedKeys={[formData["month"]]}
+            onChange={(e) => handleSelectionChange("month", e.target.value)}
+          >
+            {(month) => <SelectItem key={month.key} value={month.key}>{month.label}</SelectItem>}
+          </Select>
           {errors.month && errors.month.length > 0 && (
             <div className="form-msg">{errors.month[0]}</div>
           )}

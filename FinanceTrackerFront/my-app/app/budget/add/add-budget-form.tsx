@@ -5,6 +5,7 @@ import { Button } from "@nextui-org/button";
 import { Card, CardBody } from "@nextui-org/card"; 
 import { Input } from "@nextui-org/input";
 import { Divider } from "@nextui-org/divider";
+import { Select, SelectItem } from "@nextui-org/select";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { addBudget } from "@/app/api/route";
 import { AddBudget } from "@/types/definitions";
@@ -13,6 +14,8 @@ import { z } from "zod";
 export default function AddBudgetForm() {
   type FormErrors = Partial<Record<keyof AddBudget, string[]>>;
   const [errors, setErrors] = useState<FormErrors>({});
+  const monthRange = Array.from({ length: 12 }, (_, i) => ({key: String(i + 1), label: String(i + 1)}));
+  const yearRange = Array.from({ length: 200 }, (_, i) => ({key: String(i + 1900), label: String(i + 1900)}));
   const [formData, setFormData] = useState<AddBudget>({
     "userId": "1",
     "categoryId": "1",
@@ -20,6 +23,7 @@ export default function AddBudgetForm() {
     "month": "1",
     "amount": "1000"
   });
+  
   
   const AddBudgetSchema = z.object({
     userId: z.coerce.number().int().min(1, "User id cannot be less than 1"),
@@ -46,8 +50,6 @@ export default function AddBudgetForm() {
     const newErrors = validateForm(formData);
     setErrors(newErrors);
     if (Object.keys(newErrors).length === 0 && formData !== undefined) {
-      // Form is valid, proceed with submission
-      console.log("Form submitted:", formData);
       addBudget(formData);
     }
   }
@@ -62,6 +64,12 @@ export default function AddBudgetForm() {
         });
       };
     }
+  }
+  const handleSelectionChange = (key: string, value: string) => {
+    setFormData({
+      ...formData,
+      [key]: value,
+    });
   }
 
   return (
@@ -78,7 +86,7 @@ export default function AddBudgetForm() {
         </div>
         <h1 className={title()}>Add Budget</h1>
         <div className="w-full flex-wrap gap-4">
-          <Input key="userId" name="userId" value={formData.userId} onChange={handleChange} type="Text" 
+          <Input key="userId" name="userId" value={formData.userId} type="Text" 
           label="User Id" placeholder="Enter your user id" color='default' variant='bordered' size='md'  radius='full'/>
           {errors.userId && errors.userId.length > 0 && (
             <div className="form-msg">{errors.userId[0]}</div>
@@ -88,13 +96,31 @@ export default function AddBudgetForm() {
           {errors.categoryId && errors.categoryId.length > 0 && (
             <div className="form-msg">{errors.categoryId[0]}</div>
           )}
-          <Input key="year" name="year" value={formData.year} onChange={handleChange} type="Text" label="Year" 
-          placeholder="Enter budget year" color='default' variant='bordered' size='md' radius='full'/>
+          <Select
+            items={yearRange}
+            label="Year"
+            placeholder="Select a year"
+            className="max-w-xs"
+            color='default' variant='bordered' size='md' radius='full'
+            defaultSelectedKeys={["2000"]}
+            onChange={(e) => handleSelectionChange("year", e.target.value)}
+          >
+            {(year) => <SelectItem key={year.key} value={year.key}>{year.label}</SelectItem>}
+          </Select>
           {errors.year && errors.year.length > 0 && (
             <div className="form-msg">{errors.year[0]}</div>
           )}
-          <Input key="month" name="month" value={formData.month} onChange={handleChange} type="Text" label="Month" 
-          placeholder="Enter budget month" color='default' variant='bordered' size='md' radius='full'/>
+          <Select
+            items={monthRange}
+            label="Month"
+            placeholder="Select a month"
+            className="max-w-xs"
+            color='default' variant='bordered' size='md' radius='full'
+            defaultSelectedKeys={["1"]}
+            onChange={(e) => handleSelectionChange("month", e.target.value)}
+          >
+            {(month) => <SelectItem key={month.key} value={month.key}>{month.label}</SelectItem>}
+          </Select>
           {errors.month && errors.month.length > 0 && (
             <div className="form-msg">{errors.month[0]}</div>
           )}

@@ -16,28 +16,14 @@ import NextLink from "next/link"
 import { DeleteBudgetButton } from "./delete-budget-button";
 import { EditBudgetButton } from "./edit-budget-button";
 import { Budget } from "@/types/definitions";
+import { fetchBudgets } from "../api/route";
 
 export default function BudgetTable() {
+  const TABLE_NAME = "Budget Table"
   const [data , setData] = useState<Array<Budget>>();
-  const fetchData = useCallback(() => {
-    fetch('http://localhost:8080/api/budget/getAll')
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok ' + response.statusText);
-        }
-        return response.json(); // Parse the JSON from the response
-      })
-      .then(data => {
-        if (Array.isArray(data)) {
-          setData(data);
-          return data;
-        } else {
-          throw new Error('Response data is not an array');
-        }
-      })
-      .catch(error => {
-        console.error('There was a problem with the fetch operation:', error);
-      });
+  const fetchData = useCallback(async () => {
+    const budgets = await fetchBudgets();
+    setData(budgets)
   }, []);
 
   useEffect(() => {
@@ -52,22 +38,22 @@ export default function BudgetTable() {
     }
   }, [data]);
 
-  const renderCell = useCallback((user: Budget, columnKey: keyof Budget | 'actions' ) => {
+  const renderCell = useCallback((item: Budget, columnKey: keyof Budget | 'actions' ) => {
     if (columnKey === "actions" ) {
       return (
         <div className="relative flex items-center justify-center	gap-2">
-          <EditBudgetButton budget={user} />
-          <DeleteBudgetButton budgetId={user["budgetId"]} refreshData={fetchData} />
+          <EditBudgetButton budget={item} />
+          <DeleteBudgetButton budgetId={item["budgetId"]} refreshData={fetchData} />
         </div>
       );
     }
-    return user[columnKey];
+    return item[columnKey];
   }, []);
 
   const topContent = useMemo(() => {
     return (
       <div className="flex flex-col gap-4">
-        <h1 className={title()}>Budget Table</h1>
+        <h1 className={title()}>{TABLE_NAME}</h1>
         <div className="flex justify-between gap-3 items-end">
           <div className="flex gap-3">
           <NextLink type="button" href="/budget/add" >
@@ -77,13 +63,11 @@ export default function BudgetTable() {
         </div>
       </div>
     );
-  }, [
-    users.length,
-  ]);
+  }, [users.length]);
 
   return (
     <Table
-      aria-label="Example table with custom cells, pagination and sorting"
+      aria-label={TABLE_NAME}
       classNames={{
         wrapper: "max-h-[382px]",
       }}

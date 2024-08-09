@@ -11,8 +11,7 @@ import { authenticateUser } from "../api/route";
 export default function LoginForm() {
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    const formData = new FormData(event.currentTarget)
-    await authenticateUser(formData);
+    await authenticateUser();
   }
 
   return (

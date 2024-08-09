@@ -13,8 +13,7 @@ import { FormEvent } from "react";
 export default function SignUp() {
     async function onSubmit(event: FormEvent<HTMLFormElement>) {
       event.preventDefault()
-      const formData = new FormData(event.currentTarget)
-      await createUser(formData);
+      await createUser();
     }
 
     const gender = [
