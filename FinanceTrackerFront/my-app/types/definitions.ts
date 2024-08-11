@@ -27,12 +27,3 @@ export type EditBudget = {
   month: string,
   amount: string
 };
-
-export type AddUser = {
-  email: string,
-  password: string,
-  firstName: string,
-  lastName: string | undefined ,
-  dob: string | undefined ,
-  gender: string | undefined 
-};

@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect, permanentRedirect } from "next/navigation";
-import { AddBudget, AddUser, EditBudget } from "@/types/definitions";
+import { AddBudget, EditBudget } from "@/types/definitions";
 
 const LOGIN_TAG = "isLoggedin";
 const USER_ID = "userId";
@@ -116,8 +116,12 @@ export async function editBudget(formData: EditBudget) {
   redirect("/budget")
 }
 
-export async function createUser(formData: AddUser) {
+export async function createUser(formData: any) {
   try {
+    formData = {
+      ...formData,
+      "dob": new Date(formData.dob),
+    }
     const response = await fetch('http://localhost:8080/api/user/add', {
       method: 'POST',
       headers: {

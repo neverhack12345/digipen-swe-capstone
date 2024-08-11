@@ -4,6 +4,7 @@ import { Button } from "@nextui-org/button";
 import { Card, CardBody } from "@nextui-org/card"; 
 import { Input } from "@nextui-org/input";
 import { Divider } from "@nextui-org/divider";
+import { Spacer } from "@nextui-org/spacer";
 import NextLink from "next/link"
 import { FormEvent } from "react";
 import { authenticateUser } from "../api/route";
@@ -30,6 +31,7 @@ export default function LoginForm() {
             <div className="w-full flex-wrap gap-4">
               <Input className="gap-2" type="Email" label="Email" placeholder="Enter your email" 
               color='default' variant='bordered' size='md'  radius='full'/>
+              <Spacer y={1} />
               <Input className="gap-2" type="Password" label="Password" placeholder="Enter your password" 
               color='default' variant='bordered' size='md' radius='full'/>
             </div>
@@ -38,7 +40,6 @@ export default function LoginForm() {
                     Log-in
                 </Button>
             </div>
-          
           </form>
           <div className="w-full flex-wrap gap-4">
             <NextLink href='/signup'>
@@ -47,8 +48,9 @@ export default function LoginForm() {
               </Button>
             </NextLink>
           </div>
+          <Spacer y={1} />
           <Divider />
         </CardBody>
     </Card>
   );
-}
+} 

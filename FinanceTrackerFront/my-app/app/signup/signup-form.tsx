@@ -1,136 +1,121 @@
 "use client";
 
-import { getLocalTimeZone, today} from "@internationalized/date";
 import { Button } from "@nextui-org/button";
 import { Card, CardBody } from "@nextui-org/card"; 
 import { Input } from "@nextui-org/input";
 import { Divider } from "@nextui-org/divider";
 import { Select, SelectItem } from "@nextui-org/select";
 import { DatePicker } from "@nextui-org/date-picker";
+import { Spacer } from "@nextui-org/spacer";
 import { createUser } from "../api/route";
-import { ChangeEvent, FormEvent, useState } from "react";
 import { z } from "zod";
-import { AddUser, FormErrors } from "@/types/definitions";
+import { zodResolver } from "@hookform/resolvers/zod"
+import { Controller, useForm } from "react-hook-form"
+
+const AddUserSchema = z.object({
+  email: z.string().email().max(255, "Email cannot be more than 255 characters"),
+  password: z.string(),
+  firstName: z.string().max(255, "First name cannot be more than 255 characters"),
+  lastName: z.string().max(255, "Last name cannot be more than 255 characters"),
+  dob: z.coerce.date(),
+  gender: z.string(),
+});  
 
 export default function SignUp() {
-  const [errors, setErrors] = useState<FormErrors<AddUser>>({});
-  const [formData, setFormData] = useState<AddUser>({
-    "email": "",
-    "password": "",
-    "firstName": "",
-    "lastName": "",
-    "dob": "",
-    "gender": "",
-  });
-  
-  
-  const AddBudgetSchema = z.object({
-    userId: z.coerce.number().int().min(1, "User id cannot be less than 1"),
-    categoryId: z.coerce.number().int().min(1, "Category id cannot be less than 1"),
-    year: z.coerce.number().int().min(1800, "Year cannot be before 1800"),
-    month: z.coerce.number().int().min(1, "Month cannot be less than 1").max(12, "Month cannot be more than 12"),
-    amount: z.coerce.number()
-  });  
-
-  const validateForm = (data: AddUser): FormErrors<AddUser> => {
-    try {
-      AddBudgetSchema.parse(data);
-      return {};
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        return error.flatten().fieldErrors;
-      }
-      return {};
-    }
-  };
-
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const newErrors = validateForm(formData);
-    setErrors(newErrors);
-    if (Object.keys(newErrors).length === 0 && formData !== undefined) {
-      createUser(formData);
-    }
-  }
-  const handleChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    if (e?.target?.name != undefined && e?.target?.value != undefined) {
-      if (formData !== undefined) {
-        setFormData({
-          ...formData,
-          [e.target.name]: e.target.value,
-        });
-      };
-    }
-  }
-  const handleSelectionChange = (key: string, value: string) => {
-    setFormData({
-      ...formData,
-      [key]: value,
-    });
-  }
-
   const gender = [
-    {key: "unkown", label: "N/A"},
+    {key: "unknown", label: "N/A"},
     {key: "female", label: "F"},
     {key: "male", label: "M"},
   ];
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(AddUserSchema),
+    defaultValues: {
+      "email": "",
+      "password": "",
+      "firstName": "",
+      "lastName": "",
+      "dob": "",
+      "gender": "",
+    },
+  })
 
-    return (
-      <Card className="border-solid border-indigo-500 bg-background/60 dark:bg-default-100/50 max-w-[610px]" 
-      shadow="sm" isBlurred>
-        <CardBody>
-        <Divider />
-        <form onSubmit={onSubmit} className="space-y-3">
-          <div
-            className="flex items-end space-x-1"
-            aria-live="polite"
-            aria-atomic="true"
+  const onSubmit = (data: any) => {
+    createUser({...data, "dob": new Date(data.dob).toLocaleDateString('en-CA')});
+  }
+
+  return (
+    <Card className="border-solid border-indigo-500 bg-background/60 dark:bg-default-100/50 max-w-[610px]" 
+    shadow="sm" isBlurred>
+      <CardBody>
+      <Divider />
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
+        <div
+          className="flex items-end space-x-1"
+          aria-live="polite"
+          aria-atomic="true"
+        >
+        </div>
+        <p className="text-primary">Sign-up</p>
+        <div className="w-full flex-wrap gap-4">
+          <Input {...register("email")}
+          type="Email" label="Email" placeholder="finance@example.com" aria-label="Email"
+          isInvalid={errors.email && errors.email?.message !== undefined} 
+          errorMessage={(errors.email !== undefined) ? errors.email?.message : ""}
+          color='default' variant='bordered' size='md'  radius='full'/>
+          <Spacer y={1} />
+          <Input {...register("password")}
+          type="Password" label="Password" placeholder="Enter your password" aria-label="Password"
+          isInvalid={errors?.password !== undefined} 
+          errorMessage={(errors.password !== undefined) ? errors.password?.message : ""}
+          color='default' variant='bordered' size='md' radius='full'/>
+          <Spacer y={1} />
+          <Input {...register("firstName")}
+          type="Text" label="First Name" placeholder="Enter your first name" aria-label="First Name"
+          isInvalid={errors?.firstName!== undefined} 
+          errorMessage={(errors.firstName !== undefined) ? errors.firstName?.message : ""}
+          color='default' variant='bordered' size='md' radius='full'/>
+          <Spacer y={1} />
+          <Input {...register("lastName")}
+          type="Text" label="Last Name" placeholder="Enter your last name" aria-label="Last Name"
+          isInvalid={errors?.lastName!== undefined} 
+          errorMessage={(errors.lastName !== undefined) ? errors.lastName?.message : ""}
+          color='default' variant='bordered' size='md' radius='full'/>
+          <Spacer y={1} />
+          <Controller
+            control={control}
+            name="dob"
+            render={({ field: { onChange } }) => (
+                <DatePicker label="Date of Birth" aria-label="Date of Birth" 
+                onChange={onChange} 
+                color='default' variant='bordered' size='md' radius='full'
+                />
+            )}
+          />
+          <Spacer y={1} />
+          <Select {...register("gender")}
+            items={gender} label="Gender" placeholder="Select an gender" aria-label="Gender"
+            isInvalid={errors?.gender!== undefined} 
+            errorMessage={(errors.gender !== undefined) ? errors.gender?.message : ""}
+            className="max-w-xs"
+            color='default' variant='bordered' size='md' radius='full'
           >
-          </div>
-          <p className="text-primary">Sign-up</p>
-          <div className="w-full flex-wrap gap-4">
-            <Input type="Email" label="Email" placeholder="Enter your email" 
-            name="email" value={formData.email} onChange={handleChange}
-            color='default' variant='bordered' size='md'  radius='full'/>
-            <Input type="Password" label="Password" placeholder="Enter your password" 
-            name="password" value={formData.password} onChange={handleChange}
-            color='default' variant='bordered' size='md' radius='full'/>
-            <Input type="Text" label="First Name" placeholder="Enter your first name" 
-            name="firstName" value={formData.firstName} onChange={handleChange}
-            color='default' variant='bordered' size='md' radius='full'/>
-            <Input type="Text" label="Last Name" placeholder="Enter your last name" 
-            name="lastName" value={formData.lastName} onChange={handleChange}
-            color='default' variant='bordered' size='md' radius='full'/>
-            <DatePicker
-              label="Birthday"
-              maxValue={today(getLocalTimeZone())}
-              onChange={(e) => (setFormData({
-                ...formData,
-                "dob": e.toString(),
-              }))}
-              color='default' variant='bordered' size='md' radius='full'
-            />
-            <Select
-              items={gender}
-              label="Gender"
-              placeholder="Select an gender"
-              className="max-w-xs"
-              color='default' variant='bordered' size='md' radius='full'
-              onChange={(e) => handleSelectionChange("gender", e.target.value)}
-            >
-              {(gender) => <SelectItem key={gender.key}>{gender.label}</SelectItem>}
-            </Select>
-          </div>
-          <div className="w-full flex-wrap">
-            <Button className="w-full" type="submit" color="primary" variant='solid' size='md' radius='full'>
-              Sign-up
-            </Button>
-          </div>
-        </form>
-        <Divider />
-        </CardBody>
-      </Card>
+            {(gender) => <SelectItem key={gender.key}>{gender.label}</SelectItem>}
+          </Select>
+        </div>
+        <div className="w-full flex-wrap">
+          <Button className="w-full" type="submit" color="primary" variant='solid' size='md' radius='full'>
+            Sign-up
+          </Button>
+        </div>
+      </form>
+      <Spacer y={1} />
+      <Divider />
+      </CardBody>
+    </Card>
   );
 }
