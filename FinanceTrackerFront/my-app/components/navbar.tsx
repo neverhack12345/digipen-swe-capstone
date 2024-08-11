@@ -13,7 +13,6 @@ import { Input } from "@nextui-org/input";
 import { link as linkStyles } from "@nextui-org/theme";
 import NextLink from "next/link";
 import clsx from "clsx";
-
 import { siteConfig } from "@/config/site";
 import { ThemeSwitch } from "@/components/theme-switch";
 import {
@@ -23,8 +22,9 @@ import {
   SearchIcon,
   Logo,
 } from "@/components/icons";
-import { LogoutButton } from "./logoutButton";
+import { LogoutButton } from "./logout-button";
 import { cookies } from "next/headers";
+import LoginModal from "./login-modal";
 
 export const Navbar = () => {
   const cookieStore = cookies();
@@ -55,7 +55,7 @@ export const Navbar = () => {
         <NavbarBrand as="li" className="gap-3 max-w-fit">
           <NextLink className="flex justify-start items-center gap-1" href="/">
             <Logo />
-            <p className="font-bold text-inherit">ACME</p>
+            <p className="font-bold text-inherit">Finance Tracker</p>
           </NextLink>
         </NavbarBrand>
         <ul className="hidden lg:flex gap-4 justify-start ml-2">
@@ -96,9 +96,14 @@ export const Navbar = () => {
           <LogoutButton />
         )}
         {!cookieStore.has("isLoggedin") && (
+          <>
           <NavbarItem>
-            <NextLink href="/login">Login/Sign-up</NextLink>
+            <NextLink href="/signup">Sign Up</NextLink>
           </NavbarItem>
+          <NavbarItem>
+            <LoginModal />
+          </NavbarItem>
+          </>
         )}
       </NavbarContent>
 

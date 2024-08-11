@@ -1,12 +1,8 @@
 "use client";
-
-import { Button } from "@nextui-org/button";
-import { Card, CardBody } from "@nextui-org/card"; 
-import { Input } from "@nextui-org/input";
-import { Divider } from "@nextui-org/divider";
-import { Select, SelectItem } from "@nextui-org/select";
-import { DatePicker } from "@nextui-org/date-picker";
-import { Spacer } from "@nextui-org/spacer";
+import { 
+  Button, Card, CardBody, Input, Divider, 
+  Select, SelectItem, DatePicker, Spacer 
+} from "@nextui-org/react"
 import { createUser } from "../api/route";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -22,6 +18,8 @@ const AddUserSchema = z.object({
 });  
 
 export default function SignUp() {
+  const title = "Sign Up";
+  const submitButtonText = "Sign Up";
   const gender = [
     {key: "Unknown", label: "N/A"},
     {key: "F", label: "F"},
@@ -60,7 +58,7 @@ export default function SignUp() {
           aria-atomic="true"
         >
         </div>
-        <p className="text-primary">Sign-up</p>
+        <p className="text-primary">{title}</p>
         <div className="w-full flex-wrap gap-4">
           <Input {...register("email")}
           type="Email" label="Email" placeholder="finance@example.com" aria-label="Email"
@@ -109,7 +107,7 @@ export default function SignUp() {
         </div>
         <div className="w-full flex-wrap">
           <Button className="w-full" type="submit" color="primary" variant='solid' size='md' radius='full'>
-            Create an Account
+            {submitButtonText}
           </Button>
         </div>
       </form>
