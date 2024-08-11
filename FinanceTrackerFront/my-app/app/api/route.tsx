@@ -131,8 +131,8 @@ export async function createUser(formData: any) {
     });
 
     if (response.ok) {
-      const data = await response.json();
-      console.log(data.message);
+      const data = await response.text();
+      console.log(data);
     } else {
       const errorData = await response.json();
       console.log(errorData.message || 'There was an error submitting the form.');

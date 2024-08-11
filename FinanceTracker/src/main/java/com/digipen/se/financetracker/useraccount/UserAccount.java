@@ -16,7 +16,6 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.validator.constraints.Length;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -47,7 +46,7 @@ public class UserAccount {
     @Length(max = 255, message = "User last name cannot be longer than 255 characters!")
     @Column(name = "last_name")
     private String lastName;
-    @FutureOrPresent(message = "User date of birth cannot be in the future")
+    @PastOrPresent(message = "User date of birth cannot be in the future")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)

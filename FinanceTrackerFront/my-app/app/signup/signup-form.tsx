@@ -23,9 +23,9 @@ const AddUserSchema = z.object({
 
 export default function SignUp() {
   const gender = [
-    {key: "unknown", label: "N/A"},
-    {key: "female", label: "F"},
-    {key: "male", label: "M"},
+    {key: "Unknown", label: "N/A"},
+    {key: "F", label: "F"},
+    {key: "M", label: "M"},
   ];
   const {
     register,
@@ -109,7 +109,7 @@ export default function SignUp() {
         </div>
         <div className="w-full flex-wrap">
           <Button className="w-full" type="submit" color="primary" variant='solid' size='md' radius='full'>
-            Sign-up
+            Create an Account
           </Button>
         </div>
       </form>
