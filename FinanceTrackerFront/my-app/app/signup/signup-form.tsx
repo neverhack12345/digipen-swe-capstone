@@ -65,18 +65,14 @@ export default function SignUp() {
           <div key="firstLastName" className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-1">
           <Input 
             {...register("firstName")}
-            label="First Name" 
-            placeholder="Enter your first name" 
-            aria-label="First Name"
+            type="Text" label="First Name" aria-label="First Name" placeholder="Enter your first name" 
             isInvalid={errors?.firstName!== undefined} 
             errorMessage={(errors.firstName !== undefined) ? errors.firstName?.message : ""}
             color='default' variant='bordered' size='md' radius='full'
           />
           <Input 
             {...register("lastName")}
-            label="Last Name" 
-            placeholder="Enter your last name" 
-            aria-label="Last Name"
+            type="Text" label="Last Name" aria-label="Last Name" placeholder="Enter your last name" 
             isInvalid={errors?.lastName!== undefined} 
             errorMessage={(errors.lastName !== undefined) ? errors.lastName?.message : ""}
             color='default' variant='bordered' size='md' radius='full'
@@ -84,13 +80,13 @@ export default function SignUp() {
           </div>
           <Spacer y={1} />
           <Input {...register("email")}
-          type="Email" label="Email" placeholder="finance@example.com" aria-label="Email"
+          type="Email" label="Email" aria-label="Email" placeholder="finance@example.com" 
           isInvalid={errors.email && errors.email?.message !== undefined} 
           errorMessage={(errors.email !== undefined) ? errors.email?.message : ""}
           color='default' variant='bordered' size='md'  radius='full'/>
           <Spacer y={1} />
           <Input {...register("password")}
-          type="Password" label="Password" placeholder="Enter your password" aria-label="Password"
+          type="Password" label="Password" aria-label="Password" placeholder="Enter your password" 
           isInvalid={errors?.password !== undefined} 
           errorMessage={(errors.password !== undefined) ? errors.password?.message : ""}
           color='default' variant='bordered' size='md' radius='full'/>
@@ -111,7 +107,7 @@ export default function SignUp() {
             name="gender"
             render={({ field: { onChange } }) => (
               <Select {...register("gender")}
-                items={gender} label="Gender" placeholder="Select an gender" aria-label="Gender"
+                items={gender} label="Gender" aria-label="Gender" placeholder="Select an gender" 
                 onChange={onChange}
                 isInvalid={errors?.gender!== undefined} 
                 errorMessage={(errors.gender !== undefined) ? errors.gender?.message : ""}
