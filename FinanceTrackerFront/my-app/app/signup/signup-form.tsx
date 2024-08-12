@@ -106,14 +106,21 @@ export default function SignUp() {
             )}
           />
           <Spacer y={1} />
-          <Select {...register("gender")}
-            items={gender} label="Gender" placeholder="Select an gender" aria-label="Gender"
-            isInvalid={errors?.gender!== undefined} 
-            errorMessage={(errors.gender !== undefined) ? errors.gender?.message : ""}
-            color='default' variant='bordered' size='md' radius='full'
-          >
-            {(gender) => <SelectItem key={gender.key}>{gender.label}</SelectItem>}
-          </Select>
+          <Controller
+            control={control}
+            name="gender"
+            render={({ field: { onChange } }) => (
+              <Select {...register("gender")}
+                items={gender} label="Gender" placeholder="Select an gender" aria-label="Gender"
+                onChange={onChange}
+                isInvalid={errors?.gender!== undefined} 
+                errorMessage={(errors.gender !== undefined) ? errors.gender?.message : ""}
+                color='default' variant='bordered' size='md' radius='full'
+              >
+                {(gender) => <SelectItem key={gender.key}>{gender.label}</SelectItem>}
+              </Select>
+            )}
+          />
         </div>
         <div className="w-full flex-wrap">
           <Button className="w-full" type="submit" color="primary" variant='solid' size='md' radius='full'>
