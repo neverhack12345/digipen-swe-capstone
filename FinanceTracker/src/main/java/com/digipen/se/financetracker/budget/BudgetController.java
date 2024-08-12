@@ -10,6 +10,7 @@ import com.digipen.se.financetracker.model.BudgetCreationDTO;
 import com.digipen.se.financetracker.model.BudgetUpdateDTO;
 import com.digipen.se.financetracker.useraccount.UserAccountService;
 import jakarta.validation.ConstraintViolationException;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,7 +33,7 @@ public class BudgetController {
     }
 
     @GetMapping("/getAll")
-    public ResponseEntity<List<BudgetDTO>> findUserAccounts() throws ResourceNotFoundException {
+    public ResponseEntity<List<BudgetDTO>> findBudgets() throws ResourceNotFoundException {
         List<BudgetDTO> budgetList = this.budgetService.findAll();
         if (budgetList.isEmpty()) {
             throw new ResourceNotFoundException("No budget found!");
@@ -40,8 +41,18 @@ public class BudgetController {
         return ResponseEntity.ok().body(budgetList);
     }
 
+    @GetMapping("/searchByBudgetId")
+    public ResponseEntity<BudgetDTO> findBudgetByBudgetId(@Param("id") Integer id)
+            throws ResourceNotFoundException {
+        BudgetDTO budget = this.budgetService.findBudgetDTOByBudget_Id(id);
+        if (budget == null) {
+            throw new ResourceNotFoundException("No budget found!");
+        }
+        return ResponseEntity.ok().body(budget);
+    }
+
     @GetMapping("/searchByUserId")
-    public ResponseEntity<List<Budget>> findUserAccountByUserId(
+    public ResponseEntity<List<Budget>> findBudgetByUserId(
             @RequestParam("id") Integer userId,
             @RequestParam(value = "year", required = false) Integer year,
             @RequestParam(value = "month", required = false) Integer month)

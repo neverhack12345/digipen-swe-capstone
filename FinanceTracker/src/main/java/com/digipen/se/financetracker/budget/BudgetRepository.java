@@ -40,4 +40,10 @@ public interface BudgetRepository extends JpaRepository<Budget, Integer> {
             "b.budgetId, b.year, b.month, b.amount, b.category.catId, " +
             "b.category.catName, b.userAccount.userId) FROM Budget b")
     List<BudgetDTO> findBudgetDTO();
+
+    @Query("SELECT NEW com.digipen.se.financetracker.model.BudgetDTO(" +
+            "b.budgetId, b.year, b.month, b.amount, b.category.catId, " +
+            "b.category.catName, b.userAccount.userId) FROM Budget b " +
+            "WHERE b.budgetId = :budgetId")
+    BudgetDTO findBudgetDTOByBudget_Id(@Param("budgetId") Integer budgetId);
 }

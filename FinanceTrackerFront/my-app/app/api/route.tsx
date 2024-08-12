@@ -18,6 +18,27 @@ export async function sampleAPI(formData: FormData) {
   // redirect("/login");
 }
 
+export async function fetchCategory() {
+  try {
+    const response = await fetch('http://localhost:8080/api/category/getAll');
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok ' + response.statusText);
+    }
+
+    const data = await response.json();
+
+    if (Array.isArray(data)) {
+      return data; // Return the fetched data
+    } else {
+      throw new Error('Response data is not an array');
+    }
+  } catch (error) {
+    console.error('There was a problem with the fetch operation:', error);
+    return []; // You can return null or any fallback value here
+  }
+}
+
 export async function fetchBudgets() {
   try {
     const response = await fetch('http://localhost:8080/api/budget/getAll');
@@ -29,6 +50,27 @@ export async function fetchBudgets() {
     const data = await response.json();
 
     if (Array.isArray(data)) {
+      return data; // Return the fetched data
+    } else {
+      throw new Error('Response data is not an array');
+    }
+  } catch (error) {
+    console.error('There was a problem with the fetch operation:', error);
+    return []; // You can return null or any fallback value here
+  }
+}
+
+export async function fetchBudgetById(budgetId: string) {
+  try {
+    const response = await fetch(`http://localhost:8080/api/budget/searchByBudgetId?id=${budgetId}`);
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok ' + response.statusText);
+    }
+
+    const data = await response.json();
+
+    if (!!data) {
       return data; // Return the fetched data
     } else {
       throw new Error('Response data is not an array');
@@ -142,7 +184,7 @@ export async function createUser(formData: any) {
       console.error('Form submission error:', error);
   }
   revalidatePath("/signup")
-  redirect("/login");
+  redirect("/");
 }
 
 export async function authenticateUser() {
@@ -156,8 +198,7 @@ export async function logoutUser() {
   LOGOUT_DELETE.forEach((item) => {
     cookies().delete(item);
   })
-  revalidatePath("/")
-  redirect("/login");
+  permanentRedirect("/");
 }
 
 export async function isLoggedin() {

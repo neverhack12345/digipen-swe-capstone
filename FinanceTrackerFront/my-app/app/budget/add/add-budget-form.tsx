@@ -72,7 +72,7 @@ export default function AddBudgetForm() {
   }
 
   return (
-    <Card className="border-solid border-indigo-500 bg-background/60 dark:bg-default-100/50 max-w-[610px]" 
+    <Card className="border-solid border-indigo-500 bg-background/60 dark:bg-default-100/50 w-[300px]" 
     shadow="sm" isBlurred>
       <CardBody>
       <Divider />

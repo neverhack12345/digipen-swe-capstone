@@ -2,6 +2,11 @@
 // It describes the shape of the data, and what data type each property should accept.
 export type FormErrors<T> = Partial<Record<keyof T, string[]>>;
 
+export type Category = {
+  catId: number,
+  catName: string,
+};
+
 export type Budget = {
   budgetId: string,
   year: number,

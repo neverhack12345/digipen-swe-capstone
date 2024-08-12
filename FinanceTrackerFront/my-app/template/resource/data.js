@@ -12,13 +12,10 @@ const subCategoryColumns = [
 ]
 
 const budgetColumns = [
-  {name: "ID", uid: "budgetId", sortable: true},
   {name: "YEAR", uid: "year", sortable: true},
-  {name: "Month", uid: "month", sortable: true},
-  {name: "AMOUNT", uid: "amount", sortable: true},
-  {name: "CATEGORY ID", uid: "catId", sortable: true},
+  {name: "MONTH", uid: "month", sortable: true},
   {name: "CATEGORY", uid: "catName", sortable: true},
-  {name: "USER ID", uid: "userId", sortable: true},
+  {name: "AMOUNT", uid: "amount", sortable: true},
   {name: "ACTIONS", uid: "actions"},
 ]
 

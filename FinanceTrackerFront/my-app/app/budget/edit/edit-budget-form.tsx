@@ -2,15 +2,19 @@
 
 import { useSearchParams } from 'next/navigation'
 import { title } from "@/components/primitives";
-import { Button } from "@nextui-org/button";
-import { Card, CardBody } from "@nextui-org/card"; 
-import { Input } from "@nextui-org/input";
-import { Divider } from "@nextui-org/divider";
-import { Select, SelectItem } from '@nextui-org/select';
-import { ChangeEvent, FormEvent, useState } from "react";
-import { editBudget } from "@/app/api/route";
-import { FormErrors, EditBudget } from '@/types/definitions'; 
+import { Button, Card, CardBody, Input, Divider, Select, SelectItem } from "@nextui-org/react";
+import { ChangeEvent, FormEvent, useCallback, useEffect, useState } from "react";
+import { editBudget, fetchCategory, fetchBudgetById } from "@/app/api/route";
+import { FormErrors, EditBudget, Category } from '@/types/definitions'; 
 import { z } from "zod"
+
+const UpdateBudgetSchema = z.object({
+  budgetId: z.coerce.number().int().min(1, "Budget id cannot be less than 1"),
+  categoryId: z.coerce.number().int().min(1, "Category id cannot be less than 1"),
+  year: z.coerce.number().int().min(1800, "Year cannot be before 1800"),
+  month: z.coerce.number().int().min(1, "Month cannot be less than 1").max(12, "Month cannot be more than 12"),
+  amount: z.coerce.number()
+});  
 
 export default function EditBudgetForm() {
   const [errors, setErrors] = useState<FormErrors<EditBudget>>({});
@@ -18,20 +22,38 @@ export default function EditBudgetForm() {
   const yearRange = Array.from({ length: 200 }, (_, i) => ({key: String(i + 1900), label: String(i + 1900)}));
   const searchParams = useSearchParams() 
   const [formData, setFormData] = useState<EditBudget>({
-    "budgetId": searchParams.get('budgetId') || "1",
-    "categoryId": searchParams.get('categoryId') || "1",
-    "year": searchParams.get('year') || "2000",
-    "month": searchParams.get('month') || "1",
-    "amount": searchParams.get('amount') || "1000"
+    "budgetId": "Loading...",
+    "categoryId": "Loading...",
+    "year": "Loading...",
+    "month": "Loading...",
+    "amount": "Loading...",
   });
-
-  const UpdateBudgetSchema = z.object({
-    budgetId: z.coerce.number().int().min(1, "Budget id cannot be less than 1"),
-    categoryId: z.coerce.number().int().min(1, "Category id cannot be less than 1"),
-    year: z.coerce.number().int().min(1800, "Year cannot be before 1800"),
-    month: z.coerce.number().int().min(1, "Month cannot be less than 1").max(12, "Month cannot be more than 12"),
-    amount: z.coerce.number()
-  });  
+  const [category, setCategory] = useState<Array<Category>>([{"catId": -1, "catName": "Loading..."}]);
+  const getData = useCallback(async () => {
+    const categories = await fetchCategory();
+    setCategory(categories)
+    const budgetId = searchParams.get('budgetId');
+    if (budgetId) {
+      const budgets = await fetchBudgetById(budgetId);
+      console.log({
+        "budgetId": budgets.budgetId.toString(),
+        "categoryId": budgets.catId.toString(),
+        "year": budgets.year.toString(),
+        "month": budgets.month.toString(),
+        "amount": budgets.amount.toString() 
+      })
+      setFormData({
+        "budgetId": budgets.budgetId.toString(),
+        "categoryId": budgets.catId.toString(),
+        "year": budgets.year.toString(),
+        "month": budgets.month.toString(),
+        "amount": budgets.amount.toString() 
+      })
+    }
+  }, []);
+  useEffect(() => {
+    getData();
+  }, [])
 
   const validateForm = (data: EditBudget): FormErrors<EditBudget> => {
     try {
@@ -73,7 +95,7 @@ export default function EditBudgetForm() {
   }
 
   return (
-    <Card className="border-solid border-indigo-500 bg-background/60 dark:bg-default-100/50 max-w-[610px]" 
+    <Card className="border-solid border-indigo-500 bg-background/60 dark:bg-default-100/50 w-[300px]" 
     shadow="sm" isBlurred>
       <CardBody>
       <Divider />
@@ -91,8 +113,16 @@ export default function EditBudgetForm() {
           {errors.budgetId && errors.budgetId.length > 0 && (
             <div className="form-msg">{errors.budgetId[0]}</div>
           )}
-          <Input key="categoryId" name="categoryId" value={formData.categoryId} onChange={handleChange} type="Text" 
-          label="Category Id" placeholder="Enter budget category id" color='default' variant='bordered' size='md' radius='full'/>
+          {category && <Select
+            items={category}
+            label="Category"
+            placeholder="Select a category"
+            color='default' variant='bordered' size='md' radius='full'
+            selectedKeys={[formData["categoryId"]]}
+            onChange={(e) => handleSelectionChange("categoryId", e.target.value)}
+          >
+            {(cat) => <SelectItem key={cat.catId} value={cat.catId}>{cat.catName}</SelectItem>}
+          </Select>}
           {errors.categoryId && errors.categoryId.length > 0 && (
             <div className="form-msg">{errors.categoryId[0]}</div>
           )}
@@ -100,9 +130,8 @@ export default function EditBudgetForm() {
             items={yearRange}
             label="Year"
             placeholder="Select a year"
-            className="max-w-xs"
             color='default' variant='bordered' size='md' radius='full'
-            defaultSelectedKeys={[formData["year"]]}
+            selectedKeys={[formData["year"]]}
             onChange={(e) => handleSelectionChange("year", e.target.value)}
           >
             {(year) => <SelectItem key={year.key} value={year.key}>{year.label}</SelectItem>}
@@ -114,9 +143,8 @@ export default function EditBudgetForm() {
             items={monthRange}
             label="Month"
             placeholder="Select a month"
-            className="max-w-xs"
             color='default' variant='bordered' size='md' radius='full'
-            defaultSelectedKeys={[formData["month"]]}
+            selectedKeys={[formData["month"]]}
             onChange={(e) => handleSelectionChange("month", e.target.value)}
           >
             {(month) => <SelectItem key={month.key} value={month.key}>{month.label}</SelectItem>}

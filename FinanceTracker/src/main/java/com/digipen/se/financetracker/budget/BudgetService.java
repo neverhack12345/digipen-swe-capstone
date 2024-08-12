@@ -22,6 +22,10 @@ public class BudgetService {
         return this.budgetRepository.findById(budgetId).orElse(null);
     }
 
+    public BudgetDTO findBudgetDTOByBudget_Id(Integer budgetId) {
+        return this.budgetRepository.findBudgetDTOByBudget_Id(budgetId);
+    }
+
     public List<Budget> findAllByUserId(Integer userId) {
         return this.budgetRepository.findAllByUserAccount_UserIdOrderByMonthYearDesc(userId);
     }

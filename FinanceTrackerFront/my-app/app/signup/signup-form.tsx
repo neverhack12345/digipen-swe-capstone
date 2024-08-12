@@ -1,4 +1,6 @@
 "use client";
+
+import { title } from "@/components/primitives";
 import { 
   Button, Card, CardBody, Input, Divider, 
   Select, SelectItem, DatePicker, Spacer 
@@ -18,8 +20,8 @@ const AddUserSchema = z.object({
 });  
 
 export default function SignUp() {
-  const title = "Sign Up";
-  const submitButtonText = "Sign Up";
+  const TITLE = "Sign Up";
+  const SUBMIT_BUTTON_TEXT = "Sign Up";
   const gender = [
     {key: "Unknown", label: "N/A"},
     {key: "F", label: "F"},
@@ -47,7 +49,7 @@ export default function SignUp() {
   }
 
   return (
-    <Card className="border-solid border-indigo-500 bg-background/60 dark:bg-default-100/50 max-w-[610px]" 
+    <Card className="border-solid border-indigo-500 bg-background/60 dark:bg-default-100/50 w-[400px]" 
     shadow="sm" isBlurred>
       <CardBody>
       <Divider />
@@ -58,8 +60,29 @@ export default function SignUp() {
           aria-atomic="true"
         >
         </div>
-        <p className="text-primary">{title}</p>
+        <h1 className={title()}>{TITLE}</h1>
         <div className="w-full flex-wrap gap-4">
+          <div key="firstLastName" className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-1">
+          <Input 
+            {...register("firstName")}
+            label="First Name" 
+            placeholder="Enter your first name" 
+            aria-label="First Name"
+            isInvalid={errors?.firstName!== undefined} 
+            errorMessage={(errors.firstName !== undefined) ? errors.firstName?.message : ""}
+            color='default' variant='bordered' size='md' radius='full'
+          />
+          <Input 
+            {...register("lastName")}
+            label="Last Name" 
+            placeholder="Enter your last name" 
+            aria-label="Last Name"
+            isInvalid={errors?.lastName!== undefined} 
+            errorMessage={(errors.lastName !== undefined) ? errors.lastName?.message : ""}
+            color='default' variant='bordered' size='md' radius='full'
+          />
+          </div>
+          <Spacer y={1} />
           <Input {...register("email")}
           type="Email" label="Email" placeholder="finance@example.com" aria-label="Email"
           isInvalid={errors.email && errors.email?.message !== undefined} 
@@ -70,18 +93,6 @@ export default function SignUp() {
           type="Password" label="Password" placeholder="Enter your password" aria-label="Password"
           isInvalid={errors?.password !== undefined} 
           errorMessage={(errors.password !== undefined) ? errors.password?.message : ""}
-          color='default' variant='bordered' size='md' radius='full'/>
-          <Spacer y={1} />
-          <Input {...register("firstName")}
-          type="Text" label="First Name" placeholder="Enter your first name" aria-label="First Name"
-          isInvalid={errors?.firstName!== undefined} 
-          errorMessage={(errors.firstName !== undefined) ? errors.firstName?.message : ""}
-          color='default' variant='bordered' size='md' radius='full'/>
-          <Spacer y={1} />
-          <Input {...register("lastName")}
-          type="Text" label="Last Name" placeholder="Enter your last name" aria-label="Last Name"
-          isInvalid={errors?.lastName!== undefined} 
-          errorMessage={(errors.lastName !== undefined) ? errors.lastName?.message : ""}
           color='default' variant='bordered' size='md' radius='full'/>
           <Spacer y={1} />
           <Controller
@@ -99,7 +110,6 @@ export default function SignUp() {
             items={gender} label="Gender" placeholder="Select an gender" aria-label="Gender"
             isInvalid={errors?.gender!== undefined} 
             errorMessage={(errors.gender !== undefined) ? errors.gender?.message : ""}
-            className="max-w-xs"
             color='default' variant='bordered' size='md' radius='full'
           >
             {(gender) => <SelectItem key={gender.key}>{gender.label}</SelectItem>}
@@ -107,7 +117,7 @@ export default function SignUp() {
         </div>
         <div className="w-full flex-wrap">
           <Button className="w-full" type="submit" color="primary" variant='solid' size='md' radius='full'>
-            {submitButtonText}
+            {SUBMIT_BUTTON_TEXT}
           </Button>
         </div>
       </form>

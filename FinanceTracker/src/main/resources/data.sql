@@ -85,34 +85,159 @@ INSERT INTO sub_category (cat_id, sub_name) VALUES (13, 'Office Rent');
 INSERT INTO sub_category (cat_id, sub_name) VALUES (13, 'Postage & Shipping');
 
 /* user_account table ----------------------------------------------------------------*/
-INSERT INTO user_account (email, password, first_name, last_name, dob, gender) VALUES ('bob@bob.com', '123', 'Bob', 'Chan', NOW(), 'M');
-INSERT INTO user_account (email, password, first_name, last_name, dob, gender) VALUES ('mary@mary.com', '123', 'Mary', 'Chan', NOW(), 'F');
-
+INSERT INTO user_account (email, password, first_name, last_name, dob, gender) VALUES
+('alice@example.com', '$2b$10$xyz', 'Alice', 'Smith', '1990-01-01', 'F'),
+('bob@example.com', '$2b$10$abc', 'Bob', 'Johnson', '1985-02-15', 'M'),
+('charlie@example.com', '$2b$10$def', 'Charlie', 'Brown', '1992-03-20', 'M'),
+('diana@example.com', '$2b$10$ghi', 'Diana', 'Wang', '1995-07-07', 'F'),
+('eve@example.com', '$2b$10$jkl', 'Eve', 'Davis', '1988-12-12', 'F');
 /* cash_flow table ----------------------------------------------------------------*/
-INSERT INTO cash_flow (user_id, sub_id, source_name, date, amount, remark) VALUES (1, 1, 'DBS', NOW(), 5500, 'Moneys');
-INSERT INTO cash_flow (user_id, sub_id, source_name, date, amount, remark) VALUES (1, 2, 'SPY', NOW(), 99.42, NULL);
-INSERT INTO cash_flow (user_id, sub_id, source_name, date, amount, remark) VALUES (1, 5, 'KFC', NOW(), 10.76, 'HunGry');
-INSERT INTO cash_flow (user_id, sub_id, source_name, date, amount, remark) VALUES (1, 5, 'Brawl Star', NOW(), 5.97, NULL);
-INSERT INTO cash_flow (user_id, sub_id, source_name, date, amount, remark) VALUES (2, 1, 'UOB', NOW(), 5000, NULL);
-INSERT INTO cash_flow (user_id, sub_id, source_name, date, amount, remark) VALUES (2, 2, 'VTI', NOW(), 184.61, NULL);
-INSERT INTO cash_flow (user_id, sub_id, source_name, date, amount, remark) VALUES (2, 5, 'Happy Hawker' , NOW(), 15.42, NULL);
-INSERT INTO cash_flow (user_id, sub_id, source_name, date, amount, remark) VALUES (2, 5, 'Brawl Royal', NOW(), 14.56, NULL);
+INSERT INTO cash_flow (user_id, sub_id, source_name, date, amount, remark) VALUES
+(1, 1, 'Tech Corp', '2024-01-05', 5000.00, 'Monthly Salary'),
+(1, 2, 'Freelance Project', '2024-01-15', 1200.00, 'Website development'),
+(1, 3, 'Rent Payment', '2024-01-01', -1200.00, 'January rent'),
+(1, 4, 'Electricity Bill', '2024-01-10', -150.00, 'January electricity'),
+(1, 5, 'Grocery Shopping', '2024-01-12', -300.00, 'Weekly groceries'),
+(1, 1, 'Tech Corp', '2024-02-05', 5000.00, 'Monthly Salary'),
+(1, 2, 'Freelance Project', '2024-02-15', 1300.00, 'App development'),
+(1, 3, 'Rent Payment', '2024-02-01', -1200.00, 'February rent'),
+(1, 4, 'Water Bill', '2024-02-12', -100.00, 'February water bill'),
+(1, 5, 'Grocery Shopping', '2024-02-14', -350.00, 'Weekly groceries'),
+(1, 1, 'Tech Corp', '2024-03-05', 5000.00, 'Monthly Salary'),
+(1, 2, 'Consulting', '2024-03-18', 1100.00, 'Business consulting'),
+(1, 3, 'Rent Payment', '2024-03-01', -1200.00, 'March rent'),
+(1, 4, 'Internet Bill', '2024-03-10', -60.00, 'March internet'),
+(1, 5, 'Grocery Shopping', '2024-03-12', -320.00, 'Weekly groceries'),
+(1, 1, 'Tech Corp', '2024-04-05', 5000.00, 'Monthly Salary'),
+(1, 2, 'Freelance Project', '2024-04-15', 1500.00, 'Design work'),
+(1, 3, 'Rent Payment', '2024-04-01', -1200.00, 'April rent'),
+(1, 4, 'Electricity Bill', '2024-04-10', -160.00, 'April electricity'),
+(1, 5, 'Grocery Shopping', '2024-04-13', -310.00, 'Weekly groceries'),
+(1, 1, 'Tech Corp', '2024-05-05', 5000.00, 'Monthly Salary'),
+(1, 2, 'Freelance Project', '2024-05-15', 1400.00, 'Backend development'),
+(1, 3, 'Rent Payment', '2024-05-01', -1200.00, 'May rent'),
+(1, 4, 'Gas Bill', '2024-05-11', -90.00, 'May gas bill'),
+(1, 5, 'Grocery Shopping', '2024-05-14', -340.00, 'Weekly groceries'),
+(1, 1, 'Tech Corp', '2024-06-05', 5000.00, 'Monthly Salary'),
+(1, 2, 'Freelance Project', '2024-06-16', 1350.00, 'UI/UX design'),
+(1, 3, 'Rent Payment', '2024-06-01', -1200.00, 'June rent'),
+(1, 4, 'Electricity Bill', '2024-06-10', -150.00, 'June electricity'),
+(1, 5, 'Grocery Shopping', '2024-06-12', -330.00, 'Weekly groceries'),
+(1, 1, 'Tech Corp', '2024-07-05', 5000.00, 'Monthly Salary'),
+(1, 2, 'Freelance Project', '2024-07-15', 1250.00, 'SEO Optimization'),
+(1, 3, 'Rent Payment', '2024-07-01', -1200.00, 'July rent'),
+(1, 4, 'Water Bill', '2024-07-12', -100.00, 'July water bill'),
+(1, 5, 'Grocery Shopping', '2024-07-14', -300.00, 'Weekly groceries'),
+(1, 1, 'Tech Corp', '2024-08-05', 5000.00, 'Monthly Salary'),
+(1, 2, 'Freelance Project', '2024-08-16', 1450.00, 'Mobile app design'),
+(1, 3, 'Rent Payment', '2024-08-01', -1200.00, 'August rent'),
+(1, 4, 'Gas Bill', '2024-08-10', -80.00, 'August gas bill'),
+(1, 5, 'Grocery Shopping', '2024-08-12', -340.00, 'Weekly groceries'),
+(1, 1, 'Tech Corp', '2024-09-05', 5000.00, 'Monthly Salary'),
+(1, 2, 'Freelance Project', '2024-09-15', 1300.00, 'Web development'),
+(1, 3, 'Rent Payment', '2024-09-01', -1200.00, 'September rent'),
+(1, 4, 'Internet Bill', '2024-09-10', -60.00, 'September internet'),
+(1, 5, 'Grocery Shopping', '2024-09-12', -320.00, 'Weekly groceries'),
+(1, 1, 'Tech Corp', '2024-10-05', 5000.00, 'Monthly Salary'),
+(1, 2, 'Freelance Project', '2024-10-15', 1500.00, 'Logo design'),
+(1, 3, 'Rent Payment', '2024-10-01', -1200.00, 'October rent'),
+(1, 4, 'Electricity Bill', '2024-10-10', -160.00, 'October electricity'),
+(1, 5, 'Grocery Shopping', '2024-10-14', -310.00, 'Weekly groceries'),
+(1, 1, 'Tech Corp', '2024-11-05', 5000.00, 'Monthly Salary'),
+(1, 2, 'Freelance Project', '2024-11-15', 1400.00, 'E-commerce site'),
+(1, 3, 'Rent Payment', '2024-11-01', -1200.00, 'November rent'),
+(1, 4, 'Gas Bill', '2024-11-12', -90.00, 'November gas bill'),
+(1, 5, 'Grocery Shopping', '2024-11-16', -340.00, 'Weekly groceries'),
+(1, 1, 'Tech Corp', '2024-12-05', 5000.00, 'Monthly Salary'),
+(1, 2, 'Freelance Project', '2024-12-15', 1350.00, 'Photography project'),
+(1, 3, 'Rent Payment', '2024-12-01', -1200.00, 'December rent'),
+(1, 4, 'Water Bill', '2024-12-10', -100.00, 'December water bill'),
+(1, 5, 'Grocery Shopping', '2024-12-12', -330.00, 'Weekly groceries'),
+(1, 1, 'Tech Corp', '2025-01-05', 5100.00, 'Monthly Salary'),
+(1, 2, 'Freelance Project', '2025-01-15', 1200.00, 'Blog writing'),
+(1, 3, 'Rent Payment', '2025-01-01', -1250.00, 'January rent'),
+(1, 4, 'Electricity Bill', '2025-01-10', -170.00, 'January electricity'),
+(1, 5, 'Grocery Shopping', '2025-01-12', -320.00, 'Weekly groceries');
 
 
 /* budget table ----------------------------------------------------------------*/
-INSERT INTO budget (user_id, cat_id, year, month, amount) VALUES (1, 1, 2024, 9, 5500);
-INSERT INTO budget (user_id, cat_id, year, month, amount) VALUES (1, 2, 2024, 9, 20);
-INSERT INTO budget (user_id, cat_id, year, month, amount) VALUES (2, 1, 2024, 9, 5500);
-INSERT INTO budget (user_id, cat_id, year, month, amount) VALUES (2, 2, 2024, 9, 20);
-INSERT INTO budget (user_id, cat_id, year, month, amount) VALUES (1, 1, 2024, 8, 5500);
-INSERT INTO budget (user_id, cat_id, year, month, amount) VALUES (1, 2, 2024, 8, 20);
-INSERT INTO budget (user_id, cat_id, year, month, amount) VALUES (2, 1, 2024, 8, 5500);
-INSERT INTO budget (user_id, cat_id, year, month, amount) VALUES (2, 2, 2024, 8, 20);
-INSERT INTO budget (user_id, cat_id, year, month, amount) VALUES (1, 1, 2024, 7, 5500);
-INSERT INTO budget (user_id, cat_id, year, month, amount) VALUES (1, 2, 2024, 7, 20);
-INSERT INTO budget (user_id, cat_id, year, month, amount) VALUES (2, 1, 2024, 7, 5500);
-INSERT INTO budget (user_id, cat_id, year, month, amount) VALUES (2, 2, 2024, 7, 20);
-INSERT INTO budget (user_id, cat_id, year, month, amount) VALUES (1, 1, 2024, 6, 5500);
-INSERT INTO budget (user_id, cat_id, year, month, amount) VALUES (1, 2, 2024, 6, 20);
-INSERT INTO budget (user_id, cat_id, year, month, amount) VALUES (2, 1, 2024, 6, 5500);
-INSERT INTO budget (user_id, cat_id, year, month, amount) VALUES (2, 2, 2024, 6, 20);
+INSERT INTO budget (user_id, cat_id, year, month, amount) VALUES
+(1, 1, 2024, 1, 1000.00),
+(1, 2, 2024, 1, 2000.00),
+(1, 3, 2024, 1, 1500.00),
+(1, 4, 2024, 1, 2500.00),
+(1, 5, 2024, 1, 1200.00),
+(1, 6, 2024, 1, 900.00),
+(1, 7, 2024, 1, 1800.00),
+(1, 8, 2024, 1, 1300.00),
+(1, 9, 2024, 1, 2200.00),
+(1, 10, 2024, 1, 1700.00),
+(1, 11, 2024, 1, 800.00),
+(1, 12, 2024, 1, 2100.00),
+(1, 13, 2024, 1, 1600.00),
+(1, 1, 2024, 2, 1100.00),
+(1, 2, 2024, 2, 1900.00),
+(1, 3, 2024, 2, 1600.00),
+(1, 4, 2024, 2, 2400.00),
+(1, 5, 2024, 2, 1300.00),
+(1, 6, 2024, 2, 950.00),
+(1, 7, 2024, 2, 1700.00),
+(1, 8, 2024, 2, 1400.00),
+(1, 9, 2024, 2, 2100.00),
+(1, 10, 2024, 2, 1800.00),
+(1, 11, 2024, 2, 850.00),
+(1, 12, 2024, 2, 2000.00),
+(1, 13, 2024, 2, 1500.00),
+(1, 1, 2024, 3, 1200.00),
+(1, 2, 2024, 3, 1800.00),
+(1, 3, 2024, 3, 1700.00),
+(1, 4, 2024, 3, 2300.00),
+(1, 5, 2024, 3, 1400.00),
+(1, 6, 2024, 3, 1000.00),
+(1, 7, 2024, 3, 1600.00),
+(1, 8, 2024, 3, 1500.00),
+(1, 9, 2024, 3, 2000.00),
+(1, 10, 2024, 3, 1900.00),
+(1, 11, 2024, 3, 900.00),
+(1, 12, 2024, 3, 1900.00),
+(1, 13, 2024, 3, 1400.00),
+(1, 1, 2024, 4, 1300.00),
+(1, 2, 2024, 4, 1700.00),
+(1, 3, 2024, 4, 1800.00),
+(1, 4, 2024, 4, 2200.00),
+(1, 5, 2024, 4, 1500.00),
+(1, 6, 2024, 4, 1050.00),
+(1, 7, 2024, 4, 1500.00),
+(1, 8, 2024, 4, 1600.00),
+(1, 9, 2024, 4, 1900.00),
+(1, 10, 2024, 4, 2000.00),
+(1, 11, 2024, 4, 950.00),
+(1, 12, 2024, 4, 1800.00),
+(1, 13, 2024, 4, 1300.00),
+(1, 1, 2024, 5, 1400.00),
+(1, 2, 2024, 5, 1600.00),
+(1, 3, 2024, 5, 1900.00),
+(1, 4, 2024, 5, 2100.00),
+(1, 5, 2024, 5, 1600.00),
+(1, 6, 2024, 5, 1100.00),
+(1, 7, 2024, 5, 1400.00),
+(1, 8, 2024, 5, 1700.00),
+(1, 9, 2024, 5, 1800.00),
+(1, 10, 2024, 5, 2100.00),
+(1, 11, 2024, 5, 1000.00),
+(1, 12, 2024, 5, 1700.00),
+(1, 13, 2024, 5, 1200.00),
+(1, 1, 2024, 6, 1500.00),
+(1, 2, 2024, 6, 1500.00),
+(1, 3, 2024, 6, 2000.00),
+(1, 4, 2024, 6, 2000.00),
+(1, 5, 2024, 6, 1700.00),
+(1, 6, 2024, 6, 1150.00),
+(1, 7, 2024, 6, 1300.00),
+(1, 8, 2024, 6, 1800.00),
+(1, 9, 2024, 6, 1700.00),
+(1, 10, 2024, 6, 2200.00),
+(1, 11, 2024, 6, 1050.00),
+(1, 12, 2024, 6, 1600.00),
+(1, 13, 2024, 6, 1100.00);
+
