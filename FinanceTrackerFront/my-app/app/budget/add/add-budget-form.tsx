@@ -7,14 +7,21 @@ import { Input } from "@nextui-org/input";
 import { Divider } from "@nextui-org/divider";
 import { Select, SelectItem } from "@nextui-org/select";
 import { ChangeEvent, FormEvent, useState } from "react";
+import { monthRange, yearRange } from "@/lib/data";
 import { addBudget } from "@/app/api/route";
 import { FormErrors, AddBudget } from "@/types/definitions";
 import { z } from "zod";
 
+const AddBudgetSchema = z.object({
+  userId: z.coerce.number().int().min(1, "User id cannot be less than 1"),
+  categoryId: z.coerce.number().int().min(1, "Category id cannot be less than 1"),
+  year: z.coerce.number().int().min(1800, "Year cannot be before 1800"),
+  month: z.coerce.number().int().min(1, "Month cannot be less than 1").max(12, "Month cannot be more than 12"),
+  amount: z.coerce.number()
+});  
+
 export default function AddBudgetForm() {
   const [errors, setErrors] = useState<FormErrors<AddBudget>>({});
-  const monthRange = Array.from({ length: 12 }, (_, i) => ({key: String(i + 1), label: String(i + 1)}));
-  const yearRange = Array.from({ length: 200 }, (_, i) => ({key: String(i + 1900), label: String(i + 1900)}));
   const [formData, setFormData] = useState<AddBudget>({
     "userId": "1",
     "categoryId": "1",
@@ -22,15 +29,6 @@ export default function AddBudgetForm() {
     "month": "1",
     "amount": "1000"
   });
-  
-  
-  const AddBudgetSchema = z.object({
-    userId: z.coerce.number().int().min(1, "User id cannot be less than 1"),
-    categoryId: z.coerce.number().int().min(1, "Category id cannot be less than 1"),
-    year: z.coerce.number().int().min(1800, "Year cannot be before 1800"),
-    month: z.coerce.number().int().min(1, "Month cannot be less than 1").max(12, "Month cannot be more than 12"),
-    amount: z.coerce.number()
-  });  
 
   const validateForm = (data: AddBudget): FormErrors<AddBudget> => {
     try {

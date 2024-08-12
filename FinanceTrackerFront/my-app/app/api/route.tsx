@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect, permanentRedirect } from "next/navigation";
-import { AddBudget, EditBudget } from "@/types/definitions";
+import { AddBudget } from "@/types/definitions";
 
 const LOGIN_TAG = "isLoggedin";
 const USER_ID = "userId";
@@ -133,7 +133,7 @@ export async function deleteBudget(budgetId: any) {
   permanentRedirect("/budget")
 }
 
-export async function editBudget(formData: EditBudget) {
+export async function editBudget(formData: any) {
   try {
       const response = await fetch('http://localhost:8080/api/budget/update', {
         method: 'POST',

@@ -6,6 +6,7 @@ import { Button, Card, CardBody, Input, Divider, Select, SelectItem } from "@nex
 import { ChangeEvent, FormEvent, useCallback, useEffect, useState } from "react";
 import { editBudget, fetchCategory, fetchBudgetById } from "@/app/api/route";
 import { FormErrors, EditBudget, Category } from '@/types/definitions'; 
+import { monthRange, yearRange } from '@/lib/data';
 import { z } from "zod"
 
 const UpdateBudgetSchema = z.object({
@@ -18,8 +19,6 @@ const UpdateBudgetSchema = z.object({
 
 export default function EditBudgetForm() {
   const [errors, setErrors] = useState<FormErrors<EditBudget>>({});
-  const monthRange = Array.from({ length: 12 }, (_, i) => ({key: String(i + 1), label: String(i + 1)}));
-  const yearRange = Array.from({ length: 200 }, (_, i) => ({key: String(i + 1900), label: String(i + 1900)}));
   const searchParams = useSearchParams() 
   const [formData, setFormData] = useState<EditBudget>({
     "budgetId": "Loading...",
@@ -35,13 +34,6 @@ export default function EditBudgetForm() {
     const budgetId = searchParams.get('budgetId');
     if (budgetId) {
       const budgets = await fetchBudgetById(budgetId);
-      console.log({
-        "budgetId": budgets.budgetId.toString(),
-        "categoryId": budgets.catId.toString(),
-        "year": budgets.year.toString(),
-        "month": budgets.month.toString(),
-        "amount": budgets.amount.toString() 
-      })
       setFormData({
         "budgetId": budgets.budgetId.toString(),
         "categoryId": budgets.catId.toString(),
