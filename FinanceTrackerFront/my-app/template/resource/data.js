@@ -1,51 +1,18 @@
-const categoryColumns = [
-  {name: "ID", uid: "catId", sortable: true},
-  {name: "CATEGORY", uid: "catName", sortable: true},
-  {name: "ACTIONS", uid: "actions"},
-]
-
-const subCategoryColumns = [
-  {name: "ID", uid: "subId", sortable: true},
-  {name: "SUBCATEGORY", uid: "subName", sortable: true},
-  {name: "CATEGORY", uid: "catName", sortable: true},
-  {name: "ACTIONS", uid: "actions"},
-]
-
-const budgetColumns = [
-  {name: "YEAR", uid: "year", sortable: true},
-  {name: "MONTH", uid: "month", sortable: true},
-  {name: "CATEGORY", uid: "catName", sortable: true},
-  {name: "AMOUNT", uid: "amount", sortable: true},
-  {name: "ACTIONS", uid: "actions"},
-]
-
-const cashFlowColumns = [
-  {name: "ID", uid: "flowId", sortable: true},
-  {name: "SOURCE", uid: "sourceName", sortable: true},
-  {name: "DATE", uid: "date", sortable: true},
-  {name: "AMOUNT", uid: "amount", sortable: true},
-  {name: "REMARK", uid: "remark", sortable: true},
-  {name: "SUBCATEGORY ID", uid: "subId", sortable: true},
-  {name: "SUBCATEGORY", uid: "subName", sortable: true},
-  {name: "USER ID", uid: "userId", sortable: true},
-  {name: "ACTIONS", uid: "actions"},
-]
-
 const columns = [
-  {name: "ID", uid: "id", sortable: true},
-  {name: "NAME", uid: "name", sortable: true},
-  {name: "AGE", uid: "age", sortable: true},
-  {name: "ROLE", uid: "role", sortable: true},
-  {name: "TEAM", uid: "team"},
-  {name: "EMAIL", uid: "email"},
-  {name: "STATUS", uid: "status", sortable: true},
-  {name: "ACTIONS", uid: "actions"},
+  { name: "ID", uid: "id", sortable: true },
+  { name: "NAME", uid: "name", sortable: true },
+  { name: "AGE", uid: "age", sortable: true },
+  { name: "ROLE", uid: "role", sortable: true },
+  { name: "TEAM", uid: "team" },
+  { name: "EMAIL", uid: "email" },
+  { name: "STATUS", uid: "status", sortable: true },
+  { name: "ACTIONS", uid: "actions" },
 ];
 
 const statusOptions = [
-  {name: "Active", uid: "active"},
-  {name: "Paused", uid: "paused"},
-  {name: "Vacation", uid: "vacation"},
+  { name: "Active", uid: "active" },
+  { name: "Paused", uid: "paused" },
+  { name: "Vacation", uid: "vacation" },
 ];
 
 const users = [
@@ -251,4 +218,12 @@ const users = [
   },
 ];
 
-export {columns, users, statusOptions, categoryColumns, subCategoryColumns, budgetColumns, cashFlowColumns};
+export {
+  columns,
+  users,
+  statusOptions,
+  categoryColumns,
+  subCategoryColumns,
+  budgetColumns,
+  cashFlowColumns,
+};

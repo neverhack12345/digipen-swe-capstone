@@ -11,7 +11,7 @@ import {
     TableCell,
 } from "@nextui-org/table";
 import { PlusIcon } from "@/template/resource/icons";
-import { users, budgetColumns } from "@/template/resource/data";
+import { budgetColumns } from "@/lib/data";
 import NextLink from "next/link"
 import { DeleteBudgetButton } from "./delete-budget-button";
 import { EditBudgetButton } from "./edit-budget-button";
@@ -63,7 +63,7 @@ export default function BudgetTable() {
         </div>
       </div>
     );
-  }, [users.length]);
+  }, []);
 
   return (
     <Table

@@ -13,7 +13,8 @@ import {
 import { Tooltip } from '@nextui-org/tooltip';
 import { Button } from "@nextui-org/button"
 import { PlusIcon, EditIcon, DeleteIcon } from "@/template/resource/icons";
-import { users, cashFlowColumns } from "@/template/resource/data";
+import { users } from "@/template/resource/data";
+import { cashFlowColumns } from "@/lib/data";
 
 export default function CashFlowTable() {
   const [data, setData] = useState([

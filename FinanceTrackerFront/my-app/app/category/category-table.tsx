@@ -13,7 +13,8 @@ import {
 import { Tooltip } from '@nextui-org/tooltip';
 import { Button } from "@nextui-org/button"
 import { PlusIcon, EditIcon } from "@/template/resource/icons";
-import { users, categoryColumns } from "@/template/resource/data";
+import { users } from "@/template/resource/data";
+import { categoryColumns } from "@/lib/data";
 
 export default function CategoryTable() {
   const [data, setData] = useState([
