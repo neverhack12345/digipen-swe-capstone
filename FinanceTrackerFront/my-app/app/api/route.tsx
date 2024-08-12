@@ -204,3 +204,7 @@ export async function logoutUser() {
 export async function isLoggedin() {
   return cookies().has(LOGIN_TAG);
 }
+
+export async function getUser() {
+  return cookies().get(USER_ID)?.value;
+}

@@ -62,10 +62,9 @@ export default function EditBudgetForm() {
       "amount": "" 
     },
   })
-  const onSubmit = (data: any) => { console.log(data);editBudget(data); }
+  const onSubmit = (data: any) => { editBudget(data); }
 
   return (
-    <Skeleton isLoaded={isCompleteLoaded} >
     <Card className="border-solid border-indigo-500 bg-background/60 dark:bg-default-100/50 w-[400px]" 
     shadow="sm" isBlurred>
       <CardBody>
@@ -79,6 +78,7 @@ export default function EditBudgetForm() {
         </div>
         <h1 className={title()}>{TITLE}</h1>
         <div className="w-full flex-wrap gap-4">
+          <Skeleton isLoaded={isCompleteLoaded} className="rounded-lg">
           <div key="yearMonthKey" className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-1">
           <Controller
             control={control}
@@ -115,7 +115,9 @@ export default function EditBudgetForm() {
             )}
           />
           </div>
+          </Skeleton>
           <Spacer y={1} />
+          <Skeleton isLoaded={isCompleteLoaded} className="rounded-lg">
           <Controller
             control={control}
             name="categoryId"
@@ -133,23 +135,27 @@ export default function EditBudgetForm() {
               </Select>
             )}
           />
+          </Skeleton>
           <Spacer y={1} />
+          <Skeleton isLoaded={isCompleteLoaded} className="rounded-lg">
           <Input {...register("amount")}
           type="Text" label="Amount" aria-label="Amount" placeholder="Enter the amount" 
           isInvalid={errors?.amount !== undefined} 
           errorMessage={(errors.amount !== undefined) ? errors.amount?.message : ""}
           color='default' variant='bordered' size='md' radius='full'/>
+          </Skeleton>
         </div>
         <div className="w-full flex-wrap">
+          <Skeleton isLoaded={isCompleteLoaded} className="rounded-lg">
           <Button className="w-full" type="submit" color="primary" variant='solid' size='md' radius='full'>
             {SUBMIT_BUTTON_TEXT}
           </Button>
+          </Skeleton>
         </div>
       </form>
       <Spacer y={1} />
       <Divider />
       </CardBody>
     </Card>
-    </Skeleton>
   );
 }

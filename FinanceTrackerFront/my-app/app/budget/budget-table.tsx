@@ -1,15 +1,11 @@
 "use client"
 
 import { title } from "@/components/primitives";
+import { 
+  Table, TableHeader, TableColumn, TableBody, TableRow, TableCell,
+  Skeleton
+} from "@nextui-org/react";
 import { useState, useEffect, useCallback, useMemo } from "react";
-import {
-    Table,
-    TableHeader,
-    TableColumn,
-    TableBody,
-    TableRow,
-    TableCell,
-} from "@nextui-org/table";
 import { PlusIcon } from "@/template/resource/icons";
 import { budgetColumns } from "@/lib/data";
 import NextLink from "next/link"
@@ -20,23 +16,17 @@ import { fetchBudgets } from "../api/route";
 
 export default function BudgetTable() {
   const TABLE_NAME = "Budget Table"
-  const [data , setData] = useState<Array<Budget>>();
+  const [data , setData] = useState<Array<Budget>>([]);
+  const [isCompleteLoaded, setIsCompleteLoaded] = useState(false);
+  
   const fetchData = useCallback(async () => {
     const budgets = await fetchBudgets();
-    setData(budgets)
+    setData(budgets);
+    setIsCompleteLoaded(true);
   }, []);
-
   useEffect(() => {
     fetchData();
   }, []);
-
-  const filteredItems = useMemo(() => {
-    if (data !== undefined) {
-      return [...data];
-    } else {
-      return [];
-    }
-  }, [data]);
 
   const renderCell = useCallback((item: Budget, columnKey: keyof Budget | 'actions' ) => {
     if (columnKey === "actions" ) {
@@ -66,6 +56,7 @@ export default function BudgetTable() {
   }, []);
 
   return (
+    <Skeleton isLoaded={isCompleteLoaded} className="rounded-lg">
     <Table
       aria-label={TABLE_NAME}
       classNames={{
@@ -85,7 +76,7 @@ export default function BudgetTable() {
           </TableColumn>
         )}
       </TableHeader>
-      <TableBody emptyContent={"No budget found"} items={filteredItems}>
+      <TableBody emptyContent={"No budget found"} items={data}>
         {(item) => (
           <TableRow key={item.budgetId}>
             {(columnKey) => <TableCell>{renderCell(item, columnKey as keyof Budget | 'actions')}</TableCell>}
@@ -93,5 +84,6 @@ export default function BudgetTable() {
         )}
       </TableBody>
     </Table>
+    </Skeleton>
   );
 }
