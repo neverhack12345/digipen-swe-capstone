@@ -3,31 +3,18 @@
 import { title } from "@/components/primitives";
 import { 
   Table, TableHeader, TableColumn, TableBody, TableRow, TableCell,
-  Skeleton
 } from "@nextui-org/react";
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { PlusIcon } from "@/template/resource/icons";
 import { budgetColumns } from "@/lib/data";
 import NextLink from "next/link"
 import { DeleteBudgetButton } from "./delete-budget-button";
 import { EditBudgetButton } from "./edit-budget-button";
 import { Budget } from "@/types/definitions";
-import { fetchBudgets } from "../api/route";
 
-export default function BudgetTable() {
+export default function BudgetTable({filteredData, fetchData}) {
   const TABLE_NAME = "Budget Table"
-  const [data , setData] = useState<Array<Budget>>([]);
-  const [isCompleteLoaded, setIsCompleteLoaded] = useState(false);
   
-  const fetchData = useCallback(async () => {
-    const budgets = await fetchBudgets();
-    setData(budgets);
-    setIsCompleteLoaded(true);
-  }, []);
-  useEffect(() => {
-    fetchData();
-  }, []);
-
   const renderCell = useCallback((item: Budget, columnKey: keyof Budget | 'actions' ) => {
     if (columnKey === "actions" ) {
       return (
@@ -56,7 +43,6 @@ export default function BudgetTable() {
   }, []);
 
   return (
-    <Skeleton isLoaded={isCompleteLoaded} className="rounded-lg">
     <Table
       aria-label={TABLE_NAME}
       classNames={{
@@ -76,14 +62,13 @@ export default function BudgetTable() {
           </TableColumn>
         )}
       </TableHeader>
-      <TableBody emptyContent={"No budget found"} items={data}>
-        {(item) => (
+      <TableBody emptyContent={"No budget found"} items={filteredData}>
+        {(item: Budget) => (
           <TableRow key={item.budgetId}>
             {(columnKey) => <TableCell>{renderCell(item, columnKey as keyof Budget | 'actions')}</TableCell>}
           </TableRow>
         )}
       </TableBody>
     </Table>
-    </Skeleton>
   );
 }
