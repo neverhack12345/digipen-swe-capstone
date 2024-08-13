@@ -10,20 +10,26 @@ import java.util.List;
 
 @Repository
 public interface BudgetRepository extends JpaRepository<Budget, Integer> {
-    @Query("SELECT b from Budget b " +
+    @Query("SELECT NEW com.digipen.se.financetracker.model.BudgetDTO(" +
+            "b.budgetId, b.year, b.month, b.amount, b.category.catId, " +
+            "b.category.catName, b.userAccount.userId) FROM Budget b " +
             "WHERE b.userAccount.userId = :userId " +
             "ORDER BY b.month, b.year DESC")
-    List<Budget> findAllByUserAccount_UserIdOrderByMonthYearDesc(@Param("userId") Integer userId);
-    @Query("SELECT b from Budget b " +
+    List<BudgetDTO> findBudgetDTOByUserAccount_UserIdOrderByMonthYearDesc(@Param("userId") Integer userId);
+    @Query("SELECT NEW com.digipen.se.financetracker.model.BudgetDTO(" +
+            "b.budgetId, b.year, b.month, b.amount, b.category.catId, " +
+            "b.category.catName, b.userAccount.userId) FROM Budget b " +
             "WHERE b.year = :year AND b.userAccount.userId = :userId " +
             "ORDER BY b.month, b.year DESC")
-    List<Budget> findAllByYearAndUserAccount_UserIdOrderByMonthYearDesc(
+    List<BudgetDTO> findBudgetDTOByYearAndUserAccount_UserIdOrderByMonthYearDesc(
             @Param("userId") Integer userId,
             @Param("year") Integer year);
-    @Query("SELECT b from Budget b " +
+    @Query("SELECT NEW com.digipen.se.financetracker.model.BudgetDTO(" +
+            "b.budgetId, b.year, b.month, b.amount, b.category.catId, " +
+            "b.category.catName, b.userAccount.userId) FROM Budget b " +
             "WHERE b.year = :year AND b.month = :month AND b.userAccount.userId = :userId " +
             "ORDER BY b.month, b.year DESC")
-    List<Budget> findAllByYearAndMonthAndUserAccount_UserIdOrderByMonthYearDesc(
+    List<BudgetDTO> findBudgetDTOByYearAndMonthAndUserAccount_UserIdOrderByMonthYearDesc(
             @Param("userId") Integer userId,
             @Param("year") Integer year,
             @Param("month") Integer month);

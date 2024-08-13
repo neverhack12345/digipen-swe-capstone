@@ -30,9 +30,12 @@ public class UserAccountService {
         this.userAccountRepository.save(userAccount);
     }
 
-    public boolean authenticate(String email, String password) {
+    public Integer authenticate(String email, String password) {
         BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
-        String passwordHash = this.userAccountRepository.getPasswordByEmail(email);
-        return bcrypt.matches(password, passwordHash);
+        UserAccount user = this.userAccountRepository.getUserAccountByEmail(email);
+        if (bcrypt.matches(password, user.getPassword())) {
+            return user.getUserId();
+        }
+        return null;
     }
 }

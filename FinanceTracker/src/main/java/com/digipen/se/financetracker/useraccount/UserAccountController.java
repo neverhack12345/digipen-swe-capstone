@@ -61,14 +61,14 @@ public class UserAccountController {
     }
 
     @GetMapping("/authenticate")
-    public ResponseEntity<String> authenticate(
+    public ResponseEntity<?> authenticate(
             @Param("email") String email, @Param("password") String password)
             throws ResourceNotFoundException, InvalidRequestParamException, ConstraintViolationException {
-        if (this.userAccountService.authenticate(email, password)) {
-            return ResponseEntity.ok().body("Authentication success!");
-        } else {
-            return ResponseEntity.ok().body("Authentication fail!");
+        Integer userId = this.userAccountService.authenticate(email, password);
+        if (userId == null) {
+            throw new ResourceNotFoundException("Authentication failed!");
         }
+        return ResponseEntity.ok().body(userId);
     }
 
     @PostMapping("/update")

@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import {
   Modal,
   ModalContent,
@@ -19,6 +19,8 @@ import { authenticateUser } from "@/app/api/route";
 
 export default function LoginModal() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
 
   return (
     <>
@@ -43,6 +45,8 @@ export default function LoginModal() {
                   }
                   label="Email"
                   placeholder="Enter your email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   variant="bordered"
                 />
                 <Input
@@ -52,6 +56,8 @@ export default function LoginModal() {
                   label="Password"
                   placeholder="Enter your password"
                   type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   variant="bordered"
                 />
                 <div className="flex py-2 px-1 justify-between">
@@ -76,7 +82,7 @@ export default function LoginModal() {
                 <Button
                   color="primary"
                   onClick={async () => {
-                    await authenticateUser();
+                    await authenticateUser(email, password);
                   }}
                 >
                   Sign in

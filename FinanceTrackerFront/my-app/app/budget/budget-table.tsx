@@ -60,7 +60,7 @@ export default function BudgetTable() {
     <Table
       aria-label={TABLE_NAME}
       classNames={{
-        wrapper: "max-h-[382px]",
+        wrapper: "",
       }}
       isStriped
       topContent={topContent}

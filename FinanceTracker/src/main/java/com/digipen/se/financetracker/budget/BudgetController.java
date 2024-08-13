@@ -52,7 +52,7 @@ public class BudgetController {
     }
 
     @GetMapping("/searchByUserId")
-    public ResponseEntity<List<Budget>> findBudgetByUserId(
+    public ResponseEntity<List<BudgetDTO>> findBudgetByUserId(
             @RequestParam("id") Integer userId,
             @RequestParam(value = "year", required = false) Integer year,
             @RequestParam(value = "month", required = false) Integer month)
@@ -66,13 +66,13 @@ public class BudgetController {
         if (month != null) if (month <= 0) {
             throw new InvalidRequestParamException("Month cannot be less than or equals 0!");
         }
-        List<Budget> budgetList;
+        List<BudgetDTO> budgetList;
         if (year != null && month != null) {
-            budgetList = this.budgetService.findAllByUserId(userId, year, month);
+            budgetList = this.budgetService.findBudgetDTOByUserId(userId, year, month);
         } else if (year != null) {
-            budgetList = this.budgetService.findAllByUserId(userId, year);
+            budgetList = this.budgetService.findBudgetDTOByUserId(userId, year);
         } else {
-            budgetList = this.budgetService.findAllByUserId(userId);
+            budgetList = this.budgetService.findBudgetDTOByUserId(userId);
         }
         if (budgetList.isEmpty()) {
             throw new ResourceNotFoundException("No budget found!");

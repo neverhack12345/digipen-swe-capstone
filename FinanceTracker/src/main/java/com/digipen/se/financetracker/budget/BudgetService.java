@@ -26,16 +26,16 @@ public class BudgetService {
         return this.budgetRepository.findBudgetDTOByBudget_Id(budgetId);
     }
 
-    public List<Budget> findAllByUserId(Integer userId) {
-        return this.budgetRepository.findAllByUserAccount_UserIdOrderByMonthYearDesc(userId);
+    public List<BudgetDTO> findBudgetDTOByUserId(Integer userId) {
+        return this.budgetRepository.findBudgetDTOByUserAccount_UserIdOrderByMonthYearDesc(userId);
     }
 
-    public List<Budget> findAllByUserId(Integer userId, Integer year) {
-        return this.budgetRepository.findAllByYearAndUserAccount_UserIdOrderByMonthYearDesc(userId, year);
+    public List<BudgetDTO> findBudgetDTOByUserId(Integer userId, Integer year) {
+        return this.budgetRepository.findBudgetDTOByYearAndUserAccount_UserIdOrderByMonthYearDesc(userId, year);
     }
 
-    public List<Budget> findAllByUserId(Integer userId, Integer year, Integer month) {
-        return this.budgetRepository.findAllByYearAndMonthAndUserAccount_UserIdOrderByMonthYearDesc(
+    public List<BudgetDTO> findBudgetDTOByUserId(Integer userId, Integer year, Integer month) {
+        return this.budgetRepository.findBudgetDTOByYearAndMonthAndUserAccount_UserIdOrderByMonthYearDesc(
                 userId, year, month);
     }
 

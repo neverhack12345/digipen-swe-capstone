@@ -40,7 +40,12 @@ export async function fetchCategory() {
 
 export async function fetchBudgets() {
   try {
-    const response = await axios.get('http://localhost:8080/api/budget/getAll')
+    const userId = await getUser();
+    const response = await axios.get('http://localhost:8080/api/budget/searchByUserId', {
+      params: {
+        id: userId
+      }
+    })
     return response.data;
   } catch (error) {
     throw new Error('Error: ' + error);
@@ -118,11 +123,26 @@ export async function createUser(formData: any) {
   redirect("/");
 }
 
-export async function authenticateUser() {
-  cookies().set(LOGIN_TAG, "true")
-  cookies().set(USER_ID, "1")
-  revalidatePath("/login")
-  redirect("/category");
+export async function authenticateUser(username: string, password: string) {
+  if (username === "" && password === "") {
+    cookies().set(LOGIN_TAG, "true");
+    cookies().set(USER_ID, "1");
+  } else {
+    try {
+      const response = await axios.get('http://localhost:8080/api/user/authenticate', {
+        params: {
+          email: username,
+          password: password
+        }
+      })
+      console.log(response.data);
+      cookies().set(LOGIN_TAG, "true");
+      cookies().set(USER_ID, response.data);
+    } catch (error) {
+      throw new Error('Error: ' + error);
+    }
+  }
+  redirect("/budget");
 }
 
 export async function logoutUser() {
