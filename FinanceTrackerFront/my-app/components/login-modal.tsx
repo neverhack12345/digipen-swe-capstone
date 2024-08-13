@@ -31,7 +31,7 @@ export default function LoginModal() {
       >
         Log in
       </Button>
-      <Modal isOpen={isOpen} placement="top-center" onOpenChange={onOpenChange}>
+      <Modal isOpen={isOpen} placement="top" onOpenChange={onOpenChange}>
         <ModalContent>
           {(onClose) => (
             <>
