@@ -3,186 +3,117 @@
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect, permanentRedirect } from "next/navigation";
-import { AddBudget } from "@/types/definitions";
+import axios from "axios";
 
 const LOGIN_TAG = "isLoggedin";
 const USER_ID = "userId";
 const LOGOUT_DELETE = [LOGIN_TAG, LOGIN_TAG]
 
-export async function sampleAPI(formData: FormData) {
-  // const response = await fetch('/api/submit', {
-  //     method: 'POST',
-  //     body: formData,
-  //   })
-  // revalidatePath("/signup")
-  // redirect("/login");
-}
+// export async function sampleAPI() {
+//   axios.get('http://localhost:8080/api/category/getAll')
+//     .then((response) => {
+//       return response.data
+//     })
+//     .catch(function (error) {
+//       if (error.response) {
+//         throw new Error('Network response was not ok ' + error.response.data);
+//         // console.log(error.response.data);
+//         // console.log(error.response.status);
+//         // console.log(error.response.headers);
+//       } else if (error.request) {
+//         throw new Error('Network request was not ok ' + error.request);
+//       } else {
+//         throw new Error('Error ' + error.message);
+//       }
+//       // console.log(error.config);
+//     });
+// }
 
 export async function fetchCategory() {
   try {
-    const response = await fetch('http://localhost:8080/api/category/getAll');
-
-    if (!response.ok) {
-      throw new Error('Network response was not ok ' + response.statusText);
-    }
-
-    const data = await response.json();
-
-    if (Array.isArray(data)) {
-      return data; // Return the fetched data
-    } else {
-      throw new Error('Response data is not an array');
-    }
+    const response = await axios.get('http://localhost:8080/api/category/getAll')
+    return response.data;
   } catch (error) {
-    console.error('There was a problem with the fetch operation:', error);
-    return []; // You can return null or any fallback value here
+    throw new Error('Error: ' + error);
   }
 }
 
 export async function fetchBudgets() {
   try {
-    const response = await fetch('http://localhost:8080/api/budget/getAll');
-
-    if (!response.ok) {
-      throw new Error('Network response was not ok ' + response.statusText);
-    }
-
-    const data = await response.json();
-
-    if (Array.isArray(data)) {
-      return data; // Return the fetched data
-    } else {
-      throw new Error('Response data is not an array');
-    }
+    const response = await axios.get('http://localhost:8080/api/budget/getAll')
+    return response.data;
   } catch (error) {
-    console.error('There was a problem with the fetch operation:', error);
-    return []; // You can return null or any fallback value here
+    throw new Error('Error: ' + error);
   }
 }
 
 export async function fetchBudgetById(budgetId: string) {
   try {
-    const response = await fetch(`http://localhost:8080/api/budget/searchByBudgetId?id=${budgetId}`);
-
-    if (!response.ok) {
-      throw new Error('Network response was not ok ' + response.statusText);
-    }
-
-    const data = await response.json();
-
-    if (!!data) {
-      return data; // Return the fetched data
-    } else {
-      throw new Error('Response data is not an array');
-    }
+    const response = await axios.get('http://localhost:8080/api/budget/searchByBudgetId', {
+      params: {
+        id: budgetId
+      }
+    })
+    return response.data;
   } catch (error) {
-    console.error('There was a problem with the fetch operation:', error);
-    return []; // You can return null or any fallback value here
+    throw new Error('Error: ' + error);
   }
 }
 
-export async function addBudget(formData: AddBudget) {
+export async function addBudget(formData: any) {
   try {
-      const response = await fetch('http://localhost:8080/api/budget/add', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...formData,
-          [USER_ID]: cookies().get(USER_ID),
-        },),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        console.log(data.message);
-      } else {
-        const errorData = await response.json();
-        console.log(errorData.message || 'There was an error submitting the form.');
-      }
+    const id = await getUser();
+    if (!!id) {
+      formData["userId"] = id;
+    }
+    const response = await axios('http://localhost:8080/api/budget/add', {
+      method: 'post',
+      data: formData,
+    });
   } catch (error) {
-      console.log('There was an error submitting the form.');
-      console.error('Form submission error:', error);
-  }
+    throw new Error('Error: ' + error);
+  } 
   revalidatePath("/budget")
   redirect("/budget")
 }
 
-export async function deleteBudget(budgetId: any) {
+export async function deleteBudget(budgetId: string) {
   try {
-      const response = await fetch(`http://localhost:8080/api/budget/delete?id=${budgetId}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json', 
-        },
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        console.log(data.message);
-      } else {
-        const errorData = await response.json();
-        console.log(errorData.message || 'There was an error submitting the form.');
-      }
+    const response = await axios('http://localhost:8080/api/budget/delete', {
+      method: 'delete',
+      params: {
+        id: budgetId
+      },
+    });
   } catch (error) {
-      console.log('There was an error submitting the form.');
-      console.error('Form submission error:', error);
-  }
-  revalidatePath("/budget")
+    throw new Error('Error: ' + error);
+  } 
   permanentRedirect("/budget")
 }
 
 export async function editBudget(formData: any) {
   try {
-      const response = await fetch('http://localhost:8080/api/budget/update', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        console.log(data.message);
-      } else {
-        const errorData = await response.json();
-        console.log(errorData.message || 'There was an error submitting the form.');
-      }
+    const response = await axios('http://localhost:8080/api/budget/update', {
+      method: 'post',
+      data: formData,
+    });
   } catch (error) {
-      console.log('There was an error submitting the form.');
-      console.error('Form submission error:', error);
-  }
+    throw new Error('Error: ' + error);
+  } 
   revalidatePath("/budget")
   redirect("/budget")
 }
 
 export async function createUser(formData: any) {
+  formData["dob"] = new Date(formData.dob);
   try {
-    formData = {
-      ...formData,
-      "dob": new Date(formData.dob),
-    }
-    const response = await fetch('http://localhost:8080/api/user/add', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formData),
+    const response = await axios('http://localhost:8080/api/user/add', {
+      method: 'post',
+      data: formData,
     });
-
-    if (response.ok) {
-      const data = await response.text();
-      console.log(data);
-    } else {
-      const errorData = await response.json();
-      console.log(errorData.message || 'There was an error submitting the form.');
-    }
   } catch (error) {
-      console.log('There was an error submitting the form.');
-      console.error('Form submission error:', error);
-  }
+    throw new Error('Error: ' + error);
+  } 
   revalidatePath("/signup")
   redirect("/");
 }

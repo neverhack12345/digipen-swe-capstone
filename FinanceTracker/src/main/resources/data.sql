@@ -86,11 +86,11 @@ INSERT INTO sub_category (cat_id, sub_name) VALUES (13, 'Postage & Shipping');
 
 /* user_account table ----------------------------------------------------------------*/
 INSERT INTO user_account (email, password, first_name, last_name, dob, gender) VALUES
-('alice@example.com', '$2b$10$xyz', 'Alice', 'Smith', '1990-01-01', 'F'),
-('bob@example.com', '$2b$10$abc', 'Bob', 'Johnson', '1985-02-15', 'M'),
-('charlie@example.com', '$2b$10$def', 'Charlie', 'Brown', '1992-03-20', 'M'),
-('diana@example.com', '$2b$10$ghi', 'Diana', 'Wang', '1995-07-07', 'F'),
-('eve@example.com', '$2b$10$jkl', 'Eve', 'Davis', '1988-12-12', 'F');
+('alice@example.com', '$2a$10$1H.6c7aIinumpu9l1ttsNOASWOh8BJac.hI3pMuok1XpiwJU4OH42', 'Alice', 'Smith', '1990-01-01', 'F'),
+('bob@example.com', '$2a$10$1H.6c7aIinumpu9l1ttsNOASWOh8BJac.hI3pMuok1XpiwJU4OH42', 'Bob', 'Johnson', '1985-02-15', 'M'),
+('charlie@example.com', '$2a$10$1H.6c7aIinumpu9l1ttsNOASWOh8BJac.hI3pMuok1XpiwJU4OH42', 'Charlie', 'Brown', '1992-03-20', 'M'),
+('diana@example.com', '$2a$10$1H.6c7aIinumpu9l1ttsNOASWOh8BJac.hI3pMuok1XpiwJU4OH42', 'Diana', 'Wang', '1995-07-07', 'F'),
+('eve@example.com', '$2a$10$1H.6c7aIinumpu9l1ttsNOASWOh8BJac.hI3pMuok1XpiwJU4OH42', 'Eve', 'Davis', '1988-12-12', 'F');
 /* cash_flow table ----------------------------------------------------------------*/
 INSERT INTO cash_flow (user_id, sub_id, source_name, date, amount, remark) VALUES
 (1, 1, 'Tech Corp', '2024-01-05', 5000.00, 'Monthly Salary'),

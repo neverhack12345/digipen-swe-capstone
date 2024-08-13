@@ -13,6 +13,11 @@ import { Input } from "@nextui-org/input";
 import { link as linkStyles } from "@nextui-org/theme";
 import NextLink from "next/link";
 import clsx from "clsx";
+import { cookies } from "next/headers";
+
+import { LogoutButton } from "./logout-button";
+import LoginModal from "./login-modal";
+
 import { siteConfig } from "@/config/site";
 import { ThemeSwitch } from "@/components/theme-switch";
 import {
@@ -22,9 +27,6 @@ import {
   SearchIcon,
   Logo,
 } from "@/components/icons";
-import { LogoutButton } from "./logout-button";
-import { cookies } from "next/headers";
-import LoginModal from "./login-modal";
 
 export const Navbar = () => {
   const cookieStore = cookies();
@@ -58,21 +60,22 @@ export const Navbar = () => {
             <p className="font-bold text-inherit">Finance Tracker</p>
           </NextLink>
         </NavbarBrand>
-        <ul className="hidden lg:flex gap-4 justify-start ml-2">
-          {cookieStore.has("isLoggedin") && siteConfig.navItems.map((item) => (
-            <NavbarItem key={item.href}>
-              <NextLink
-                className={clsx(
-                  linkStyles({ color: "foreground" }),
-                  "data-[active=true]:text-primary data-[active=true]:font-medium",
-                )}
-                color="foreground"
-                href={item.href}
-              >
-                {item.label}
-              </NextLink>
-            </NavbarItem>
-          ))}
+        <ul className="hidden sm:flex gap-4 justify-start ml-2">
+          {cookieStore.has("isLoggedin") &&
+            siteConfig.navItems.map((item) => (
+              <NavbarItem key={item.href}>
+                <NextLink
+                  className={clsx(
+                    linkStyles({ color: "foreground" }),
+                    "data-[active=true]:text-primary data-[active=true]:font-medium",
+                  )}
+                  color="foreground"
+                  href={item.href}
+                >
+                  {item.label}
+                </NextLink>
+              </NavbarItem>
+            ))}
         </ul>
       </NavbarContent>
 
@@ -92,17 +95,15 @@ export const Navbar = () => {
           </Link>
           <ThemeSwitch />
         </NavbarItem>
-        {cookieStore.has("isLoggedin") && (
-          <LogoutButton />
-        )}
+        {cookieStore.has("isLoggedin") && <LogoutButton />}
         {!cookieStore.has("isLoggedin") && (
           <>
-          <NavbarItem>
-            <NextLink href="/signup">Sign Up</NextLink>
-          </NavbarItem>
-          <NavbarItem>
-            <LoginModal />
-          </NavbarItem>
+            <NavbarItem>
+              <NextLink href="/signup">Sign Up</NextLink>
+            </NavbarItem>
+            <NavbarItem>
+              <LoginModal />
+            </NavbarItem>
           </>
         )}
       </NavbarContent>

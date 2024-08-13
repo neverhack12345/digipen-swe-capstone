@@ -99,7 +99,8 @@ public class BudgetController {
         if (category == null) {
             throw new InvalidRequestParamException("Category Id cannot be found!");
         }
-        Budget budget = new Budget(budgetCreationDTO.getYear(), budgetCreationDTO.getMonth(), budgetCreationDTO.getAmount(),
+        Budget budget = new Budget(
+                budgetCreationDTO.getYear(), budgetCreationDTO.getMonth(), budgetCreationDTO.getAmount(),
                 category, userAccount);
         this.budgetService.add(budget);
         return ResponseEntity.ok().body("Add successful!");
@@ -115,10 +116,14 @@ public class BudgetController {
         if (currBudget == null) {
             throw new ResourceNotFoundException("Budget not found!");
         }
-        if (this.budgetService.countBudgetByDetails(
-                currBudget.getUserAccount().getUserId(), budgetUpdateDTO.getCategoryId(),
-                budgetUpdateDTO.getYear(), budgetUpdateDTO.getMonth()) > 0) {
-            throw new InvalidRequestParamException("Budget already exists!");
+        if (!(currBudget.getCategory().getCatId() == budgetUpdateDTO.getCategoryId() &&
+                currBudget.getYear() == budgetUpdateDTO.getYear() &&
+                currBudget.getMonth() == budgetUpdateDTO.getMonth())) {
+            if (this.budgetService.countBudgetByDetails(
+                    currBudget.getUserAccount().getUserId(), budgetUpdateDTO.getCategoryId(),
+                    budgetUpdateDTO.getYear(), budgetUpdateDTO.getMonth()) == 0) {
+                throw new InvalidRequestParamException("Budget already exists!");
+            }
         }
         Category newCat = this.categoryService.findCategoryByCatId(budgetUpdateDTO.getCategoryId());
         if (newCat == null) {

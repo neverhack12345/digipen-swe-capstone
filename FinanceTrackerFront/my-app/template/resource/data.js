@@ -222,8 +222,4 @@ export {
   columns,
   users,
   statusOptions,
-  categoryColumns,
-  subCategoryColumns,
-  budgetColumns,
-  cashFlowColumns,
 };

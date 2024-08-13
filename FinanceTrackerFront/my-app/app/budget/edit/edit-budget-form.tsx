@@ -28,8 +28,7 @@ export default function EditBudgetForm() {
   const getData = useCallback(async () => {
     const budgetId = searchParams.get('budgetId');
     if (budgetId) {
-      const budgets = await fetchBudgetById(budgetId);
-      const categories = await fetchCategory();
+      const [budgets, categories] = await Promise.all([fetchBudgetById(budgetId), fetchCategory()]);
       setCategory(categories)
       if (budgets !== undefined) {
         setValue("budgetId", budgets.budgetId);
@@ -62,7 +61,7 @@ export default function EditBudgetForm() {
       "amount": "" 
     },
   })
-  const onSubmit = (data: any) => { editBudget(data); }
+  const onSubmit = (data: any) => { console.log(data);editBudget(data); }
 
   return (
     <Card className="border-solid border-indigo-500 bg-background/60 dark:bg-default-100/50 w-[400px]" 
@@ -138,11 +137,22 @@ export default function EditBudgetForm() {
           </Skeleton>
           <Spacer y={1} />
           <Skeleton isLoaded={isCompleteLoaded} className="rounded-lg">
-          <Input {...register("amount")}
-          type="Text" label="Amount" aria-label="Amount" placeholder="Enter the amount" 
-          isInvalid={errors?.amount !== undefined} 
-          errorMessage={(errors.amount !== undefined) ? errors.amount?.message : ""}
-          color='default' variant='bordered' size='md' radius='full'/>
+          <Controller
+            control={control}
+            name="amount"
+            render={({ field: { onChange } }) => (
+              <Input {...register("amount")}
+                isRequired
+                type="Text" label="Amount" aria-label="Amount" placeholder="Enter the amount" 
+                defaultValue={getValues("amount").toString()}
+                isInvalid={errors?.amount !== undefined} 
+                onChange={onChange}
+                value={getValues("amount").toString()}
+                errorMessage={(errors.amount !== undefined) ? errors.amount?.message : ""}
+                color='default' variant='bordered' size='md' radius='full'/>
+            )}
+          />
+          
           </Skeleton>
         </div>
         <div className="w-full flex-wrap">

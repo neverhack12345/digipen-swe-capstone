@@ -3,32 +3,32 @@
 export type FormErrors<T> = Partial<Record<keyof T, string[]>>;
 
 export type Category = {
-  catId: number,
-  catName: string,
+  catId: number;
+  catName: string;
 };
 
 export type Budget = {
-  budgetId: string,
-  year: number,
-  month: number,
-  amount: number,
-  catId: number,
-  catName: string,
-  userId: number
+  budgetId: string;
+  year: number;
+  month: number;
+  amount: number;
+  catId: number;
+  catName: string;
+  userId: number;
 };
 
 export type AddBudget = {
-  userId: string,
-  categoryId: string,
-  year: string,
-  month: string,
-  amount: string
+  userId: string;
+  categoryId: string;
+  year: string;
+  month: string;
+  amount: string;
 };
 
 export type EditBudget = {
-  budgetId: string,
-  categoryId: string,
-  year: string,
-  month: string,
-  amount: string
+  budgetId: string;
+  categoryId: string;
+  year: string;
+  month: string;
+  amount: string;
 };

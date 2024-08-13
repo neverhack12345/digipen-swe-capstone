@@ -130,6 +130,7 @@ export default function AddBudgetForm() {
           <Spacer y={1} />
           <Skeleton isLoaded={isCompleteLoaded} className="rounded-lg">
           <Input {...register("amount")}
+          isRequired
           type="Text" label="Amount" aria-label="Amount" placeholder="Enter the amount" 
           isInvalid={errors?.amount !== undefined} 
           errorMessage={(errors.amount !== undefined) ? errors.amount?.message : ""}

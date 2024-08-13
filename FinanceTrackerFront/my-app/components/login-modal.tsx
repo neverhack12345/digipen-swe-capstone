@@ -1,30 +1,43 @@
-"use client"
+"use client";
 
 import React from "react";
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, 
-  Button, useDisclosure, Checkbox, Input, Link 
+import {
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Button,
+  useDisclosure,
+  Checkbox,
+  Input,
+  Link,
 } from "@nextui-org/react";
-import { MailIcon, LockIcon } from '@/template/resource/icons';
+
+import { MailIcon, LockIcon } from "@/template/resource/icons";
 import { authenticateUser } from "@/app/api/route";
 
 export default function LoginModal() {
-  const {isOpen, onOpen, onOpenChange} = useDisclosure();
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   return (
     <>
-      <Button onPress={onOpen} color='default' variant='bordered' size='md'  radius='full'>Log in</Button>
-      <Modal 
-        isOpen={isOpen} 
-        onOpenChange={onOpenChange}
-        placement="top-center"
+      <Button
+        color="default"
+        radius="full"
+        size="md"
+        variant="bordered"
+        onPress={onOpen}
       >
+        Log in
+      </Button>
+      <Modal isOpen={isOpen} placement="top-center" onOpenChange={onOpenChange}>
         <ModalContent>
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1">Log in</ModalHeader>
               <ModalBody>
                 <Input
-                  autoFocus
                   endContent={
                     <MailIcon className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
                   }
@@ -49,16 +62,23 @@ export default function LoginModal() {
                   >
                     Remember me
                   </Checkbox>
-                  <Link color="primary" href="/signup" size="sm" onClick={onClose}>
+                  <Link
+                    color="primary"
+                    href="/signup"
+                    size="sm"
+                    onClick={onClose}
+                  >
                     Create new account
                   </Link>
                 </div>
               </ModalBody>
               <ModalFooter>
-                <Button color="primary" 
-                onClick={async () => {
-                  await authenticateUser();
-                }}>
+                <Button
+                  color="primary"
+                  onClick={async () => {
+                    await authenticateUser();
+                  }}
+                >
                   Sign in
                 </Button>
               </ModalFooter>
