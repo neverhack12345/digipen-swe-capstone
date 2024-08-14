@@ -37,7 +37,7 @@ export async function fetchCategory() {
 
     return response.data;
   } catch (error) {
-    throw new Error("Error: " + error);
+    throw new Error("" + error);
   }
 }
 
@@ -55,7 +55,7 @@ export async function fetchBudgets() {
 
     return response.data;
   } catch (error) {
-    throw new Error("Error: " + error);
+    throw new Error("" + error);
   }
 }
 
@@ -72,7 +72,7 @@ export async function fetchBudgetById(budgetId: string) {
 
     return response.data;
   } catch (error) {
-    throw new Error("Error: " + error);
+    throw new Error("" + error);
   }
 }
 
@@ -88,7 +88,7 @@ export async function addBudget(formData: any) {
       data: formData,
     });
   } catch (error) {
-    throw new Error("Error: " + error);
+    throw new Error("" + error);
   }
   revalidatePath("/budget");
   redirect("/budget");
@@ -103,7 +103,7 @@ export async function deleteBudget(budgetId: string) {
       },
     });
   } catch (error) {
-    throw new Error("Error: " + error);
+    throw new Error("" + error);
   }
   permanentRedirect("/budget");
 }
@@ -115,7 +115,7 @@ export async function editBudget(formData: any) {
       data: formData,
     });
   } catch (error) {
-    throw new Error("Error: " + error);
+    throw new Error("" + error);
   }
   revalidatePath("/budget");
   redirect("/budget");
@@ -129,7 +129,7 @@ export async function createUser(formData: any) {
       data: formData,
     });
   } catch (error) {
-    throw new Error("Error: " + error);
+    throw new Error("" + error);
   }
   revalidatePath("/signup");
   redirect("/");
@@ -154,7 +154,7 @@ export async function authenticateUser(username: string, password: string) {
       cookies().set(LOGIN_TAG, "true");
       cookies().set(USER_ID, response.data);
     } catch (error) {
-      throw new Error("Error: " + error);
+      throw new Error("" + error);
     }
   }
   redirect("/budget");
