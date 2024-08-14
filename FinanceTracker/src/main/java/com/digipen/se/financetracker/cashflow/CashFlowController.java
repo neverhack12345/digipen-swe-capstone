@@ -41,7 +41,7 @@ public class CashFlowController {
     }
 
     @GetMapping("/searchByUserId")
-    public ResponseEntity<List<CashFlow>> findCashFlowByUserId(
+    public ResponseEntity<List<CashFlowDTO>> findCashFlowByUserId(
             @RequestParam("id") Integer userId,
             @RequestParam(value = "year", required = false) Integer year,
             @RequestParam(value = "month", required = false) Integer month)
@@ -55,7 +55,7 @@ public class CashFlowController {
         if (month != null) if (month <= 0) {
             throw new InvalidRequestParamException("Month cannot be less than or equals 0!");
         }
-        List<CashFlow> cashFlowList;
+        List<CashFlowDTO> cashFlowList;
         if (year != null && month != null) {
             cashFlowList = this.cashFlowService.findAllByUserId(userId, year, month);
         } else if (year != null) {

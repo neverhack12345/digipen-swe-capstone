@@ -11,19 +11,25 @@ import java.util.List;
 
 @Repository
 public interface CashFlowRepository extends JpaRepository<CashFlow, Integer> {
-    @Query("SELECT f FROM CashFlow f " +
+    @Query("SELECT NEW com.digipen.se.financetracker.model.CashFlowDTO(" +
+            "f.flowId, f.sourceName, f.date, f.amount, f.remark, f.subCategory.subId, " +
+            "f.subCategory.subName, f.userAccount.userId) FROM CashFlow f " +
             "WHERE f.userAccount.userId = :userId " +
             "ORDER BY f.date DESC")
-    List<CashFlow> findAllByUserAccount_UserIdOrderByDateDesc(@Param("userId") Integer userId);
-    @Query("SELECT f FROM CashFlow f " +
+    List<CashFlowDTO> findCashFlowDTOByUserAccount_UserIdOrderByDateDesc(@Param("userId") Integer userId);
+    @Query("SELECT NEW com.digipen.se.financetracker.model.CashFlowDTO(" +
+            "f.flowId, f.sourceName, f.date, f.amount, f.remark, f.subCategory.subId, " +
+            "f.subCategory.subName, f.userAccount.userId) FROM CashFlow f " +
             "WHERE f.userAccount.userId = :userId AND YEAR(f.date) = :year " +
             "ORDER BY f.date DESC")
-    List<CashFlow> findAllByYearAndUserAccount_UserIdOrderByDateDesc(
+    List<CashFlowDTO> findCashFlowDTOByYearAndUserAccount_UserIdOrderByDateDesc(
             @Param("userId") Integer userId, @Param("year") Integer year);
-    @Query("SELECT f FROM CashFlow f " +
+    @Query("SELECT NEW com.digipen.se.financetracker.model.CashFlowDTO(" +
+            "f.flowId, f.sourceName, f.date, f.amount, f.remark, f.subCategory.subId, " +
+            "f.subCategory.subName, f.userAccount.userId) FROM CashFlow f " +
             "WHERE f.userAccount.userId = :userId AND YEAR(f.date) = :year AND MONTH(f.date) = :month " +
             "ORDER BY f.date DESC")
-    List<CashFlow> findAllByYearAndMonthAndUserAccount_UserIdOrderByDateDesc(
+    List<CashFlowDTO> findCashFlowDTOByYearAndMonthAndUserAccount_UserIdOrderByDateDesc(
             @Param("userId") Integer userId,@Param("year") Integer year, @Param("month") Integer month);
 
     @Query("SELECT COUNT(f) FROM CashFlow f " +

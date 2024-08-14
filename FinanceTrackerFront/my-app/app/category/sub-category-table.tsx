@@ -1,6 +1,5 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
 import {
   Table,
   TableHeader,
@@ -8,60 +7,27 @@ import {
   TableBody,
   TableRow,
   TableCell,
-} from "@nextui-org/table";
-import { Tooltip } from "@nextui-org/tooltip";
-import { Button } from "@nextui-org/button";
+  Tooltip,
+} from "@nextui-org/react";
+import { useCallback, useMemo } from "react";
+import NextLink from "next/link";
 
-import { title } from "@/components/primitives";
-import { PlusIcon, EditIcon } from "@/template/resource/icons";
-import { users } from "@/template/resource/data";
 import { subCategoryColumns } from "@/lib/data";
+import { PlusIcon, EditIcon } from "@/template/resource/icons";
+import { title } from "@/components/primitives";
+import { SubCategory } from "@/types/definitions";
 
-export default function CategoryTable() {
-  const [data, setData] = useState([
-    {
-      subId: 0,
-      subName: "string",
-    },
-  ]);
+export default function CategoryTable({
+  filteredData,
+  fetchData,
+}: {
+  filteredData: Array<SubCategory>;
+  fetchData?: () => Promise<void>;
+}) {
+  const TABLE_NAME = "Sub-Category Table";
 
-  const headerColumns = React.useMemo(() => {
-    return subCategoryColumns;
-  }, []);
-
-  useEffect(() => {
-    fetch("http://localhost:8080/api/subcategory/getAll")
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok " + response.statusText);
-        }
-
-        return response.json(); // Parse the JSON from the response
-      })
-      .then((data) => {
-        if (Array.isArray(data)) {
-          setData(data);
-
-          return data;
-        } else {
-          throw new Error("Response data is not an array");
-        }
-      })
-      .catch((error) => {
-        throw new Error("Error: ", error);
-      });
-  }, []);
-
-  const filteredItems = React.useMemo(() => {
-    let filteredUsers = [...data];
-
-    return filteredUsers;
-  }, [data]);
-
-  const renderCell = React.useCallback(
-    (user: { [x: string]: any }, columnKey: string | number) => {
-      const cellValue = user[columnKey];
-
+  const renderCell = useCallback(
+    (item: SubCategory, columnKey: keyof SubCategory | "actions") => {
       if (columnKey === "actions") {
         return (
           <div className="relative flex items-center justify-center	gap-2">
@@ -73,41 +39,50 @@ export default function CategoryTable() {
           </div>
         );
       }
+      if (columnKey === "subName") {
+        return (
+          <div className="flex flex-col">
+            <p className="text-bold text-small capitalize">
+              {item[columnKey]}
+            </p>
+            <p className="text-bold text-tiny capitalize text-default-400">
+              {item.catName}
+            </p>
+          </div>
+        )
+      }
 
-      return cellValue;
+      return item[columnKey];
     },
     [],
   );
 
-  const topContent = React.useMemo(() => {
+  const topContent = useMemo(() => {
     return (
       <div className="flex flex-col gap-4">
-        <h1 className={title()}>Sub-Category Table</h1>
+        <h1 className={title()}>{TABLE_NAME}</h1>
         <div className="flex justify-between gap-3 items-end">
           <div className="flex gap-3">
-            <Button
-              color="primary"
-              endContent={<PlusIcon height={undefined} width={undefined} />}
-            >
-              Add New
-            </Button>
+            <NextLink href="#" type="button">
+              <PlusIcon height={undefined} width={undefined} />
+            </NextLink>
           </div>
         </div>
       </div>
     );
-  }, [users.length]);
+  }, []);
 
   return (
     <Table
       isStriped
-      aria-label="Example table with custom cells, pagination and sorting"
+      aria-label={TABLE_NAME}
       classNames={{
-        wrapper: "max-h-[382px]",
+        wrapper: "",
       }}
       topContent={topContent}
       topContentPlacement="outside"
     >
-      <TableHeader columns={headerColumns}>
+      <TableHeader columns={subCategoryColumns}>
         {(column) => (
           <TableColumn
             key={column.uid}
@@ -117,11 +92,13 @@ export default function CategoryTable() {
           </TableColumn>
         )}
       </TableHeader>
-      <TableBody emptyContent={"No sub-category found"} items={filteredItems}>
-        {(item) => (
+      <TableBody emptyContent={"No sub-category found"} items={filteredData}>
+        {(item: SubCategory) => (
           <TableRow key={item.subId}>
             {(columnKey) => (
-              <TableCell>{renderCell(item, columnKey)}</TableCell>
+              <TableCell>
+                {renderCell(item, columnKey as keyof SubCategory | "actions")}
+              </TableCell>
             )}
           </TableRow>
         )}

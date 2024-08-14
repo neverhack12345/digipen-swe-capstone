@@ -5,17 +5,20 @@ import { Skeleton } from "@nextui-org/skeleton";
 import CategoryTable from "./category-table";
 import SubCategoryTable from "./sub-category-table";
 
-import { Category } from "@/types/definitions";
-import { fetchCategory } from "@/lib/backend";
+import { Category, SubCategory } from "@/types/definitions";
+import { fetchCategory, fetchSubCategory } from "@/lib/backend";
 
 const CategoryPage = () => {
   const [category, setCategory] = useState<Array<Category>>([]);
+  const [subCategory, setSubCategory] = useState<Array<SubCategory>>([]);
   const [isCompleteLoaded, setIsCompleteLoaded] = useState(false);
 
   const fetchData = useCallback(async () => {
-    const category = await fetchCategory();
+    const categoryResult = await fetchCategory();
+    const subCategoryResult = await fetchSubCategory();
 
-    setCategory(category);
+    setCategory(categoryResult);
+    setSubCategory(subCategoryResult)
     setIsCompleteLoaded(true);
   }, []);
 
@@ -29,7 +32,7 @@ const CategoryPage = () => {
         <CategoryTable filteredData={category} />
       </Skeleton>
       <Skeleton className="rounded-lg" isLoaded={isCompleteLoaded}>
-        <SubCategoryTable />
+        <SubCategoryTable filteredData={subCategory} />
       </Skeleton>
     </div>
   );

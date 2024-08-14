@@ -19,20 +19,20 @@ public class CashFlowService {
         return this.cashFlowRepository.findCashFlowDTO();
     }
 
-    public List<CashFlow> findAllByUserId(Integer userId) {
-        return this.cashFlowRepository.findAllByUserAccount_UserIdOrderByDateDesc(userId);
-    }
-
     public CashFlow findCashFlowByFlow_Id(Integer flowId) {
         return this.cashFlowRepository.findById(flowId).orElse(null);
     }
 
-    public List<CashFlow> findAllByUserId(Integer userId, Integer year) {
-        return this.cashFlowRepository.findAllByYearAndUserAccount_UserIdOrderByDateDesc(userId, year);
+    public List<CashFlowDTO> findAllByUserId(Integer userId) {
+        return this.cashFlowRepository.findCashFlowDTOByUserAccount_UserIdOrderByDateDesc(userId);
     }
 
-    public List<CashFlow> findAllByUserId(Integer userId, Integer year, Integer month) {
-        return this.cashFlowRepository.findAllByYearAndMonthAndUserAccount_UserIdOrderByDateDesc(
+    public List<CashFlowDTO> findAllByUserId(Integer userId, Integer year) {
+        return this.cashFlowRepository.findCashFlowDTOByYearAndUserAccount_UserIdOrderByDateDesc(userId, year);
+    }
+
+    public List<CashFlowDTO> findAllByUserId(Integer userId, Integer year, Integer month) {
+        return this.cashFlowRepository.findCashFlowDTOByYearAndMonthAndUserAccount_UserIdOrderByDateDesc(
                 userId, year, month);
     }
 

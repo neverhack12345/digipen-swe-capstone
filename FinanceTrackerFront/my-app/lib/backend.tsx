@@ -41,11 +41,41 @@ export async function fetchCategory() {
   }
 }
 
+export async function fetchSubCategory() {
+  try {
+    const response = await axios.get(
+      "http://localhost:8080/api/subcategory/getAll",
+    );
+
+    return response.data;
+  } catch (error) {
+    throw new Error("" + error);
+  }
+}
+
 export async function fetchBudgets() {
   try {
     const userId = await getUser();
     const response = await axios.get(
       "http://localhost:8080/api/budget/searchByUserId",
+      {
+        params: {
+          id: userId,
+        },
+      },
+    );
+
+    return response.data;
+  } catch (error) {
+    throw new Error("" + error);
+  }
+}
+
+export async function fetchCashFlows() {
+  try {
+    const userId = await getUser();
+    const response = await axios.get(
+      "http://localhost:8080/api/cashflow/searchByUserId",
       {
         params: {
           id: userId,

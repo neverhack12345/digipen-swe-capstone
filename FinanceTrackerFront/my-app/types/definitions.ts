@@ -7,6 +7,12 @@ export type Category = {
   catName: string;
 };
 
+export type SubCategory = {
+  subId: number;
+  subName: string;
+  catName: string;
+}
+
 export type Budget = {
   budgetId: string;
   year: number;
@@ -16,6 +22,17 @@ export type Budget = {
   catName: string;
   userId: number;
 };
+
+export type CashFlow = {
+  flowId: number,
+  sourceName: string,
+  date: string,
+  amount: number,
+  remark: string,
+  subId: number,
+  subName: string,
+  userId: number,
+}
 
 export type AddBudget = {
   userId: string;
