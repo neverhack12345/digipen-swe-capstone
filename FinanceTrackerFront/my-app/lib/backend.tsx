@@ -7,7 +7,7 @@ import axios from "axios";
 
 const LOGIN_TAG = "isLoggedin";
 const USER_ID = "userId";
-const LOGOUT_DELETE = [LOGIN_TAG, LOGIN_TAG]
+const LOGOUT_DELETE = [LOGIN_TAG, LOGIN_TAG];
 
 // export async function sampleAPI() {
 //   axios.get('http://localhost:8080/api/category/getAll')
@@ -31,95 +31,107 @@ const LOGOUT_DELETE = [LOGIN_TAG, LOGIN_TAG]
 
 export async function fetchCategory() {
   try {
-    const response = await axios.get('http://localhost:8080/api/category/getAll')
+    const response = await axios.get(
+      "http://localhost:8080/api/category/getAll",
+    );
+
     return response.data;
   } catch (error) {
-    throw new Error('Error: ' + error);
+    throw new Error("Error: " + error);
   }
 }
 
 export async function fetchBudgets() {
   try {
     const userId = await getUser();
-    const response = await axios.get('http://localhost:8080/api/budget/searchByUserId', {
-      params: {
-        id: userId
-      }
-    })
+    const response = await axios.get(
+      "http://localhost:8080/api/budget/searchByUserId",
+      {
+        params: {
+          id: userId,
+        },
+      },
+    );
+
     return response.data;
   } catch (error) {
-    throw new Error('Error: ' + error);
+    throw new Error("Error: " + error);
   }
 }
 
 export async function fetchBudgetById(budgetId: string) {
   try {
-    const response = await axios.get('http://localhost:8080/api/budget/searchByBudgetId', {
-      params: {
-        id: budgetId
-      }
-    })
+    const response = await axios.get(
+      "http://localhost:8080/api/budget/searchByBudgetId",
+      {
+        params: {
+          id: budgetId,
+        },
+      },
+    );
+
     return response.data;
   } catch (error) {
-    throw new Error('Error: ' + error);
+    throw new Error("Error: " + error);
   }
 }
 
 export async function addBudget(formData: any) {
   try {
     const id = await getUser();
+
     if (!!id) {
       formData["userId"] = id;
     }
-    const response = await axios('http://localhost:8080/api/budget/add', {
-      method: 'post',
+    await axios("http://localhost:8080/api/budget/add", {
+      method: "post",
       data: formData,
     });
   } catch (error) {
-    throw new Error('Error: ' + error);
-  } 
-  revalidatePath("/budget")
-  redirect("/budget")
+    throw new Error("Error: " + error);
+  }
+  revalidatePath("/budget");
+  redirect("/budget");
 }
 
 export async function deleteBudget(budgetId: string) {
   try {
-    const response = await axios('http://localhost:8080/api/budget/delete', {
-      method: 'delete',
+    await axios("http://localhost:8080/api/budget/delete", {
+      method: "delete",
       params: {
-        id: budgetId
+        id: budgetId,
       },
     });
   } catch (error) {
-    throw new Error('Error: ' + error);
-  } 
-  permanentRedirect("/budget")
+    throw new Error("Error: " + error);
+  }
+  permanentRedirect("/budget");
 }
 
 export async function editBudget(formData: any) {
   try {
-    const response = await axios('http://localhost:8080/api/budget/update', {
-      method: 'post',
+    await axios("http://localhost:8080/api/budget/update", {
+      method: "post",
       data: formData,
     });
   } catch (error) {
-    throw new Error('Error: ' + error);
-  } 
-  revalidatePath("/budget")
-  redirect("/budget")
+    throw new Error("Error: " + error);
+  }
+  revalidatePath("/budget");
+  redirect("/budget");
 }
 
 export async function createUser(formData: any) {
   formData["dob"] = new Date(formData.dob);
   try {
-    const response = await axios('http://localhost:8080/api/user/add', {
-      method: 'post',
+    await axios("http://localhost:8080/api/user/add", {
+      method: "post",
       data: formData,
     });
   } catch (error) {
-    throw new Error('Error: ' + error);
-  } 
-  revalidatePath("/signup")
+    throw new Error("Error: " + error);
+  }
+  revalidatePath("/signup");
   redirect("/");
 }
 
@@ -129,17 +141,20 @@ export async function authenticateUser(username: string, password: string) {
     cookies().set(USER_ID, "1");
   } else {
     try {
-      const response = await axios.get('http://localhost:8080/api/user/authenticate', {
-        params: {
-          email: username,
-          password: password
-        }
-      })
-      console.log(response.data);
+      const response = await axios.get(
+        "http://localhost:8080/api/user/authenticate",
+        {
+          params: {
+            email: username,
+            password: password,
+          },
+        },
+      );
+
       cookies().set(LOGIN_TAG, "true");
       cookies().set(USER_ID, response.data);
     } catch (error) {
-      throw new Error('Error: ' + error);
+      throw new Error("Error: " + error);
     }
   }
   redirect("/budget");
@@ -148,7 +163,7 @@ export async function authenticateUser(username: string, password: string) {
 export async function logoutUser() {
   LOGOUT_DELETE.forEach((item) => {
     cookies().delete(item);
-  })
+  });
   permanentRedirect("/");
 }
 

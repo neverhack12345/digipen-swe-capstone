@@ -5,9 +5,7 @@ export default function BudgetLayout({
 }) {
   return (
     <section className="flex flex-col items-center justify-center">
-      <div className="text-center justify-center">
-        {children}
-      </div>
+      <div className="text-center justify-center">{children}</div>
     </section>
   );
 }

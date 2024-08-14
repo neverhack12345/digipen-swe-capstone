@@ -2,11 +2,16 @@
 
 import { Button } from "@nextui-org/button";
 import { NavbarItem } from "@nextui-org/navbar";
+import {
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  useDisclosure,
+} from "@nextui-org/react";
 
-import { logoutUser } from "@/app/api/route";
-import { 
-  Modal, ModalBody, ModalContent, ModalFooter, 
-  ModalHeader, useDisclosure } from "@nextui-org/react";
+import { logoutUser } from "@/lib/backend";
 
 export const LogoutButton = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -24,7 +29,7 @@ export const LogoutButton = () => {
       </Button>
       <Modal isOpen={isOpen} placement="top" onOpenChange={onOpenChange}>
         <ModalContent>
-          {(onClose) => (
+          {() => (
             <>
               <ModalHeader className="flex flex-col gap-1">Log out</ModalHeader>
               <ModalBody>

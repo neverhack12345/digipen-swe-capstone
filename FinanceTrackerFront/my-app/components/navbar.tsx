@@ -14,8 +14,10 @@ import { link as linkStyles } from "@nextui-org/theme";
 import NextLink from "next/link";
 import clsx from "clsx";
 import { cookies } from "next/headers";
+
 import { LogoutButton } from "./logout-button";
 import LoginModal from "./login-modal";
+
 import { siteConfig } from "@/config/site";
 import { ThemeSwitch } from "@/components/theme-switch";
 import {

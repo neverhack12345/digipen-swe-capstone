@@ -1,6 +1,6 @@
-"use client"
-import CategoryTable from "./category-table"
-import SubCategoryTable from "./sub-category-table"
+"use client";
+import CategoryTable from "./category-table";
+import SubCategoryTable from "./sub-category-table";
 
 const CategoryPage = () => {
   return (
@@ -9,6 +9,6 @@ const CategoryPage = () => {
       <SubCategoryTable />
     </div>
   );
-}
+};
 
 export default CategoryPage;

@@ -15,7 +15,7 @@ import {
 } from "@nextui-org/react";
 
 import { MailIcon, LockIcon } from "@/template/resource/icons";
-import { authenticateUser } from "@/app/api/route";
+import { authenticateUser } from "@/lib/backend";
 
 export default function LoginModal() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -46,8 +46,8 @@ export default function LoginModal() {
                   label="Email"
                   placeholder="Enter your email"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
                   variant="bordered"
+                  onChange={(e) => setEmail(e.target.value)}
                 />
                 <Input
                   endContent={
@@ -57,8 +57,8 @@ export default function LoginModal() {
                   placeholder="Enter your password"
                   type="password"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
                   variant="bordered"
+                  onChange={(e) => setPassword(e.target.value)}
                 />
                 <div className="flex py-2 px-1 justify-between">
                   <Checkbox
