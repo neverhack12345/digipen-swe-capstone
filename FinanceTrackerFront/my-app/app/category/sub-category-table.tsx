@@ -42,14 +42,12 @@ export default function CategoryTable({
       if (columnKey === "subName") {
         return (
           <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">
-              {item[columnKey]}
-            </p>
+            <p className="text-bold text-small capitalize">{item[columnKey]}</p>
             <p className="text-bold text-tiny capitalize text-default-400">
               {item.catName}
             </p>
           </div>
-        )
+        );
       }
 
       return item[columnKey];

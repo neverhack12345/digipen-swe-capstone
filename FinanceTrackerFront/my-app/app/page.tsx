@@ -1,8 +1,9 @@
-"use client"
+"use client";
 
-import { title, subtitle } from "@/components/primitives";
 import { Image } from "@nextui-org/react";
 import NextImage from "next/image";
+
+import { title, subtitle } from "@/components/primitives";
 
 export default function Home() {
   return (
@@ -11,21 +12,19 @@ export default function Home() {
         <h1 className={title()}>Live&nbsp;</h1>
         <h1 className={title({ color: "violet" })}>life&nbsp;</h1>
         <br />
-        <h1 className={title()}>
-          with financial independence.
-        </h1>
+        <h1 className={title()}>with financial independence.</h1>
         <h2 className={subtitle({ class: "mt-4" })}>
           One-stop finance tracking.
         </h2>
         <div>
-        <Image
-          as={NextImage}
-          isBlurred
-          width={1000}
-          height={666}
-          src="/freedom.jpg"
-          alt="Financial freedom image"
-        />
+          <Image
+            isBlurred
+            alt="Financial freedom image"
+            as={NextImage}
+            height={666}
+            src="/freedom.jpg"
+            width={1000}
+          />
         </div>
       </div>
     </section>

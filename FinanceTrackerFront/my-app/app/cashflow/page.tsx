@@ -1,10 +1,12 @@
-"use client"
+"use client";
 
-import { CashFlow } from "@/types/definitions";
-import CashFlowTable from "./cashflow-table";
-import { fetchCashFlowsById } from "@/lib/backend";
 import { useState, useCallback, useEffect } from "react";
 import { Skeleton } from "@nextui-org/react";
+
+import CashFlowTable from "./cashflow-table";
+
+import { CashFlow } from "@/types/definitions";
+import { fetchCashFlowsById } from "@/lib/backend";
 
 export default function CashFlowPage() {
   const [data, setData] = useState<Array<CashFlow>>([]);
@@ -13,7 +15,8 @@ export default function CashFlowPage() {
 
   const fetchData = useCallback(async () => {
     const cashFlowResult = await fetchCashFlowsById();
-    setData(cashFlowResult)
+
+    setData(cashFlowResult);
     setIsCompleteLoaded(true);
   }, []);
 
@@ -37,7 +40,7 @@ export default function CashFlowPage() {
   return (
     <div className="relative mx-auto flex w-full space-y-2.5 p-4">
       <Skeleton className="rounded-lg" isLoaded={isCompleteLoaded}>
-        <CashFlowTable filteredData={filteredData}/>
+        <CashFlowTable filteredData={filteredData} />
       </Skeleton>
     </div>
   );

@@ -23,12 +23,9 @@ export default function PlanTable({
 }) {
   const TABLE_NAME = "Plan Table";
 
-  const renderCell = useCallback(
-    (item: Plan, columnKey: keyof Plan) => {
-      return item[columnKey];
-    },
-    [],
-  );
+  const renderCell = useCallback((item: Plan, columnKey: keyof Plan) => {
+    return item[columnKey];
+  }, []);
 
   const topContent = useMemo(() => {
     return (
@@ -62,9 +59,7 @@ export default function PlanTable({
         {(item: Plan) => (
           <TableRow key={item.year}>
             {(columnKey) => (
-              <TableCell>
-                {renderCell(item, columnKey as keyof Plan)}
-              </TableCell>
+              <TableCell>{renderCell(item, columnKey as keyof Plan)}</TableCell>
             )}
           </TableRow>
         )}

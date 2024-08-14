@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect, permanentRedirect } from "next/navigation";
 import axios from "axios";
+
 import { PlanFormType } from "@/types/definitions";
 
 const LOGIN_TAG = "isLoggedin";
@@ -78,13 +79,13 @@ export async function fetchPlan(formData: PlanFormType) {
       "http://localhost:8080/api/plan/generateProjection",
       {
         params: {
-          principal : formData.principal,
-          interestPerYear : formData.interestPerYear,
-          yearlyContribution : formData.yearlyContribution,
-          yearlyWithdrawAmount : formData.yearlyWithdrawAmount,
-          yearsContributing : formData.yearsContributing,
-          yearStartWithdraw : formData.yearStartWithdraw,
-          yearsProjected : formData.yearsProjected,
+          principal: formData.principal,
+          interestPerYear: formData.interestPerYear,
+          yearlyContribution: formData.yearlyContribution,
+          yearlyWithdrawAmount: formData.yearlyWithdrawAmount,
+          yearsContributing: formData.yearsContributing,
+          yearStartWithdraw: formData.yearStartWithdraw,
+          yearsProjected: formData.yearsProjected,
         },
       },
     );

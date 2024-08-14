@@ -18,7 +18,7 @@ const CategoryPage = () => {
     const subCategoryResult = await fetchSubCategory();
 
     setCategory(categoryResult);
-    setSubCategory(subCategoryResult)
+    setSubCategory(subCategoryResult);
     setIsCompleteLoaded(true);
   }, []);
 

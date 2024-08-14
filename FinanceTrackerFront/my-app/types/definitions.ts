@@ -11,7 +11,7 @@ export type SubCategory = {
   subId: number;
   subName: string;
   catName: string;
-}
+};
 
 export type Budget = {
   budgetId: string;
@@ -32,7 +32,7 @@ export type CashFlow = {
   subId: number;
   subName: string;
   userId: number;
-}
+};
 
 export type Plan = {
   year: number;
@@ -40,7 +40,7 @@ export type Plan = {
   yearlyContribution: number;
   yearlyWithdraw: number;
   yearlyInterest: number;
-}
+};
 
 export type PlanFormType = {
   principal: string;
@@ -50,7 +50,7 @@ export type PlanFormType = {
   yearlyWithdrawAmount: string;
   yearStartWithdraw: string;
   yearsProjected: string;
-}
+};
 
 export type AddBudget = {
   userId: string;
