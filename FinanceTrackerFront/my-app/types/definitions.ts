@@ -24,14 +24,32 @@ export type Budget = {
 };
 
 export type CashFlow = {
-  flowId: number,
-  sourceName: string,
-  date: string,
-  amount: number,
-  remark: string,
-  subId: number,
-  subName: string,
-  userId: number,
+  flowId: number;
+  sourceName: string;
+  date: string;
+  amount: number;
+  remark: string;
+  subId: number;
+  subName: string;
+  userId: number;
+}
+
+export type Plan = {
+  year: number;
+  yearlyPrincipal: number;
+  yearlyContribution: number;
+  yearlyWithdraw: number;
+  yearlyInterest: number;
+}
+
+export type PlanFormType = {
+  principal: string;
+  interestPerYear: string;
+  yearlyContribution: string;
+  yearsContributing: string;
+  yearlyWithdrawAmount: string;
+  yearStartWithdraw: string;
+  yearsProjected: string;
 }
 
 export type AddBudget = {

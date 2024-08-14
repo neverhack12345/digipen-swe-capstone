@@ -2,7 +2,7 @@
 
 import { CashFlow } from "@/types/definitions";
 import CashFlowTable from "./cashflow-table";
-import { fetchCashFlows } from "@/lib/backend";
+import { fetchCashFlowsById } from "@/lib/backend";
 import { useState, useCallback, useEffect } from "react";
 import { Skeleton } from "@nextui-org/react";
 
@@ -12,7 +12,7 @@ export default function CashFlowPage() {
   const [isCompleteLoaded, setIsCompleteLoaded] = useState(false);
 
   const fetchData = useCallback(async () => {
-    const cashFlowResult = await fetchCashFlows();
+    const cashFlowResult = await fetchCashFlowsById();
     setData(cashFlowResult)
     setIsCompleteLoaded(true);
   }, []);

@@ -25,6 +25,14 @@ export const cashFlowColumns = [
   { name: "ACTIONS", uid: "actions" },
 ];
 
+export const planColumns = [
+  { name: "YEAR", uid: "year", sortable: true },
+  { name: "YEARLY PRINCIPAL", uid: "yearlyPrincipal", sortable: true },
+  { name: "YEARLY CONTRIBUTION", uid: "yearlyContribution", sortable: true },
+  { name: "YEARLY WITHDRAWL", uid: "yearlyWithdraw", sortable: true },
+  { name: "YEARLY INTEREST", uid: "yearlyInterest", sortable: true },
+];
+
 export const monthRange = [
   { key: "1", label: "January" },
   { key: "2", label: "Feburary" },
