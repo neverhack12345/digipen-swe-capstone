@@ -15,10 +15,10 @@ mvnw.cmd install
 Update configuration in application.properties located in FinanceTracker\src\main\resources\application.properties:
 
 #### Database configuration
-spring.datasource.url=jdbc:mariadb://localhost:3306/<database>
-spring.datasource.username=<username>
-spring.datasource.password=<password>
-spring.datasource.driver-class-name=<driver>
+- spring.datasource.url=jdbc:mariadb://localhost:3306/<database>
+- spring.datasource.username=<username>
+- spring.datasource.password=<password>
+- spring.datasource.driver-class-name=<driver>
 
 #### Hibernate configuration
 
