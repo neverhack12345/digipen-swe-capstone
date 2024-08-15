@@ -7,24 +7,24 @@ Capstone project for Digipen TFIP - SWE. Finance Tracker.
 Javascript - FinanceTrackerFront
 
 #### Technologies
-React
-NextJS
-Shadcn
-NextUI
-Tailwind
-Recharts
-react-form-hooks
-zod
-axios
-clsx
+- React
+- NextJS
+- Shadcn
+- NextUI
+- Tailwind
+- Recharts
+- react-form-hooks
+- zod
+- axios
+- clsx
 
 ### Back-End
 Java - FinanceTracker
 
 #### Technologies
-Spring Boot
-JPA
-Hibernate
+- Spring Boot
+- JPA
+- Hibernate
 
 ### Database
-MariaDB
+SQL - MariaDB
